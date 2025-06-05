@@ -1,0 +1,36 @@
+<odoo>
+    <record id="res_config_settings_view_form_purchase_ext" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.purchase</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="25"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Adjust the XPath expression to target the desired location -->
+            <xpath expr="//div[hasclass('app_settings_block') and @data-key='purchase']/h2" position="after">
+                <!-- Insert your additional elements here -->
+                <h2>Orders</h2>
+                <div class="row mt16 o_settings_container" name="purchase_setting_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="po_order_approval">
+                        <div class="o_setting_left_pane">
+                            <field name="po_order"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="po_order"/>
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
+                                <div class="text-muted">
+                                    Request managers to approve orders above a minimum amount
+                                </div>
+                                <div class="content-group" attrs="{'invisible': [('po_order', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label for="amount" class="col-lg-4 o_light_label"/>
+                                        <field name="amount" currency_field="company_currency_id" widget="monetary" />
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

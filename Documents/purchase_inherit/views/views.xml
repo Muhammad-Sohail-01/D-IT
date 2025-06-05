@@ -1,0 +1,105 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record id="action_redirect_to_main_menu" model="ir.actions.act_url">
+    <field name="name">Redirect to Main Menu</field>
+    <field name="url">/web#menu_id=your_module.menu_root</field>
+    <field name="target">new</field>
+</record>
+    <record model="ir.ui.view" id="purchase_ext.list">
+      <field name="name">purchase.ext.list</field>
+      <field name="model">community.purchase</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="object"/>
+          <field name="vendor"/>
+          <field name="decision"/>
+        </tree>
+      </field>
+    </record>
+      <!-- tree view -->
+        <record id="view_purchase_community_tree" model="ir.ui.view">
+            <field name="name">purchase.community.tree</field>
+            <field name="model">community.purchase</field>
+            <field name="arch" type="xml">
+                <tree string="Purchase Committee"
+                    decoration-muted="state=='cancel'" sample="1">
+                    <field name="name"/>
+                    <field name="object"/>
+                    <field name="vendor"/>
+                     <field name="decision"/>
+                    <field name="state"
+                        decoration-success="state == 'purchase'" decoration-warning="state == 'to approve'" decoration-info="state == 'draft'" widget="badge"/>
+
+                </tree>
+            </field>
+        </record>
+
+    <!-- form view -->
+     <record id="view_purchase_ext" model="ir.ui.view">
+            <field name="name">community.purchase.form</field>
+            <field name="model">community.purchase</field>
+            <field name="arch" type="xml">
+                <form string="Employee" class='o_employee_form'>
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft, confirm" readonly="1"/>
+                        <button name="button_confirm" string="Confirm Order" type="object" class="oe_highlight"
+                       attrs="{'invisible': [('state', 'not in', ('draft'))]}"/>
+                        <button name="button_approve" type="object" states='to approve' string="Approve Order"   class="oe_highlight" data-hotkey="z"/>
+                          <button name="create_purchase_orders" type="object" states='purchase' string="Create Purchase Order"   class="oe_highlight" groups="purchase.group_purchase_manager" data-hotkey="z"/>
+                          <button name="button_cancel" states="draft,to approve,sent,purchase" string="Cancel" type="object" data-hotkey="x" />
+                        <!--                        <button name="" string= type="action" groups="hr.group_hr_user" attrs="{'invisible': [('active', '=', False)]}"/>-->
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" string="Participants"/>
+                                <field name="object" string="Object"/>
+                                <field name="vendor" string="vendor" widget="res_partner_many2one"/>
+
+                                <field name="nature_of_purchase" string="Purchase Nature"/>
+                                <field name="attachments" filename="attachments_name" widget="work_permit_upload"/>
+                                <field name="attachments_name" invisible="1"/>
+                                <field name="decision" string="Decision"/>
+                            </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount" string="Amount" widget="monetary"/>
+                            <field name="date" string="Date"/>
+                            <field name="vendor_reference"/>
+                            <field name="approver_id"/>
+                        </group>
+                        </group>
+
+                    </sheet>
+
+
+                </form>
+            </field>
+        </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="purchase_ext.action_window">
+      <field name="name">Purchasing Committee</field>
+      <field name="res_model">community.purchase</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="purchase.purchase_rfq">
+        <field name="name">Expression of needs</field>
+    </record>
+    <record model="ir.ui.menu" id="purchase.menu_purchase_rfq">
+        <field name="name">Expression of Needs</field>
+<!-- in 11 version -->
+    </record>
+
+
+
+    <menuitem name="Purchasing Committee" id="purchase_ext.menu_1_list" parent="purchase.menu_procurement_management"
+              action="purchase_ext.action_window"
+              sequence="15"/>
+
+  </data>
+</odoo>

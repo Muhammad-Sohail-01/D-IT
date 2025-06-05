@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_form_purchase_ext" model="ir.ui.view">
+        <field name="name">purchase.order.form.ext</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <field name="date_order" position="replace"/>
+            <button name="confirm_reminder_mail" position="attributes">
+             <attribute name="attrs">{'invisible': ['|','|', ('state', 'not in', ('purchase', 'done')), ('mail_reminder_confirmed', '=', True), ('date_planned', '=', False)]}</attribute>
+        </button>
+            <label for="date_planned" position="replace"/>
+            <field name="date_planned" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+            <xpath expr="//form/sheet/group/group/div[@name='reminder']//span" position="replace">
+            </xpath>
+            <field name="reminder_date_before_receipt" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+            <label for="receipt_reminder_email" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </label>
+            <field name="receipt_reminder_email" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

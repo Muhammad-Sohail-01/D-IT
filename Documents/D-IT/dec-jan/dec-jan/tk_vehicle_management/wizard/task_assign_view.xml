@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="task_assign_view_form" model="ir.ui.view">
+            <field name="name">task.assign.view.form</field>
+            <field name="model">task.assignation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group string="Service">
+                            <field name="service_ids" widget="many2many_tags" required="1"
+                                   domain="[('vehicle_health_report_id','=',health_report_id),
+                                            ('display_type','=',False),('task_id','=',False),
+                                            ('service_selected','=',True)]"/>
+                        </group>
+                        <group string="Team Details">
+                            <field name="team_id" rquired="1"/>
+                            <field name="team_leaders_ids" invisible="1"/>
+                            <field name="team_technician_ids" invisible="1"/>
+                            <field name="leaders_ids" widget="many2many_tags" required="1"/>
+                            <!-- <field name="technician_ids" widget="many2many_tags" required="0"/> -->
+                        </group>
+                    </group>
+                    <group string="Task Details">
+                        <group>
+                            <field name="inspection_id" invisible="1"/>
+                            <field name="health_report_id" invisible="1"/>
+                            <field name="task_title" required="1"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="allocated_hours" widget="float_time" required="1"/>
+                            <field name="registration_no"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Task Assign" type="object" class="btn btn-outline-success"
+                                name="action_assign_service_task" icon="fa-bookmark"/>
+                        <button string="Cancel" special="cancel" class="btn btn-outline-danger" icon="fa-window-close"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="task_assignation_action" model="ir.actions.act_window">
+            <field name="name">Task Assign</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">task.assignation</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,2128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vehicle_health_report_view_form" model="ir.ui.view">
+            <field name="name">vehicle.health.report.view.form</field>
+            <field name="model">vehicle.health.report</field>
+            <field name="arch" type="xml">
+                <form create="0">
+                    <header>
+                        <field name="status" widget="statusbar" options="{'clickable':'1'}"/>
+                        <button name="action_add_service_parts" type="object" string="Add Services &amp; Parts"
+                                class="btn btn-primary" icon="fa-plus" invisible="status == 'complete'"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_view_task"
+                                    icon="fa-tasks" invisible="not task_id" string="Task">
+                                <span>
+                                    Task
+                                    <br/>
+                                    <field name="allocated_hours" widget="float_time"/>
+                                    Hours
+                                </span>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="inspection_id" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="task_id" invisible="1" readonly="1" force_save="1"/>
+                                <field name="inspection_type_id"/>
+                                <field name="allocated_hours" invisible="0" widget="float_time"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Team Details">
+                                <field name="team_id" rquired="1"/>
+                                <field name="team_leaders_ids" invisible="1"/>
+                                <field name="team_technician_ids" invisible="1"/>
+                                <field name="leaders_ids" widget="many2many_avatar_user" required="1"/>
+                                <field name="technician_ids" widget="many2many_avatar_user" required="1"/>
+                            </group>
+                            <group string="Responsible">
+                                <field name="sale_person_id"/>
+                                <field name="service_adviser_id"/>
+                                <field name="parts_total" invisible="1"/>
+                                <field name="service_total" invisible="1"/>
+                            </group>
+                        </group>
+                        <group string="Vehicle Details">
+                            <group>
+                                <field name="brand_id" required="1"/>
+                                <field name="vehicle_model_id" required="1"/>
+                                <field name="year" required="1"/>
+                                <field name="color" required="1"/>
+                                <field name="fuel_type" required="1"/>
+                                <field name="transmission" widget="radio" options="{'horizontal':True}" required="1"/>
+                            </group>
+                            <group>
+                                <field name="vin_no" required="1"/>
+                                <field name="registration_no" required="1"/>
+                                <field name="miles" required="1"/>
+                                <field name="is_warranty" widget="boolean_toggle" required="1"/>
+                                <field name="warranty_type" invisible="not is_warranty"/>
+                                <field name="insurance_provider"/>
+                            </group>
+                        </group>
+                        <group string="Inspection Details">
+                            <group>
+                                <field name="inspect_type" widget="radio" options="{'horizontal':True}"/>
+                                <field name="customer_observation" placeholder="Customer Observation"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="inspection_type" widget="radio" options="{'horizontal':True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Health Report Template">
+                                <field name="template_id"/>
+                            </group>
+                            <group string="Taxes">
+                                <field name="tax_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <separator string="Inspections" name="vehicle_inspection_categories"/>
+                        <span class="d-inline-block">
+                            <field name="part_assessment"/>
+                            <label for="part_assessment"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="inner_body_inspection"/>
+                            <label for="inner_body_inspection"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="outer_body_inspection"/>
+                            <label for="outer_body_inspection"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="mechanical_condition"/>
+                            <label for="mechanical_condition"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="vehicle_fluid"/>
+                            <label for="vehicle_fluid"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="tyre_inspection"/>
+                            <label for="tyre_inspection"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="under_vehicle"/>
+                            <label for="under_vehicle"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="brake_condition"/>
+                            <label for="brake_condition"/>
+                        </span>
+                        <span class="d-inline-block">
+                            <field name="vehicle_component"/>
+                            <label for="vehicle_component"/>
+                        </span>
+                        <notebook>
+                            <page string="Required Services &amp; Parts" name="required_services_part">
+                                <notebook>
+                                    <page name="required_services" string="Required Services">
+                                        <field name="inspection_required_service_ids"
+                                               widget="section_and_note_one2many">
+                                            <tree editable="bottom" default_order="sequence asc, id asc">
+                                                <control>
+                                                    <create name="add_product_control"
+                                                            string="Add a service"/>
+                                                    <create name="add_section_control"
+                                                            string="Add a section"
+                                                            context="{'default_display_type': 'line_section'}"/>
+                                                </control>
+                                                <field name="sequence" widget="handle"/>
+                                                <field name="product_id" required="not display_type"/>
+                                                <field name="name" required="1" widget="section_and_note_text"/>
+                                                <field name="estimate_time" widget="float_time"/>
+                                                <field name="qty" column_invisible="1"/>
+                                                <field name="uom_id"/>
+                                                <field name="required_status" column_invisible="1"/>
+                                                <field name="required_attention" column_invisible="1"/>
+                                                <field name="okay_for_now" column_invisible="1"/>
+                                                <field name="further_attention" column_invisible="1"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                        title="Requires immediate attention"
+                                                        invisible="required_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        string="" icon="fa-check" title="Requires immediate attention"
+                                                        invisible="not required_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                        title="Requires future attention"
+                                                        invisible="further_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        class="me-1 btn btn-warning inspection-btn-tree"
+                                                        icon="fa-check"
+                                                        title="Requires future attention"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="not further_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        title="Checked and OK at this time"
+                                                        icon="fa-blank"
+                                                        class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="okay_for_now"/>
+                                                <button name="action_require_status"
+                                                        icon="fa-check"
+                                                        title="Checked and OK at this time"
+                                                        context="{'click_from_tree': True}"
+                                                        type="object"
+                                                        class="me-1 btn btn-success inspection-btn-tree"
+                                                        invisible="not okay_for_now"/>
+                                                <field name="tax_ids" widget="many2many_tags" column_invisible="1"/>
+                                                <field name="price" column_invisible="1"/>
+                                                <field name="display_type" column_invisible="1"/>
+                                                <field name="currency_id" column_invisible="1"/>
+                                                <field name="tax_amount" column_invisible="1"/>
+                                                <field name="total_amount" column_invisible="1"/>
+                                                <button name="%(service_concern_action)d" type="action" string="3C"
+                                                        class="btn btn-warning" icon="fa-bars"/>
+                                            </tree>
+                                        </field>
+                                        <group class="oe_subtotal_footer oe_right" invisible="1">
+                                            <field name="service_total" string="Total Amount"/>
+                                        </group>
+                                    </page>
+                                    <page name="required_parts" string="Required Parts">
+                                        <field name="inspection_required_parts_ids" widget="section_and_note_one2many">
+                                            <tree editable="bottom" decoration-warning="is_additional_part == True"
+                                                  default_order="sequence asc, id asc">
+                                                <control>
+                                                    <create name="add_product_control"
+                                                            string="Add a part"/>
+                                                    <create name="add_section_control"
+                                                            string="Add a section"
+                                                            context="{'default_display_type': 'line_section'}"/>
+                                                </control>
+                                                <field name="sequence" widget="handle"/>
+                                                <field name="display_type" column_invisible="1"/>
+                                                <field name="product_id" required="not display_type"/>
+                                                <field name="name" required="1" widget="section_and_note_text"/>
+                                                <field name="qty"/>
+                                                <field name="uom_id"/>
+                                                <field name="tax_ids" widget="many2many_tags" column_invisible="1"/>
+                                                <field name="service_ids" column_invisible="1"/>
+                                                <field name="service_id" domain="[('id','in',service_ids)]"/>
+                                                <field name="required_status" column_invisible="1"/>
+                                                <field name="required_attention" column_invisible="1"/>
+                                                <field name="okay_for_now" column_invisible="1"/>
+                                                <field name="further_attention" column_invisible="1"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                        title="Requires immediate attention"
+                                                        invisible="required_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        string="" icon="fa-check" title="Requires immediate attention"
+                                                        invisible="not required_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                        title="Requires future attention"
+                                                        invisible="further_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        class="me-1 btn btn-warning inspection-btn-tree"
+                                                        icon="fa-check"
+                                                        title="Requires future attention"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="not further_attention"/>
+                                                <button name="action_require_status"
+                                                        type="object"
+                                                        title="Checked and OK at this time"
+                                                        icon="fa-blank"
+                                                        class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="okay_for_now"/>
+                                                <button name="action_require_status"
+                                                        icon="fa-check"
+                                                        title="Checked and OK at this time"
+                                                        context="{'click_from_tree': True}"
+                                                        type="object"
+                                                        class="me-1 btn btn-success inspection-btn-tree"
+                                                        invisible="not okay_for_now"/>
+                                                <field name="price" column_invisible="1"/>
+                                                <field name="currency_id" column_invisible="1"/>
+                                                <field name="is_additional_part" column_invisible="1"/>
+                                                <field name="tax_amount" column_invisible="1"/>
+                                                <field name="total_amount" column_invisible="1"/>
+                                            </tree>
+                                        </field>
+                                        <group class="oe_subtotal_footer oe_right" invisible="1">
+                                            <field name="parts_total" string="Total Amount"/>
+                                        </group>
+                                    </page>
+                                </notebook>
+                            </page>
+                            <page name="spare_part_assessments" string="Parts Assessments"
+                                  invisible="not part_assessment">
+                                <div>
+                                    <table width="100%" class="table table-bordered table-sm">
+                                        <tr bgcolor="#f2f2f3">
+                                            <th style="padding: 5px; text-align: center;" colspan="4">Vehicle Spare
+                                                Parts Assessments
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <field name="wd"/>
+                                                <label for="wd"/>
+                                            </td>
+                                            <td>
+                                                <field name="abs"/>
+                                                <label for="abs"/>
+                                            </td>
+                                            <td>
+                                                <field name="air_conditioning"/>
+                                                <label for="air_conditioning"/>
+                                            </td>
+                                            <td>
+                                                <field name="gps"/>
+                                                <label for="gps"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <field name="luxury_sport_pkg"/>
+                                                <label for="luxury_sport_pkg"/>
+                                            </td>
+                                            <td>
+                                                <field name="running_boards"/>
+                                                <label for="running_boards"/>
+                                            </td>
+                                            <td>
+                                                <field name="awd"/>
+                                                <label for="awd"/>
+                                            </td>
+                                            <td>
+                                                <field name="bed_liner"/>
+                                                <label for="bed_liner"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <field name="moon_sun_roof"/>
+                                                <label for="moon_sun_roof"/>
+                                            </td>
+                                            <td>
+                                                <field name="auto_transmission"/>
+                                                <label for="auto_transmission"/>
+                                            </td>
+                                            <td>
+                                                <field name="camper_shell"/>
+                                                <label for="camper_shell"/>
+                                            </td>
+                                            <td>
+                                                <field name="cd_usb_bluetooth"/>
+                                                <label for="cd_usb_bluetooth"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <field name="power_locks"/>
+                                                <label for="power_locks"/>
+                                            </td>
+                                            <td>
+                                                <field name="power_seats"/>
+                                                <label for="power_seats"/>
+                                            </td>
+                                            <td>
+                                                <field name="roof_rack"/>
+                                                <label for="roof_rack"/>
+                                            </td>
+                                            <td>
+                                                <field name="power_windows"/>
+                                                <label for="power_windows"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <field name="rear_window_wiper"/>
+                                                <label for="rear_window_wiper"/>
+                                            </td>
+                                            <td>
+                                                <field name="rear_lift_gate"/>
+                                                <label for="rear_lift_gate"/>
+                                            </td>
+                                            <td>
+                                                <field name="am_fm_radio"/>
+                                                <label for="am_fm_radio"/>
+                                            </td>
+                                            <td>
+                                                <field name="sport_wheels"/>
+                                                <label for="sport_wheels"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <field name="tilt_wheel"/>
+                                                <label for="tilt_wheel"/>
+                                            </td>
+                                            <td>
+                                                <field name="towing_package"/>
+                                                <label for="towing_package"/>
+                                            </td>
+                                            <td>
+                                                <field name="wide_tires"/>
+                                                <label for="wide_tires"/>
+                                            </td>
+                                            <td>
+                                                <field name="cruise_control"/>
+                                                <label for="cruise_control"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <field name="infotainment_system"/>
+                                                <label for="infotainment_system"/>
+                                            </td>
+                                            <td>
+                                                <field name="leather_interior"/>
+                                                <label for="leather_interior"/>
+                                            </td>
+                                            <td>
+                                                <field name="cvt_transmission"/>
+                                                <label for="cvt_transmission"/>
+                                            </td>
+                                            <td>
+                                                <field name="rear_sliding_window"/>
+                                                <label for="rear_sliding_window"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <field name="stereo"/>
+                                                <label for="stereo"/>
+                                            </td>
+                                            <td>
+                                                <field name="other"/>
+                                                <label for="other"/>
+                                            </td>
+                                            <td>
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </page>
+                            <page name="vehicle_body_conditions" string="Interior/Exterior"
+                                  invisible="not inner_body_inspection and not outer_body_inspection">
+                                <notebook>
+                                    <page name="inner_condition" string="Interior"
+                                          invisible="not inner_body_inspection">
+                                        <field name="vehicle_inner_inspection_ids">
+                                            <tree>
+                                                <field name="required_attention" column_invisible="1"/>
+                                                <field name="further_attention" column_invisible="1"/>
+                                                <field name="okay_for_now" column_invisible="1"/>
+                                                <button name="action_required_attention_accept"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                        title="Requires immediate attention"
+                                                        invisible="required_attention"/>
+                                                <button name="action_required_attention_reject"
+                                                        type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        string="" icon="fa-check" title="Requires immediate attention"
+                                                        invisible="not required_attention"/>
+                                                <button name="action_further_attention_accept"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                        title="Requires future attention"
+                                                        invisible="further_attention"/>
+                                                <button name="action_further_attention_reject"
+                                                        type="object"
+                                                        class="me-1 btn btn-warning inspection-btn-tree"
+                                                        icon="fa-check"
+                                                        title="Requires future attention"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="not further_attention"/>
+                                                <button name="action_okay_for_now_accept"
+                                                        type="object"
+                                                        title="Checked and OK at this time"
+                                                        icon="fa-blank"
+                                                        class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="okay_for_now"/>
+                                                <button name="action_okay_for_now_reject"
+                                                        icon="fa-check"
+                                                        title="Checked and OK at this time"
+                                                        context="{'click_from_tree': True}"
+                                                        type="object"
+                                                        class="me-1 btn btn-success inspection-btn-tree"
+                                                        invisible="not okay_for_now"/>
+                                                <field name="part_id"/>
+                                                <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                            </tree>
+                                            <form>
+                                                <sheet>
+                                                    <div class="oe_title">
+                                                        <label for="part_id"/>
+                                                        <h1>
+                                                            <field name="part_id" required="1"
+                                                                   placeholder="Select part"
+                                                                   options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                            <field name="required_attention" invisible="1"/>
+                                                            <field name="further_attention" invisible="1"/>
+                                                            <field name="okay_for_now" invisible="1"/>
+                                                        </h1>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <button name="action_required_attention_accept"
+                                                                    type="object"
+                                                                    icon="fa-blank"
+                                                                    class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                                    title="Requires immediate attention"
+                                                                    invisible="required_attention"/>
+                                                            <button name="action_required_attention_reject"
+                                                                    type="object"
+                                                                    class="me-1 btn btn-danger inspection-btn p-1"
+                                                                    icon="fa-check"
+                                                                    title="Requires immediate attention"
+                                                                    invisible="not required_attention"/>
+                                                            <button name="action_further_attention_accept"
+                                                                    type="object"
+                                                                    icon="fa-blank"
+                                                                    class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                                    title="Requires future attention"
+                                                                    invisible="further_attention"/>
+                                                            <button name="action_further_attention_reject"
+                                                                    type="object"
+                                                                    class="me-1 btn btn-warning inspection-btn p-1"
+                                                                    icon="fa-check"
+                                                                    title="Requires future attention"
+                                                                    invisible="not further_attention"/>
+                                                            <button name="action_okay_for_now_accept"
+                                                                    type="object"
+                                                                    title="Checked and OK at this time"
+                                                                    icon="fa-blank"
+                                                                    class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                                    invisible="okay_for_now"/>
+                                                            <button name="action_okay_for_now_reject"
+                                                                    icon="fa-check"
+                                                                    title="Checked and OK at this time"
+                                                                    type="object"
+                                                                    class="me-1 btn btn-success inspection-btn p-1"
+                                                                    invisible="not okay_for_now"/>
+                                                        </div>
+                                                    </div>
+                                                    <separator string="Notes"/>
+                                                    <field name="notes" nolabel="1"/>
+                                                    <group string="Detailed Inspection"
+                                                           invisible="not required_attention and not further_attention">
+                                                        <group>
+                                                            <field name="inspection_video" filename="file_name"
+                                                                   widget="binary"/>
+                                                            <field name="file_name" invisible="1"/>
+                                                            <field name="is_detailed_inspection"/>
+                                                        </group>
+                                                        <group invisible="not is_detailed_inspection">
+                                                            <field name="vehicle_item_id" placeholder="e.g. Seat"/>
+                                                            <field name="interior_condition"/>
+                                                            <field name="interior_condition_notes"/>
+                                                        </group>
+                                                    </group>
+                                                    <notebook>
+                                                        <page string="Services &amp; Parts"
+                                                              invisible="not required_attention and not further_attention">
+                                                            <group string="Services">
+                                                                <field name="service_ids" string="Service"
+                                                                       widget="many2many_tags"
+                                                                       options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            </group>
+                                                            <separator string="Parts"/>
+                                                            <field name="part_ids" nolabel="1">
+                                                                <tree editable="bottom">
+                                                                    <field name="product_id" required="1"
+                                                                           options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                                    <field name="qty"/>
+                                                                    <field name="uom_id"/>
+                                                                    <field name="service_ids" column_invisible="1"/>
+                                                                    <field name="service_id" required="1"/>
+                                                                </tree>
+                                                            </field>
+                                                        </page>
+                                                        <page string="Images">
+                                                            <field name="image_ids">
+                                                                <form>
+                                                                    <sheet>
+                                                                        <div class="oe_title">
+                                                                            <label for="name"/>
+                                                                            <h1>
+                                                                                <field name="name"/>
+                                                                            </h1>
+                                                                        </div>
+                                                                        <group>
+                                                                            <group>
+                                                                                <field name="avtar" widget="image"
+                                                                                       options='{"size": [300, 300]}'
+                                                                                       class="bg-view" nolabel="1"/>
+                                                                            </group>
+                                                                        </group>
+                                                                    </sheet>
+                                                                </form>
+                                                                <kanban string="Kanban" class="">
+                                                                    <field name="id"/>
+                                                                    <field name="avtar"/>
+                                                                    <field name="name"/>
+                                                                    <templates>
+                                                                        <t t-name="kanban-box">
+                                                                            <div class="card oe_kanban_global_click p-0 border-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8">
+                                                                                        <strong>
+                                                                                            <field name="name"/>
+                                                                                        </strong>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <hr class="mb-1 mt-1"/>
+                                                                                <div class="o_squared_image">
+                                                                                    <img class="card-img-top"
+                                                                                         style="height:250px;object-fit: cover;"
+                                                                                         t-att-src="kanban_image('interior.images', 'avtar', record.id.raw_value)"
+                                                                                         t-att-alt="record.name.value"/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </t>
+                                                                    </templates>
+                                                                </kanban>
+                                                            </field>
+                                                        </page>
+                                                    </notebook>
+                                                </sheet>
+                                            </form>
+                                        </field>
+                                        <div class="row">
+                                            <div class="col-md-2 col-sm-6">
+                                                <button name="action_check_okay_inspections" type="object"
+                                                        confirm="Are you sure you want set 'Checked and OK at this time' for all unselected interior parts"
+                                                        string="Check All" icon="fa-check-square"
+                                                        class="btn btn-success" context="{'check_all':'interior'}"/>
+                                            </div>
+                                        </div>
+                                    </page>
+                                    <page name="vehicle_body_outer_condition" string="Exterior"
+                                          invisible="not outer_body_inspection">
+                                        <field name="vehicle_outer_inspection_ids">
+                                            <tree>
+                                                <field name="required_attention" column_invisible="1"/>
+                                                <field name="further_attention" column_invisible="1"/>
+                                                <field name="okay_for_now" column_invisible="1"/>
+                                                <button name="action_required_attention_accept"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                        title="Requires immediate attention"
+                                                        invisible="required_attention"/>
+                                                <button name="action_required_attention_reject"
+                                                        type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        string="" icon="fa-check" title="Requires immediate attention"
+                                                        invisible="not required_attention"/>
+                                                <button name="action_further_attention_accept"
+                                                        type="object"
+                                                        icon="fa-blank"
+                                                        context="{'click_from_tree': True}"
+                                                        class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                        title="Requires future attention"
+                                                        invisible="further_attention"/>
+                                                <button name="action_further_attention_reject"
+                                                        type="object"
+                                                        class="me-1 btn btn-warning inspection-btn-tree"
+                                                        icon="fa-check"
+                                                        title="Requires future attention"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="not further_attention"/>
+                                                <button name="action_okay_for_now_accept"
+                                                        type="object"
+                                                        title="Checked and OK at this time"
+                                                        icon="fa-blank"
+                                                        class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                        context="{'click_from_tree': True}"
+                                                        invisible="okay_for_now"/>
+                                                <button name="action_okay_for_now_reject"
+                                                        icon="fa-check"
+                                                        title="Checked and OK at this time"
+                                                        context="{'click_from_tree': True}"
+                                                        type="object"
+                                                        class="me-1 btn btn-success inspection-btn-tree"
+                                                        invisible="not okay_for_now"/>
+                                                <field name="part_id"/>
+                                                <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                            </tree>
+                                            <form>
+                                                <sheet>
+                                                    <div class="oe_title">
+                                                        <label for="part_id"/>
+                                                        <h1>
+                                                            <field name="part_id" required="1"
+                                                                   placeholder="Select part"
+                                                                   options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                            <field name="required_attention" invisible="1"/>
+                                                            <field name="further_attention" invisible="1"/>
+                                                            <field name="okay_for_now" invisible="1"/>
+                                                        </h1>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <button name="action_required_attention_accept"
+                                                                    type="object"
+                                                                    icon="fa-blank"
+                                                                    class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                                    title="Requires immediate attention"
+                                                                    invisible="required_attention"/>
+                                                            <button name="action_required_attention_reject"
+                                                                    type="object"
+                                                                    class="me-1 btn btn-danger inspection-btn p-1"
+                                                                    icon="fa-check"
+                                                                    title="Requires immediate attention"
+                                                                    invisible="not required_attention"/>
+                                                            <button name="action_further_attention_accept"
+                                                                    type="object"
+                                                                    icon="fa-blank"
+                                                                    class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                                    title="Requires future attention"
+                                                                    invisible="further_attention"/>
+                                                            <button name="action_further_attention_reject"
+                                                                    type="object"
+                                                                    class="me-1 btn btn-warning inspection-btn p-1"
+                                                                    icon="fa-check"
+                                                                    title="Requires future attention"
+                                                                    invisible="not further_attention"/>
+                                                            <button name="action_okay_for_now_accept"
+                                                                    type="object"
+                                                                    title="Checked and OK at this time"
+                                                                    icon="fa-blank"
+                                                                    class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                                    invisible="okay_for_now"/>
+                                                            <button name="action_okay_for_now_reject"
+                                                                    icon="fa-check"
+                                                                    title="Checked and OK at this time"
+                                                                    type="object"
+                                                                    class="me-1 btn btn-success inspection-btn p-1"
+                                                                    invisible="not okay_for_now"/>
+                                                        </div>
+                                                    </div>
+                                                    <separator string="Notes"/>
+                                                    <field name="notes" nolabel="1"/>
+                                                    <group string="Detailed Inspection"
+                                                           invisible="not required_attention and not further_attention">
+                                                        <group>
+                                                            <field name="inspection_video" filename="file_name"
+                                                                   widget="binary"/>
+                                                            <field name="file_name" invisible="1"/>
+                                                            <field name="is_detailed_inspection"/>
+                                                        </group>
+                                                        <group invisible="not is_detailed_inspection">
+                                                            <field name="vehicle_view"/>
+                                                            <field name="vehicle_condition_location_id"/>
+                                                            <field name="vehicle_condition_id"/>
+                                                            <field name="condition_code"/>
+                                                        </group>
+                                                    </group>
+                                                    <notebook>
+                                                        <page string="Services &amp; Parts"
+                                                              invisible="not required_attention and not further_attention">
+                                                            <group string="Services">
+                                                                <field name="service_ids" string="Service"
+                                                                       widget="many2many_tags"
+                                                                       options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            </group>
+                                                            <separator string="Parts"/>
+                                                            <field name="part_ids" nolabel="1">
+                                                                <tree editable="bottom">
+                                                                    <field name="product_id" required="1"
+                                                                           options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                                    <field name="qty"/>
+                                                                    <field name="uom_id"/>
+                                                                    <field name="service_ids" column_invisible="1"/>
+                                                                    <field name="service_id" required="1"/>
+                                                                </tree>
+                                                            </field>
+                                                        </page>
+                                                        <page string="Images">
+                                                            <field name="image_ids">
+                                                                <form>
+                                                                    <sheet>
+                                                                        <div class="oe_title">
+                                                                            <label for="name"/>
+                                                                            <h1>
+                                                                                <field name="name"/>
+                                                                            </h1>
+                                                                        </div>
+                                                                        <group>
+                                                                            <group>
+                                                                                <field name="avtar" widget="image"
+                                                                                       options='{"size": [300, 300]}'
+                                                                                       class="bg-view" nolabel="1"/>
+                                                                            </group>
+                                                                        </group>
+                                                                    </sheet>
+                                                                </form>
+                                                                <kanban string="Kanban" class="">
+                                                                    <field name="id"/>
+                                                                    <field name="avtar"/>
+                                                                    <field name="name"/>
+                                                                    <templates>
+                                                                        <t t-name="kanban-box">
+                                                                            <div class="card oe_kanban_global_click p-0 border-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8">
+                                                                                        <strong>
+                                                                                            <field name="name"/>
+                                                                                        </strong>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <hr class="mb-1 mt-1"/>
+                                                                                <div class="o_squared_image">
+                                                                                    <img class="card-img-top"
+                                                                                         style="height:250px;object-fit: cover;"
+                                                                                         t-att-src="kanban_image('exterior.images', 'avtar', record.id.raw_value)"
+                                                                                         t-att-alt="record.name.value"/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </t>
+                                                                    </templates>
+                                                                </kanban>
+                                                            </field>
+                                                        </page>
+                                                    </notebook>
+                                                </sheet>
+                                            </form>
+                                        </field>
+                                        <div class="row">
+                                            <div class="col-md-2 col-sm-6">
+                                                <button name="action_check_okay_inspections" type="object"
+                                                        confirm="Are you sure you want set 'Checked and OK at this time' for all unselected exterior parts"
+                                                        string="Check All" icon="fa-check-square"
+                                                        context="{'check_all':'exterior'}"
+                                                        class="btn btn-success"/>
+                                            </div>
+                                        </div>
+                                    </page>
+                                </notebook>
+                            </page>
+                            <page name="mechanical_condition" string="Under Hood"
+                                  invisible="not mechanical_condition">
+                                <field name="vehicle_mechanical_inspection_ids">
+                                    <tree>
+                                        <field name="required_attention" column_invisible="1"/>
+                                        <field name="further_attention" column_invisible="1"/>
+                                        <field name="okay_for_now" column_invisible="1"/>
+                                        <button name="action_required_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                title="Requires immediate attention"
+                                                invisible="required_attention"/>
+                                        <button name="action_required_attention_reject"
+                                                type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                string="" icon="fa-check" title="Requires immediate attention"
+                                                invisible="not required_attention"/>
+                                        <button name="action_further_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="further_attention"/>
+                                        <button name="action_further_attention_reject"
+                                                type="object"
+                                                class="me-1 btn btn-warning inspection-btn-tree"
+                                                icon="fa-check"
+                                                title="Requires future attention"
+                                                context="{'click_from_tree': True}"
+                                                invisible="not further_attention"/>
+                                        <button name="action_okay_for_now_accept"
+                                                type="object"
+                                                title="Checked and OK at this time"
+                                                icon="fa-blank"
+                                                class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                invisible="okay_for_now"/>
+                                        <button name="action_okay_for_now_reject"
+                                                icon="fa-check"
+                                                title="Checked and OK at this time"
+                                                context="{'click_from_tree': True}"
+                                                type="object"
+                                                class="me-1 btn btn-success inspection-btn-tree"
+                                                invisible="not okay_for_now"/>
+                                        <field name="part_id"/>
+                                        <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="part_id"/>
+                                                <h1>
+                                                    <field name="part_id" required="1"
+                                                           placeholder="Select part"
+                                                           options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                    <field name="required_attention" invisible="1"/>
+                                                    <field name="further_attention" invisible="1"/>
+                                                    <field name="okay_for_now" invisible="1"/>
+                                                </h1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button name="action_required_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                            title="Requires immediate attention"
+                                                            invisible="required_attention"/>
+                                                    <button name="action_required_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-danger inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires immediate attention"
+                                                            invisible="not required_attention"/>
+                                                    <button name="action_further_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                            title="Requires future attention"
+                                                            invisible="further_attention"/>
+                                                    <button name="action_further_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-warning inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires future attention"
+                                                            invisible="not further_attention"/>
+                                                    <button name="action_okay_for_now_accept"
+                                                            type="object"
+                                                            title="Checked and OK at this time"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                            invisible="okay_for_now"/>
+                                                    <button name="action_okay_for_now_reject"
+                                                            icon="fa-check"
+                                                            title="Checked and OK at this time"
+                                                            type="object"
+                                                            class="me-1 btn btn-success inspection-btn p-1"
+                                                            invisible="not okay_for_now"/>
+                                                </div>
+                                            </div>
+                                            <separator string="Notes"/>
+                                            <field name="notes" nolabel="1"/>
+                                            <group string="Detailed Inspection"
+                                                   invisible="not required_attention and not further_attention">
+                                                <group>
+                                                    <field name="inspection_video" filename="file_name"
+                                                           widget="binary"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                    <field name="is_detailed_inspection"/>
+                                                </group>
+                                                <group invisible="not is_detailed_inspection">
+                                                    <field name="vehicle_item_id" placeholder="e.g. Brakes"/>
+                                                    <field name="mechanical_condition"/>
+                                                    <field name="mechanical_condition_notes"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                                <page string="Services &amp; Parts"
+                                                      invisible="not required_attention and not further_attention">
+                                                    <group string="Services">
+                                                        <field name="service_ids" string="Service"
+                                                               widget="many2many_tags"
+                                                               options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                    </group>
+                                                    <separator string="Parts"/>
+                                                    <field name="part_ids" nolabel="1">
+                                                        <tree editable="bottom">
+                                                            <field name="product_id" required="1"
+                                                                   options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            <field name="qty"/>
+                                                            <field name="uom_id"/>
+                                                            <field name="service_ids" column_invisible="1"/>
+                                                            <field name="service_id" required="1"/>
+                                                        </tree>
+                                                    </field>
+                                                </page>
+                                                <page string="Images">
+                                                    <field name="image_ids">
+                                                        <form>
+                                                            <sheet>
+                                                                <div class="oe_title">
+                                                                    <label for="name"/>
+                                                                    <h1>
+                                                                        <field name="name"/>
+                                                                    </h1>
+                                                                </div>
+                                                                <group>
+                                                                    <group>
+                                                                        <field name="avtar" widget="image"
+                                                                               options='{"size": [300, 300]}'
+                                                                               class="bg-view" nolabel="1"/>
+                                                                    </group>
+                                                                </group>
+                                                            </sheet>
+                                                        </form>
+                                                        <kanban string="Kanban" class="">
+                                                            <field name="id"/>
+                                                            <field name="avtar"/>
+                                                            <field name="name"/>
+                                                            <templates>
+                                                                <t t-name="kanban-box">
+                                                                    <div class="card oe_kanban_global_click p-0 border-0">
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <strong>
+                                                                                    <field name="name"/>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr class="mb-1 mt-1"/>
+                                                                        <div class="o_squared_image">
+                                                                            <img class="card-img-top"
+                                                                                 style="height:250px;object-fit: cover;"
+                                                                                 t-att-src="kanban_image('under.hood.images', 'avtar', record.id.raw_value)"
+                                                                                 t-att-alt="record.name.value"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </t>
+                                                            </templates>
+                                                        </kanban>
+                                                    </field>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-6">
+                                        <button name="action_check_okay_inspections" type="object"
+                                                confirm="Are you sure you want set 'Checked and OK at this time' for all unselected under hood parts"
+                                                string="Check All" icon="fa-check-square"
+                                                class="btn btn-success" context="{'check_all':'under_hood'}"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="vehicle_fluids" string="Fluids Inspection" invisible="not vehicle_fluid">
+                                <field name="vehicle_fluid_inspection_ids">
+                                    <tree>
+                                        <field name="required_attention" column_invisible="1"/>
+                                        <field name="further_attention" column_invisible="1"/>
+                                        <field name="okay_for_now" column_invisible="1"/>
+                                        <button name="action_required_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                title="Requires immediate attention"
+                                                invisible="required_attention"/>
+                                        <button name="action_required_attention_reject"
+                                                type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                string="" icon="fa-check" title="Requires immediate attention"
+                                                invisible="not required_attention"/>
+                                        <button name="action_further_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="further_attention"/>
+                                        <button name="action_further_attention_reject"
+                                                type="object"
+                                                class="me-1 btn btn-warning inspection-btn-tree"
+                                                icon="fa-check"
+                                                title="Requires future attention"
+                                                context="{'click_from_tree': True}"
+                                                invisible="not further_attention"/>
+                                        <button name="action_okay_for_now_accept"
+                                                type="object"
+                                                title="Checked and OK at this time"
+                                                icon="fa-blank"
+                                                class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                invisible="okay_for_now"/>
+                                        <button name="action_okay_for_now_reject"
+                                                icon="fa-check"
+                                                title="Checked and OK at this time"
+                                                context="{'click_from_tree': True}"
+                                                type="object"
+                                                class="me-1 btn btn-success inspection-btn-tree"
+                                                invisible="not okay_for_now"/>
+                                        <field name="part_id"/>
+                                        <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="part_id"/>
+                                                <h1>
+                                                    <field name="part_id" required="1"
+                                                           placeholder="Select part"
+                                                           options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                    <field name="required_attention" invisible="1"/>
+                                                    <field name="further_attention" invisible="1"/>
+                                                    <field name="okay_for_now" invisible="1"/>
+                                                </h1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button name="action_required_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                            title="Requires immediate attention"
+                                                            invisible="required_attention"/>
+                                                    <button name="action_required_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-danger inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires immediate attention"
+                                                            invisible="not required_attention"/>
+                                                    <button name="action_further_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                            title="Requires future attention"
+                                                            invisible="further_attention"/>
+                                                    <button name="action_further_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-warning inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires future attention"
+                                                            invisible="not further_attention"/>
+                                                    <button name="action_okay_for_now_accept"
+                                                            type="object"
+                                                            title="Checked and OK at this time"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                            invisible="okay_for_now"/>
+                                                    <button name="action_okay_for_now_reject"
+                                                            icon="fa-check"
+                                                            title="Checked and OK at this time"
+                                                            type="object"
+                                                            class="me-1 btn btn-success inspection-btn p-1"
+                                                            invisible="not okay_for_now"/>
+                                                </div>
+                                            </div>
+                                            <separator string="Notes"/>
+                                            <field name="notes" nolabel="1"/>
+                                            <group string="Detailed Inspection"
+                                                   invisible="not required_attention and not further_attention">
+                                                <group>
+                                                    <field name="inspection_video" filename="file_name"
+                                                           widget="binary"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                    <field name="is_detailed_inspection"/>
+                                                </group>
+                                                <group invisible="not is_detailed_inspection">
+                                                    <field name="f_vehicle_side"/>
+                                                    <field name="vehicle_fluid_id"/>
+                                                    <field name="condition"/>
+                                                    <field name="remarks"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                                <page string="Services &amp; Parts"
+                                                      invisible="not required_attention and not further_attention">
+                                                    <group string="Services">
+                                                        <field name="service_ids" string="Service"
+                                                               widget="many2many_tags"
+                                                               options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                    </group>
+                                                    <separator string="Parts"/>
+                                                    <field name="part_ids" nolabel="1">
+                                                        <tree editable="bottom">
+                                                            <field name="product_id" required="1"
+                                                                   options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            <field name="qty"/>
+                                                            <field name="uom_id"/>
+                                                            <field name="service_ids" column_invisible="1"/>
+                                                            <field name="service_id" required="1"/>
+                                                        </tree>
+                                                    </field>
+                                                </page>
+                                                <page string="Images">
+                                                    <field name="image_ids">
+                                                        <form>
+                                                            <sheet>
+                                                                <div class="oe_title">
+                                                                    <label for="name"/>
+                                                                    <h1>
+                                                                        <field name="name"/>
+                                                                    </h1>
+                                                                </div>
+                                                                <group>
+                                                                    <group>
+                                                                        <field name="avtar" widget="image"
+                                                                               options='{"size": [300, 300]}'
+                                                                               class="bg-view" nolabel="1"/>
+                                                                    </group>
+                                                                </group>
+                                                            </sheet>
+                                                        </form>
+                                                        <kanban string="Kanban" class="">
+                                                            <field name="id"/>
+                                                            <field name="avtar"/>
+                                                            <field name="name"/>
+                                                            <templates>
+                                                                <t t-name="kanban-box">
+                                                                    <div class="card oe_kanban_global_click p-0 border-0">
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <strong>
+                                                                                    <field name="name"/>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr class="mb-1 mt-1"/>
+                                                                        <div class="o_squared_image">
+                                                                            <img class="card-img-top"
+                                                                                 style="height:250px;object-fit: cover;"
+                                                                                 t-att-src="kanban_image('fluid.images', 'avtar', record.id.raw_value)"
+                                                                                 t-att-alt="record.name.value"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </t>
+                                                            </templates>
+                                                        </kanban>
+                                                    </field>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-6">
+                                        <button name="action_check_okay_inspections" type="object"
+                                                confirm="Are you sure you want set 'Checked and OK at this time' for all unselected fluid parts"
+                                                string="Check All" icon="fa-check-square"
+                                                context="{'check_all':'fluid'}"
+                                                class="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="tyre_inspection" string="Tyres Inspections" invisible="not tyre_inspection">
+                                <field name="vehicle_tyre_inspection_ids">
+                                    <tree>
+                                        <field name="required_attention" column_invisible="1"/>
+                                        <field name="further_attention" column_invisible="1"/>
+                                        <field name="okay_for_now" column_invisible="1"/>
+                                        <button name="action_required_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                title="Requires immediate attention"
+                                                invisible="required_attention"/>
+                                        <button name="action_required_attention_reject"
+                                                type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                string="" icon="fa-check" title="Requires immediate attention"
+                                                invisible="not required_attention"/>
+                                        <button name="action_further_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="further_attention"/>
+                                        <button name="action_further_attention_reject"
+                                                type="object"
+                                                class="me-1 btn btn-warning inspection-btn-tree"
+                                                icon="fa-check"
+                                                title="Requires future attention"
+                                                context="{'click_from_tree': True}"
+                                                invisible="not further_attention"/>
+                                        <button name="action_okay_for_now_accept"
+                                                type="object"
+                                                title="Checked and OK at this time"
+                                                icon="fa-blank"
+                                                class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                invisible="okay_for_now"/>
+                                        <button name="action_okay_for_now_reject"
+                                                icon="fa-check"
+                                                title="Checked and OK at this time"
+                                                context="{'click_from_tree': True}"
+                                                type="object"
+                                                class="me-1 btn btn-success inspection-btn-tree"
+                                                invisible="not okay_for_now"/>
+                                        <field name="part_id"/>
+                                        <field name="incoming"/>
+                                        <field name="adjust_to"/>
+                                        <field name="tread_depth"/>
+                                        <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="part_id"/>
+                                                <h1>
+                                                    <field name="part_id" required="1"
+                                                           placeholder="Select part"
+                                                           options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                    <field name="required_attention" invisible="1"/>
+                                                    <field name="further_attention" invisible="1"/>
+                                                    <field name="okay_for_now" invisible="1"/>
+                                                </h1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button name="action_required_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                            title="Requires immediate attention"
+                                                            invisible="required_attention"/>
+                                                    <button name="action_required_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-danger inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires immediate attention"
+                                                            invisible="not required_attention"/>
+                                                    <button name="action_further_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                            title="Requires future attention"
+                                                            invisible="further_attention"/>
+                                                    <button name="action_further_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-warning inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires future attention"
+                                                            invisible="not further_attention"/>
+                                                    <button name="action_okay_for_now_accept"
+                                                            type="object"
+                                                            title="Checked and OK at this time"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                            invisible="okay_for_now"/>
+                                                    <button name="action_okay_for_now_reject"
+                                                            icon="fa-check"
+                                                            title="Checked and OK at this time"
+                                                            type="object"
+                                                            class="me-1 btn btn-success inspection-btn p-1"
+                                                            invisible="not okay_for_now"/>
+                                                </div>
+                                            </div>
+                                            <separator string="Notes"/>
+                                            <field name="notes" nolabel="1"/>
+                                            <group>
+                                                <group string="Tyre Details"
+                                                       invisible="not required_attention and not further_attention">
+                                                    <field name="incoming"/>
+                                                    <field name="adjust_to"/>
+                                                    <field name="tread_depth"/>
+                                                </group>
+                                                <group string="Detailed Inspection"
+                                                       invisible="not required_attention and not further_attention">
+                                                    <field name="inspection_video" filename="file_name"
+                                                           widget="binary"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                    <field name="is_detailed_inspection"/>
+                                                    <field name="tyre" invisible="not is_detailed_inspection"/>
+                                                    <field name="condition" invisible="not is_detailed_inspection"/>
+                                                    <field name="tread_wear"
+                                                           invisible="not is_detailed_inspection"/>
+                                                    <field name="tyre_pressure"
+                                                           invisible="not is_detailed_inspection"/>
+                                                    <field name="brake_pads"
+                                                           invisible="not is_detailed_inspection"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                                <page string="Services &amp; Parts"
+                                                      invisible="not required_attention and not further_attention">
+                                                    <group string="Services">
+                                                        <field name="service_ids" string="Service"
+                                                               widget="many2many_tags"
+                                                               options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                    </group>
+                                                    <separator string="Parts"/>
+                                                    <field name="part_ids" nolabel="1">
+                                                        <tree editable="bottom">
+                                                            <field name="product_id" required="1"
+                                                                   options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            <field name="qty"/>
+                                                            <field name="uom_id"/>
+                                                            <field name="service_ids" column_invisible="1"/>
+                                                            <field name="service_id" required="1"/>
+                                                        </tree>
+                                                    </field>
+                                                </page>
+                                                <page string="Images">
+                                                    <field name="image_ids">
+                                                        <form>
+                                                            <sheet>
+                                                                <div class="oe_title">
+                                                                    <label for="name"/>
+                                                                    <h1>
+                                                                        <field name="name"/>
+                                                                    </h1>
+                                                                </div>
+                                                                <group>
+                                                                    <group>
+                                                                        <field name="avtar" widget="image"
+                                                                               options='{"size": [300, 300]}'
+                                                                               class="bg-view" nolabel="1"/>
+                                                                    </group>
+                                                                </group>
+                                                            </sheet>
+                                                        </form>
+                                                        <kanban string="Kanban" class="">
+                                                            <field name="id"/>
+                                                            <field name="avtar"/>
+                                                            <field name="name"/>
+                                                            <templates>
+                                                                <t t-name="kanban-box">
+                                                                    <div class="card oe_kanban_global_click p-0 border-0">
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <strong>
+                                                                                    <field name="name"/>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr class="mb-1 mt-1"/>
+                                                                        <div class="o_squared_image">
+                                                                            <img class="card-img-top"
+                                                                                 style="height:250px;object-fit: cover;"
+                                                                                 t-att-src="kanban_image('tyre.images', 'avtar', record.id.raw_value)"
+                                                                                 t-att-alt="record.name.value"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </t>
+                                                            </templates>
+                                                        </kanban>
+                                                    </field>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-6">
+                                        <button name="action_check_okay_inspections" type="object"
+                                                confirm="Are you sure you want set 'Checked and OK at this time' for all unselected tyre parts"
+                                                string="Check All" icon="fa-check-square" context="{'check_all':'tyre'}"
+                                                class="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="under_vehicle_inspection" string="Under Vehicle"
+                                  invisible="not under_vehicle">
+                                <field name="under_vehicle_inspection_ids">
+                                    <tree>
+                                        <field name="required_attention" column_invisible="1"/>
+                                        <field name="further_attention" column_invisible="1"/>
+                                        <field name="okay_for_now" column_invisible="1"/>
+                                        <button name="action_required_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                title="Requires immediate attention"
+                                                invisible="required_attention"/>
+                                        <button name="action_required_attention_reject"
+                                                type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                string="" icon="fa-check" title="Requires immediate attention"
+                                                invisible="not required_attention"/>
+                                        <button name="action_further_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="further_attention"/>
+                                        <button name="action_further_attention_reject"
+                                                type="object"
+                                                class="me-1 btn btn-warning inspection-btn-tree"
+                                                icon="fa-check"
+                                                title="Requires future attention"
+                                                context="{'click_from_tree': True}"
+                                                invisible="not further_attention"/>
+                                        <button name="action_okay_for_now_accept"
+                                                type="object"
+                                                title="Checked and OK at this time"
+                                                icon="fa-blank"
+                                                class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                invisible="okay_for_now"/>
+                                        <button name="action_okay_for_now_reject"
+                                                icon="fa-check"
+                                                title="Checked and OK at this time"
+                                                context="{'click_from_tree': True}"
+                                                type="object"
+                                                class="me-1 btn btn-success inspection-btn-tree"
+                                                invisible="not okay_for_now"/>
+                                        <field name="part_id"/>
+                                        <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="part_id"/>
+                                                <h1>
+                                                    <field name="part_id" required="1"
+                                                           placeholder="Select part"
+                                                           options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                    <field name="required_attention" invisible="1"/>
+                                                    <field name="further_attention" invisible="1"/>
+                                                    <field name="okay_for_now" invisible="1"/>
+                                                </h1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button name="action_required_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                            title="Requires immediate attention"
+                                                            invisible="required_attention"/>
+                                                    <button name="action_required_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-danger inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires immediate attention"
+                                                            invisible="not required_attention"/>
+                                                    <button name="action_further_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                            title="Requires future attention"
+                                                            invisible="further_attention"/>
+                                                    <button name="action_further_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-warning inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires future attention"
+                                                            invisible="not further_attention"/>
+                                                    <button name="action_okay_for_now_accept"
+                                                            type="object"
+                                                            title="Checked and OK at this time"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                            invisible="okay_for_now"/>
+                                                    <button name="action_okay_for_now_reject"
+                                                            icon="fa-check"
+                                                            title="Checked and OK at this time"
+                                                            type="object"
+                                                            class="me-1 btn btn-success inspection-btn p-1"
+                                                            invisible="not okay_for_now"/>
+                                                </div>
+                                            </div>
+                                            <separator string="Notes"/>
+                                            <field name="notes" nolabel="1"/>
+                                            <group string="Detailed Inspection"
+                                                   invisible="not required_attention and not further_attention">
+                                                <group>
+                                                    <field name="inspection_video" filename="file_name"
+                                                           widget="binary"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                                <page string="Services &amp; Parts"
+                                                      invisible="not required_attention and not further_attention">
+                                                    <group string="Services">
+                                                        <field name="service_ids" string="Service"
+                                                               widget="many2many_tags"
+                                                               options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                    </group>
+                                                    <separator string="Parts"/>
+                                                    <field name="part_ids" nolabel="1">
+                                                        <tree editable="bottom">
+                                                            <field name="product_id" required="1"
+                                                                   options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            <field name="qty"/>
+                                                            <field name="uom_id"/>
+                                                            <field name="service_ids" column_invisible="1"/>
+                                                            <field name="service_id" required="1"/>
+                                                        </tree>
+                                                    </field>
+                                                </page>
+                                                <page string="Images">
+                                                    <field name="image_ids">
+                                                        <form>
+                                                            <sheet>
+                                                                <div class="oe_title">
+                                                                    <label for="name"/>
+                                                                    <h1>
+                                                                        <field name="name"/>
+                                                                    </h1>
+                                                                </div>
+                                                                <group>
+                                                                    <group>
+                                                                        <field name="avtar" widget="image"
+                                                                               options='{"size": [300, 300]}'
+                                                                               class="bg-view" nolabel="1"/>
+                                                                    </group>
+                                                                </group>
+                                                            </sheet>
+                                                        </form>
+                                                        <kanban string="Kanban" class="">
+                                                            <field name="id"/>
+                                                            <field name="avtar"/>
+                                                            <field name="name"/>
+                                                            <templates>
+                                                                <t t-name="kanban-box">
+                                                                    <div class="card oe_kanban_global_click p-0 border-0">
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <strong>
+                                                                                    <field name="name"/>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr class="mb-1 mt-1"/>
+                                                                        <div class="o_squared_image">
+                                                                            <img class="card-img-top"
+                                                                                 style="height:250px;object-fit: cover;"
+                                                                                 t-att-src="kanban_image('under.vehicle.images', 'avtar', record.id.raw_value)"
+                                                                                 t-att-alt="record.name.value"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </t>
+                                                            </templates>
+                                                        </kanban>
+                                                    </field>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-6">
+                                        <button name="action_check_okay_inspections" type="object"
+                                                confirm="Are you sure you want set 'Checked and OK at this time' for all unselected under vehicle parts"
+                                                string="Check All" icon="fa-check-square"
+                                                context="{'check_all':'under_vehicle'}"
+                                                class="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="brake_conditions" string="Brake Conditions"
+                                  invisible="not brake_condition">
+                                <field name="brake_condition_ids">
+                                    <tree>
+                                        <field name="required_attention" column_invisible="1"/>
+                                        <field name="further_attention" column_invisible="1"/>
+                                        <field name="okay_for_now" column_invisible="1"/>
+                                        <button name="action_required_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                title="Requires immediate attention"
+                                                invisible="required_attention"/>
+                                        <button name="action_required_attention_reject"
+                                                type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                string="" icon="fa-check" title="Requires immediate attention"
+                                                invisible="not required_attention"/>
+                                        <button name="action_further_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="further_attention"/>
+                                        <button name="action_further_attention_reject"
+                                                type="object"
+                                                class="me-1 btn btn-warning inspection-btn-tree"
+                                                icon="fa-check"
+                                                title="Requires future attention"
+                                                context="{'click_from_tree': True}"
+                                                invisible="not further_attention"/>
+                                        <button name="action_okay_for_now_accept"
+                                                type="object"
+                                                title="Checked and OK at this time"
+                                                icon="fa-blank"
+                                                class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                invisible="okay_for_now"/>
+                                        <button name="action_okay_for_now_reject"
+                                                icon="fa-check"
+                                                title="Checked and OK at this time"
+                                                context="{'click_from_tree': True}"
+                                                type="object"
+                                                class="me-1 btn btn-success inspection-btn-tree"
+                                                invisible="not okay_for_now"/>
+                                        <field name="part_id"/>
+                                        <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="part_id"/>
+                                                <h1>
+                                                    <field name="part_id" required="1"
+                                                           placeholder="Select part"
+                                                           options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                    <field name="required_attention" invisible="1"/>
+                                                    <field name="further_attention" invisible="1"/>
+                                                    <field name="okay_for_now" invisible="1"/>
+                                                </h1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button name="action_required_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                            title="Requires immediate attention"
+                                                            invisible="required_attention"/>
+                                                    <button name="action_required_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-danger inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires immediate attention"
+                                                            invisible="not required_attention"/>
+                                                    <button name="action_further_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                            title="Requires future attention"
+                                                            invisible="further_attention"/>
+                                                    <button name="action_further_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-warning inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires future attention"
+                                                            invisible="not further_attention"/>
+                                                    <button name="action_okay_for_now_accept"
+                                                            type="object"
+                                                            title="Checked and OK at this time"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                            invisible="okay_for_now"/>
+                                                    <button name="action_okay_for_now_reject"
+                                                            icon="fa-check"
+                                                            title="Checked and OK at this time"
+                                                            type="object"
+                                                            class="me-1 btn btn-success inspection-btn p-1"
+                                                            invisible="not okay_for_now"/>
+                                                </div>
+                                            </div>
+                                            <separator string="Notes"/>
+                                            <field name="notes" nolabel="1"/>
+                                            <group string="Detailed Inspection"
+                                                   invisible="not required_attention and not further_attention">
+                                                <group>
+                                                    <field name="inspection_video" filename="file_name"
+                                                           widget="binary"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                                <page string="Services &amp; Parts"
+                                                      invisible="not required_attention and not further_attention">
+                                                    <group string="Services">
+                                                        <field name="service_ids" string="Service"
+                                                               widget="many2many_tags"
+                                                               options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                    </group>
+                                                    <separator string="Parts"/>
+                                                    <field name="part_ids" nolabel="1">
+                                                        <tree editable="bottom">
+                                                            <field name="product_id" required="1"
+                                                                   options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            <field name="qty"/>
+                                                            <field name="uom_id"/>
+                                                            <field name="service_ids" column_invisible="1"/>
+                                                            <field name="service_id" required="1"/>
+                                                        </tree>
+                                                    </field>
+                                                </page>
+                                                <page string="Images">
+                                                    <field name="image_ids">
+                                                        <form>
+                                                            <sheet>
+                                                                <div class="oe_title">
+                                                                    <label for="name"/>
+                                                                    <h1>
+                                                                        <field name="name"/>
+                                                                    </h1>
+                                                                </div>
+                                                                <group>
+                                                                    <group>
+                                                                        <field name="avtar" widget="image"
+                                                                               options='{"size": [300, 300]}'
+                                                                               class="bg-view" nolabel="1"/>
+                                                                    </group>
+                                                                </group>
+                                                            </sheet>
+                                                        </form>
+                                                        <kanban string="Kanban" class="">
+                                                            <field name="id"/>
+                                                            <field name="avtar"/>
+                                                            <field name="name"/>
+                                                            <templates>
+                                                                <t t-name="kanban-box">
+                                                                    <div class="card oe_kanban_global_click p-0 border-0">
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <strong>
+                                                                                    <field name="name"/>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr class="mb-1 mt-1"/>
+                                                                        <div class="o_squared_image">
+                                                                            <img class="card-img-top"
+                                                                                 style="height:250px;object-fit: cover;"
+                                                                                 t-att-src="kanban_image('brake.images', 'avtar', record.id.raw_value)"
+                                                                                 t-att-alt="record.name.value"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </t>
+                                                            </templates>
+                                                        </kanban>
+                                                    </field>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-6">
+                                        <button name="action_check_okay_inspections" type="object"
+                                                confirm="Are you sure you want set 'Checked and OK at this time' for all unselected brake parts"
+                                                string="Check All" icon="fa-check-square"
+                                                context="{'check_all':'brake'}"
+                                                class="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="multi_point_inspection" string="Multi-Point Inspection"
+                                  invisible="not vehicle_component">
+                                <field name="vehicle_components_inspection_ids">
+                                    <tree>
+                                        <field name="required_attention" column_invisible="1"/>
+                                        <field name="further_attention" column_invisible="1"/>
+                                        <field name="okay_for_now" column_invisible="1"/>
+                                        <button name="action_required_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-danger inspection-btn-tree"
+                                                title="Requires immediate attention"
+                                                invisible="required_attention"/>
+                                        <button name="action_required_attention_reject"
+                                                type="object" class="me-1 btn btn-danger inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                string="" icon="fa-check" title="Requires immediate attention"
+                                                invisible="not required_attention"/>
+                                        <button name="action_further_attention_accept"
+                                                type="object"
+                                                icon="fa-blank"
+                                                context="{'click_from_tree': True}"
+                                                class="me-1 btn btn-outline-warning inspection-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="further_attention"/>
+                                        <button name="action_further_attention_reject"
+                                                type="object"
+                                                class="me-1 btn btn-warning inspection-btn-tree"
+                                                icon="fa-check"
+                                                title="Requires future attention"
+                                                context="{'click_from_tree': True}"
+                                                invisible="not further_attention"/>
+                                        <button name="action_okay_for_now_accept"
+                                                type="object"
+                                                title="Checked and OK at this time"
+                                                icon="fa-blank"
+                                                class="me-1 btn btn-outline-success inspection-btn-tree"
+                                                context="{'click_from_tree': True}"
+                                                invisible="okay_for_now"/>
+                                        <button name="action_okay_for_now_reject"
+                                                icon="fa-check"
+                                                title="Checked and OK at this time"
+                                                context="{'click_from_tree': True}"
+                                                type="object"
+                                                class="me-1 btn btn-success inspection-btn-tree"
+                                                invisible="not okay_for_now"/>
+                                        <field name="part_id"/>
+                                        <field name="service_ids" widget="many2many_tags" string="Services"/>
+                                    </tree>
+                                    <form string="Multi-Point Inspection">
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="part_id"/>
+                                                <h1>
+                                                    <field name="part_id" required="1"
+                                                           placeholder="Select part"
+                                                           options="{'no_create':True,'no_create_edit':True,'no_open':True,'no_quick_create':True}"/>
+                                                    <field name="required_attention" invisible="1"/>
+                                                    <field name="further_attention" invisible="1"/>
+                                                    <field name="okay_for_now" invisible="1"/>
+                                                </h1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button name="action_required_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-danger inspection-btn p-1"
+                                                            title="Requires immediate attention"
+                                                            invisible="required_attention"/>
+                                                    <button name="action_required_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-danger inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires immediate attention"
+                                                            invisible="not required_attention"/>
+                                                    <button name="action_further_attention_accept"
+                                                            type="object"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-warning inspection-btn p-1"
+                                                            title="Requires future attention"
+                                                            invisible="further_attention"/>
+                                                    <button name="action_further_attention_reject"
+                                                            type="object"
+                                                            class="me-1 btn btn-warning inspection-btn p-1"
+                                                            icon="fa-check"
+                                                            title="Requires future attention"
+                                                            invisible="not further_attention"/>
+                                                    <button name="action_okay_for_now_accept"
+                                                            type="object"
+                                                            title="Checked and OK at this time"
+                                                            icon="fa-blank"
+                                                            class="me-1 btn btn-outline-success inspection-btn p-1"
+                                                            invisible="okay_for_now"/>
+                                                    <button name="action_okay_for_now_reject"
+                                                            icon="fa-check"
+                                                            title="Checked and OK at this time"
+                                                            type="object"
+                                                            class="me-1 btn btn-success inspection-btn p-1"
+                                                            invisible="not okay_for_now"/>
+                                                </div>
+                                            </div>
+                                            <separator string="Notes"/>
+                                            <field name="notes" nolabel="1"/>
+                                            <group string="Detailed Inspection"
+                                                   invisible="not required_attention and not further_attention">
+                                                <group>
+                                                    <field name="inspection_video" filename="file_name"
+                                                           widget="binary"/>
+                                                    <field name="file_name" invisible="1"/>
+                                                    <field name="is_detailed_inspection"/>
+                                                </group>
+                                                <group invisible="not is_detailed_inspection">
+                                                    <field name="vehicle_component_id"/>
+                                                    <field name="condition"/>
+                                                    <field name="remarks"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                                <page string="Services &amp; Parts"
+                                                      invisible="not required_attention and not further_attention">
+                                                    <group string="Services">
+                                                        <field name="service_ids" string="Service"
+                                                               widget="many2many_tags"
+                                                               options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                    </group>
+                                                    <separator string="Parts"/>
+                                                    <field name="part_ids" nolabel="1">
+                                                        <tree editable="bottom">
+                                                            <field name="product_id" required="1"
+                                                                   options="{'no_quick_create':True,'no_create':True,'no_edit':True,'no_create_edit':True}"/>
+                                                            <field name="qty"/>
+                                                            <field name="uom_id"/>
+                                                            <field name="service_ids" column_invisible="1"/>
+                                                            <field name="service_id" required="1"/>
+                                                        </tree>
+                                                    </field>
+                                                </page>
+                                                <page string="Images">
+                                                    <field name="image_ids">
+                                                        <form>
+                                                            <sheet>
+                                                                <div class="oe_title">
+                                                                    <label for="name"/>
+                                                                    <h1>
+                                                                        <field name="name"/>
+                                                                    </h1>
+                                                                </div>
+                                                                <group>
+                                                                    <group>
+                                                                        <field name="avtar" widget="image"
+                                                                               options='{"size": [300, 300]}'
+                                                                               class="bg-view" nolabel="1"/>
+                                                                    </group>
+                                                                </group>
+                                                            </sheet>
+                                                        </form>
+                                                        <kanban string="Kanban" class="">
+                                                            <field name="id"/>
+                                                            <field name="avtar"/>
+                                                            <field name="name"/>
+                                                            <templates>
+                                                                <t t-name="kanban-box">
+                                                                    <div class="card oe_kanban_global_click p-0 border-0">
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <strong>
+                                                                                    <field name="name"/>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr class="mb-1 mt-1"/>
+                                                                        <div class="o_squared_image">
+                                                                            <img class="card-img-top"
+                                                                                 style="height:250px;object-fit: cover;"
+                                                                                 t-att-src="kanban_image('multipoint.images', 'avtar', record.id.raw_value)"
+                                                                                 t-att-alt="record.name.value"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </t>
+                                                            </templates>
+                                                        </kanban>
+                                                    </field>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-6">
+                                        <button name="action_check_okay_inspections" type="object"
+                                                confirm="Are you sure you want set 'Checked and OK at this time' for all unselected multipoint parts"
+                                                string="Check All" icon="fa-check-square"
+                                                context="{'check_all':'multi_point'}"
+                                                class="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="inspection_image" string="Images">
+                                <field name="inspection_image_ids">
+                                    <form>
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="name"/>
+                                                <h1>
+                                                    <field name="name" placeholder="e.g. Name"/>
+                                                </h1>
+                                            </div>
+                                            <group string="Inspection Image">
+                                                <field name="avatar" widget="image" style="width: 75%;" nolabel="1"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                    <kanban string="Kanban" class="">
+                                        <field name="id"/>
+                                        <field name="avatar"/>
+                                        <field name="name"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="card oe_kanban_global_click p-0 border-0">
+                                                    <div class="row">
+                                                        <div class="col-8">
+                                                            <strong>
+                                                                <field name="name"/>
+                                                            </strong>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="mb-1 mt-1"/>
+                                                    <div class="o_squared_image">
+                                                        <img class="card-img-top"
+                                                             style="height:250px;object-fit: cover;"
+                                                             t-att-src="kanban_image('inspection.images', 'avatar', record.id.raw_value)"
+                                                             t-att-alt="record.name.value"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- Required Service Tree View-->
+        <record id="vehicle_required_service_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.required.service.view.tree</field>
+            <field name="model">vehicle.required.services</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="active==False">
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="estimate_time" widget="float_time"/>
+                    <field name="required_status"/>
+                    <field name="active" column_invisible="1"/>
+                    <field name="qty"/>
+                    <field name="uom_id"/>
+                    <field name="tax_ids" widget="many2many_tags"/>
+                    <field name="price"/>
+                    <field name="currency_id" column_invisible="1"/>
+                    <field name="service_selected" column_invisible="1"/>
+                    <field name="vehicle_health_report_id" column_invisible="1"/>
+                    <field name="tax_amount"/>
+                    <field name="total_amount" sum="Total Amount"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Required Parts Tree View-->
+        <record id="vehicle_required_part_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.required.part.view.tree</field>
+            <field name="model">vehicle.required.parts</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="active==False">
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="qty"/>
+                    <field name="uom_id"/>
+                    <field name="forecast_qty"/>
+                    <button name="action_view_forecast_report" type="object" title="Forecast Report"
+                            icon="fa-area-chart"/>
+                    <field name="tax_ids" widget="many2many_tags"/>
+                    <field name="service_ids" column_invisible="1"/>
+                    <field name="service_id" domain="[('id','in',service_ids)]"/>
+                    <field name="required_status"/>
+                    <field name="active" column_invisible="1"/>
+                    <field name="price"/>
+                    <field name="tax_amount"/>
+                    <field name="total_amount" sum="Total Amount"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

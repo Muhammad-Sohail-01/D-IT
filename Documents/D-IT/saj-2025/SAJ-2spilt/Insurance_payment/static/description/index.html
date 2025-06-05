@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Payment Module</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: #f8f9fa;
+            border-bottom: 2px solid #ddd;
+        }
+        header img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .banner {
+            width: 100%;
+            max-height: 300px;
+            margin: 20px 0;
+            display: block;
+        }
+        h1, h2, h3 {
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="static/description/logo.png" alt="Logo">
+    </header>
+<div class="container">
+        <img src="static/description/banner.png" alt="Banner" class="banner">
+
+        <section id="overview" class="section">
+            <h2>Overview</h2>
+            <p>The Insurance Payment Module allows businesses to manage insurance payments seamlessly within Odoo. It extends the <code>sale.order</code> model by introducing insurance-related fields and functionality, enabling tracking, automated calculations, journal entry creation, and integration with existing accounting workflows.</p>
+        </section>
+    </div>
+</head>
+<body>
+    <header>
+        <h1>Insurance Payment Module</h1>
+    </header>
+
+    <div class="container">
+        <nav>
+            <a href="#overview">Overview</a>
+            <a href="#features">Features</a>
+            <a href="#dependencies">Dependencies</a>
+            <a href="#installation">Installation</a>
+            <a href="#usage-guide">Usage Guide</a>
+            <a href="#testing">Testing</a>
+            <a href="#screenshots">Screenshots</a>
+            <a href="#support">Support</a>
+            <a href="#license">License</a>
+        </nav>
+
+        <section id="overview" class="section">
+            <h2>Overview</h2>
+            <p>The Insurance Payment Module allows businesses to manage insurance payments seamlessly within Odoo. It extends the <code>sale.order</code> model by introducing insurance-related fields and functionality, enabling tracking, automated calculations, journal entry creation, and integration with existing accounting workflows.</p>
+        </section>
+
+        <section id="features" class="section">
+            <h2>Features</h2>
+            <ul>
+                <li>Manage insurance companies and related policies effortlessly.</li>
+                <li>Automate calculations for insurance amounts based on fixed values or percentages.</li>
+                <li>Generate and post insurance-related journal entries.</li>
+                <li>User-friendly interface enhancements for managing insurance details in sales orders.</li>
+                <li>Seamless integration with existing accounting and sales workflows.</li>
+            </ul>
+        </section>
+
+        <section id="dependencies" class="section">
+            <h2>Dependencies</h2>
+            <p>This module requires the following Odoo modules to function correctly:</p>
+            <ul>
+                <li>base</li>
+                <li>account</li>
+                <li>sale</li>
+                <li>sale_management</li>
+                <li>tk_vehicle_management (custom module)</li>
+            </ul>
+        </section>
+
+        <section id="installation" class="section">
+            <h2>Installation</h2>
+            <ol>
+                <li>Clone or Download the Repository.</li>
+                <li>Place the module folder into your Odoo addons directory.</li>
+                <li>Restart the Odoo Server:</li>
+                <pre><code>./odoo-bin -u all</code></pre>
+                <li>Navigate to the Apps menu in Odoo, search for <strong>Insurance Payment</strong>, and click Install.</li>
+            </ol>
+        </section>
+
+        <section id="usage-guide" class="section">
+            <h2>Usage Guide</h2>
+
+            <h3 id="setting-up-insurance-companies">Setting Up Insurance Companies</h3>
+            <ol>
+                <li>Navigate to Contacts > Create.</li>
+                <li>Add the insurance company details.</li>
+                <li>Assign the company to the "Insurance" category.</li>
+            </ol>
+
+            <h3 id="managing-insurance-transactions">Managing Insurance Transactions</h3>
+            <ol>
+                <li>Go to Sales > Sales Orders and create a new order.</li>
+                <li>Within the Insurance Details tab:</li>
+                <ul>
+                    <li>Check the Enable Insurance Invoice box.</li>
+                    <li>Select the Insurance Company.</li>
+                    <li>Enter the Policy Number.</li>
+                    <li>Choose Amount Nature (Fixed or Percentage).</li>
+                    <li>Specify the fixed amount or percentage.</li>
+                </ul>
+                <li>Confirm the sales order.</li>
+            </ol>
+
+            <h3 id="generating-insurance-journal-entries">Generating Insurance Journal Entries</h3>
+            <ol>
+                <li>From the Sales Order form, click the <strong>Ins JV</strong> button (in the header).</li>
+                <li>The system validates the data and creates a journal entry automatically.</li>
+                <li>You can review the generated entry in Accounting > Journal Entries.</li>
+            </ol>
+        </section>
+
+        <section id="testing" class="section">
+            <h2>Testing the Journal Entry Flow</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Insurance Company Setup:</strong> Ensure the insurance company is recorded as a partner with the "Insurance" category.</li>
+                <li><strong>Journal Configuration:</strong> Verify that an "Insurance Journal" exists under Accounting > Configuration > Journals.</li>
+                <li><strong>Module Installation:</strong> Confirm the module is installed and error-free.</li>
+            </ul>
+
+            <h3>Step-by-Step Testing</h3>
+            <ol>
+                <li>Create a Sales Order:</li>
+                <ul>
+                    <li>Navigate to Sales > Sales Orders > Create.</li>
+                    <li>Fill in customer and product details, and complete the Insurance Details tab.</li>
+                </ul>
+                <li>Validate Insurance Details:</li>
+                <ul>
+                    <li>Verify correct calculations for receivable amounts and insurance percentages.</li>
+                </ul>
+                <li>Generate the Journal Entry:</li>
+                <ul>
+                    <li>Click the Ins JV button, and review the resulting journal entry under Accounting > Journal Entries.</li>
+                </ul>
+            </ol>
+        </section>
+
+        <section id="screenshots" class="section">
+            <h2>Screenshots</h2>
+            <img src="insurance1.png" alt="Insurance Details Tab">
+            <img src="insurance2.png" alt="Insurance Journal Entry">
+            <img src="insurance3.png" alt="Calculation Screen">
+            <img src="insurance4.png" alt="Validation Errors">
+        </section>
+
+        <section id="support" class="section">
+            <h2>Support</h2>
+            <p>For support or inquiries, please contact:</p>
+            <ul>
+                <li><strong>Author:</strong> Rauff M. Imasdeen</li>
+                <li><strong>Email:</strong> <a href="mailto:rauffmimas@gmail.com">rauffmimas@gmail.com</a></li>
+                <li><strong>WhatsApp:</strong> +971582878939</li>
+            </ul>
+        </section>
+        <div class="support-button">
+    <a href="https://wa.me/971582878939" target="_blank" title="Contact Support on WhatsApp">
+        <img src="static/description/whatsapp-icon.png" alt="WhatsApp Icon" class="whatsapp-icon">
+        Contact Support
+    </a>
+</div>
+
+<style>
+    .support-button {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .support-button a {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        background-color: #25d366;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+    .support-button a:hover {
+        background-color: #1eb254;
+    }
+    .support-button a img.whatsapp-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+</style>
+
+        <section id="license" class="section">
+            <h2>License and Copyright</h2>
+            <p>&copy; 2024 Rauff M. Imasdeen. All rights reserved.</p>
+            <p>This software is licensed under the LGPL-3 license. Unauthorized reproduction or distribution of this module is prohibited without prior written consent.</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Insurance Payment Module. All rights reserved.</p>
+    </footer>
+</body>
+</html>

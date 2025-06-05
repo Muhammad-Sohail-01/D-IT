@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="vehicle_booking_form_view" model="ir.ui.view">
+            <field name="name">vehicle.booking.form.view</field>
+            <field name="model">vehicle.booking</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="status" widget="statusbar"/>
+                        <button name="action_create_vehicle_inspection" type="object" string="Create Inspection"
+                                class="btn btn-primary" invisible="inspection_id"/>
+                    </header>
+                    <div invisible="not warranty_contract_id or vehicle_from != 'customer_vehicle' or not register_vehicle_id"
+                         class="alert alert-info text-center" role="alert">
+                        This vehicle is covered under warranty. Please refer to the warranty contract for further
+                        details.
+                    </div>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_view_job_card"
+                                    icon="fa-wrench" invisible="not inspection_id">
+                                Job Card
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                            <h6>
+                                <field name="vehicle_from" widget="radio" options="{'horizontal':True}" invisible="1"/>
+                            </h6>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <group string="Customer Details">
+                            <group>
+                                <field name="customer_id" required="1" options="{'no_quick_create':True}"/>
+                                <field name="last_name" invisible="1"/>
+                                <field name="email" widget="email"/>
+                                <field name="phone" widget="phone"/>
+                                <field name="priority" widget="priority"/>
+                            </group>
+                            <group>
+                                <field name="address_area" required="1"/>
+                                <field name="business" widget="boolean_toggle" required="1"/>
+                                <field name="customer_tag_ids" widget="many2many_tags"
+                                       options="{'color_field': 'color'}"/>
+                                <field name="notes"/>
+                            </group>
+                        </group>
+                        <group string="Vehicle From Fleet"
+                               invisible="vehicle_from not in ['fleet_vehicle','customer_vehicle']">
+                            <group>
+                                <field name="register_vehicle_id" placeholder="From Register Vehicle"
+                                       options="{'no_quick_create':True,'no_create':True}"
+                                       string="Registered Vehicle"
+                                       invisible="vehicle_from != 'customer_vehicle'"/>
+                                <label for="register_vehicle_id" class="mt-1" string=""/>
+                                <div name="register_vehicle_id">
+                                    <button string="Register Vehicle" class="btn btn-primary"
+                                            icon="fa-car" type="action" name="%(vr_vehicle_register_action)d"
+                                            invisible="register_vehicle_id"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="warranty_contract_id"
+                                       domain="[('register_vehicle_id','=',register_vehicle_id),('status','=','running'),('start_date', '&lt;=', booking_date),('end_date', '&gt;=', booking_date)]"/>
+                            </group>
+                        </group>
+                        <group string="Vehicle Details" invisible="not register_vehicle_id">
+                            <group>
+                                <field name="brand_id" required="register_vehicle_id"/>
+                                <field name="vehicle_model_id" required="register_vehicle_id"/>
+                                <field name="year" required="register_vehicle_id"/>
+                                <field name="color" required="register_vehicle_id"/>
+                                <field name="fuel_type" required="register_vehicle_id"/>
+                                <field name="transmission" widget="radio" options="{'horizontal':True}"
+                                       required="register_vehicle_id"/>
+                            </group>
+                            <group>
+                                <field name="vin_no" required="register_vehicle_id"/>
+                                <field name="registration_no" required="register_vehicle_id"/>
+                                <field name="miles" required="register_vehicle_id"/>
+                                <field name="is_warranty" widget="boolean_toggle" required="register_vehicle_id"/>
+                                <field name="warranty_type" invisible="not is_warranty"/>
+                                <field name="insurance_provider"/>
+                            </group>
+                        </group>
+                        <group string="Check in Details">
+                            <group>
+                                <field name="booking_source" widget="radio" options="{'horizontal':True}" required="1"/>
+                                <field name="other_source" invisible="booking_source != 'other'"
+                                       required="booking_source == 'other'"/>
+                                <field name="lead_id" readonly="1" force_save="1" invisible="not lead_id"/>
+                                <field name="inspection_id" invisible="not inspection_id" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="booking_date" required="1"/>
+                                <field name="lead_source_id" readonly="1" force_save="1" invisible="not lead_id"/>
+                                <field name="lead_medium_id" readonly="1" force_save="1" invisible="not lead_id"/>
+                                <field name="vehicle_appointment_id" readonly="1" force_save="1"
+                                       invisible="not vehicle_appointment_id"/>
+                            </group>
+                        </group>
+                        <group string="Responsible">
+                            <group>
+                                <field name="sale_person_id" widget="many2one_avatar_user"/>
+                            </group>
+                            <group>
+                                <field name="service_adviser_id" widget="many2one_avatar_user"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Vehicle License" name="vehicle_license">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6>
+                                            Front
+                                        </h6>
+                                        <hr class="mb-1 mt-1"/>
+                                        <field name="licence_image_front" widget="image"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6>
+                                            Back
+                                        </h6>
+                                        <hr class="mb-1 mt-1"/>
+                                        <field name="licence_image_back" widget="image"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page string="Customer Requests/Complaints">
+                                <field name="vehicle_concern_ids" widget="section_and_note_one2many">
+                                    <tree editable="bottom">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a line"/>
+                                            <create name="add_section_control"
+                                                    string="Add a title"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                        </control>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="concern_type_id" required="not display_type" string="Concern"/>
+                                        <field name="display_type" column_invisible="1"/>
+                                        <field name="name" widget="section_and_note_text"
+                                               required="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_booking_tree_view" model="ir.ui.view">
+            <field name="name">vehicle.booking.tree.view</field>
+            <field name="model">vehicle.booking</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="booking_date"/>
+                    <field name="customer_id"/>
+                    <field name="email" widget="email"/>
+                    <field name="phone" widget="phone"/>
+                    <field name="brand_id"/>
+                    <field name="vehicle_model_id"/>
+                    <field name="registration_no"/>
+                    <field name="priority" widget="priority"/>
+                    <field name="activity_ids" widget="list_activity"/>
+                    <field name="status" widget="badge" decoration-success="status == 'job_card'"
+                           decoration-warning="status == 'check_in'"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vehicle_booking_search_view" model="ir.ui.view">
+            <field name="name">vehicle.booking.search.view</field>
+            <field name="model">vehicle.booking</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <field name="registration_no"/>
+                    <field name="vin_no"/>
+                    <field name="brand_id"/>
+                    <field name="vehicle_model_id"/>
+                    <field name="booking_source"/>
+                    <field name="sale_person_id"/>
+                    <field name="service_adviser_id"/>
+                    <filter string="Check In" name="filter_by_check_in" domain="[('status','=','check_in')]"/>
+                    <filter string="Job Card" name="filter_by_job_card" domain="[('status','=','job_card')]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Status" name="check_in_status" domain="[]"
+                                context="{'group_by':'status'}"/>
+                        <separator/>
+                        <filter string="Vehicle Model" name="check_in_vehicle_model" domain="[]"
+                                context="{'group_by':'vehicle_model_id'}"/>
+                        <filter string="Vehicle Brand" name="check_in_vehicle_brand" domain="[]"
+                                context="{'group_by':'brand_id'}"/>
+                        <separator/>
+                        <filter string="Customer" name="check_in_customer" domain="[]"
+                                context="{'group_by':'customer_id'}"/>
+                        <filter string="Customer Tags" name="check_in_customer_tag" domain="[]"
+                                context="{'group_by':'customer_tag_ids'}"/>
+                        <separator/>
+                        <filter string="Receptionist" name="sale_person" domain="[]"
+                                context="{'group_by':'sale_person_id'}"/>
+                        <filter string="Service Advisor" name="group_service_adviser" domain="[]"
+                                context="{'group_by':'service_adviser_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="vehicle_booking_action" model="ir.actions.act_window">
+            <field name="name">Check ins</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.booking</field>
+            <field name="view_mode">tree,form,search,activity</field>
+        </record>
+    </data>
+</odoo>

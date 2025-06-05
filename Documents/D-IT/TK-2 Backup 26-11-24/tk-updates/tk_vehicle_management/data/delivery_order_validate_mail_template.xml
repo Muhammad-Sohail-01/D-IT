@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="delivery_order_validate_mail_template" model="mail.template">
+            <field name="name">Vehicle Management : Validate Delivery Order</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="subject">{{ object.name }} - Delivery order validated</field>
+            <field name="email_from">{{ object.company_id.email_formatted or '' }}</field>
+            <field name="email_to">{{ object.service_adviser_id.partner_id.email }}</field>
+            <field name="partner_to">{{ object.service_adviser_id.partner_id.id }}</field>
+            <field name="body_html" type="html">
+                <p>
+                    Dear
+                    <br/>
+                    <t t-out="object.service_adviser_id.name"/>
+                    <hr/>
+                    <t t-if="object.env.context.get('is_additional')">
+                        Additional part order
+                    </t>
+                    <t t-else="">
+                        Part order
+                    </t>
+                    <strong>
+                        <span t-out="object.env.context.get('order_no')"/>
+                    </strong>
+                    related to job card
+                    <strong>
+                        <span t-field="object.name"/>
+                    </strong>
+                    has been successfully validated
+                    by
+                    <strong>
+                        <span t-out="object.env.context.get('responsible')"/>
+                    </strong>
+                    .
+                </p>
+                <p>
+                    Please proceed with the necessary arrangements to fulfill requirement of this job card.
+                </p>
+                <p>
+                    <strong>Best regards</strong>
+                    <br/>
+                    <strong>
+                        <t t-out="object.company_id.name"/>
+                    </strong>
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <span>
+                    <t t-out="object.company_id.name"/>
+                    <br/>
+                    <t t-out="object.company_id.phone"/>
+                    <br/>
+                    <t t-out="object.company_id.email"/>
+                    <br/>
+                    <t t-out="object.company_id.website"/>
+                </span>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

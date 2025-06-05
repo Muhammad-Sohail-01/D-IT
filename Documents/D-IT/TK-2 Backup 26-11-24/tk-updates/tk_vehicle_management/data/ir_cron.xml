@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vehicle_warranty_expire" model="ir.cron">
+            <field name="name">Vehicle Management: Vehicle Warranty Expire</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_warranty"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.expire_vehicle_warranty()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <record id="vehicle_quotation_expire" model="ir.cron">
+            <field name="name">Vehicle Management: Vehicle Quotation Expire</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.expire_vehicle_quotation()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <record id="vehicle_appointment_miss_cron" model="ir.cron">
+            <field name="name">Vehicle Management: Vehicle Appointment Miss</field>
+            <field name="model_id" ref="tk_vehicle_management.model_calendar_event"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.vehicle_appointment_miss_mail_send()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <!-- Whatsapp 15 Day Reminder-->
+        <record id="vehicle_appointment_wh_week_before_cron" model="ir.cron">
+            <field name="name">Vehicle Management: Whatsapp Reminder 15 Days Before</field>
+            <field name="model_id" ref="tk_vehicle_management.model_calendar_event"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.wa_send_vehicle_appointment_week_reminder()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <!-- Whatsapp 1 Day Reminder-->
+        <record id="vehicle_appointment_wh_day_before_cron" model="ir.cron">
+            <field name="name">Vehicle Management: Whatsapp Reminder 1 Days Before</field>
+            <field name="model_id" ref="tk_vehicle_management.model_calendar_event"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.wa_send_vehicle_appointment_day_reminder()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <!-- Whatsapp Appointment Miss Reminder-->
+        <record id="vehicle_appointment_wh_appointment_miss_cron" model="ir.cron">
+            <field name="name">Vehicle Management: Whatsapp Reminder Appointment Miss</field>
+            <field name="model_id" ref="tk_vehicle_management.model_calendar_event"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.wa_send_vehicle_appointment_miss_reminder()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <!-- Consent Expire Cron -->
+        <record id="vehicle_consent_expire" model="ir.cron">
+            <field name="name">Vehicle Management: Vehicle Consent Expire</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.expire_vehicle_consent()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <!-- Vehicle Warranty Reminder -->
+        <record id="vehicle_warranty_reminder_month" model="ir.cron">
+            <field name="name">Vehicle Management: Vehicle Warranty Reminder 6 Month</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_warranty"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.action_send_warranty_checkup_reminder()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <!--Job Card Inspection Create Status-->
+        <record id="job_card_inspection_status_update_cron" model="ir.cron">
+            <field name="name">Vehicle Management: Job Card Inspection Status Update</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="state" eval="'code'"/>
+            <field name="code" eval="'model.job_card_status_update_cron()'"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">0</field>
+            <field name="active" eval="False"/>
+            <field name="doall" eval="True"/>
+        </record>
+    </data>
+</odoo>

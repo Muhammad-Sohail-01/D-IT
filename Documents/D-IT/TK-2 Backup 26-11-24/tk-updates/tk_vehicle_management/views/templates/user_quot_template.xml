@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Avtar - Template -->
+        <template id="vehicle_main_avtar_template">
+            <div class="breatcome_area d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="breatcome_title">
+                                <div class="breatcome_title_inner pb-2">
+                                    <h2>
+                                        <t t-esc="vehicle_main_title"/>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="user_quot_details" name="Quotation">
+            <t t-call="website.layout">
+                <t t-call="tk_vehicle_management.vehicle_main_avtar_template">
+                    <t t-set="vehicle_main_title" t-value="'Job Card Quotation'"/>
+                </t>
+                <div class="container py-4">
+                    <t t-if="error">
+                        <div t-attf-class="alert alert-{{error['type']}} mb-0" role="alert">
+                            <h4 class="alert-heading">
+                                <span t-esc="error['title']"/>
+                            </h4>
+                            <p>
+                                <span t-esc="error['message']"/>
+                            </p>
+                            <t t-if="inspection_id and inspection_id.quot_reopen_request not in ['reopen_expire','reopen_reject','reopen_cancel']">
+                                <a class="btn btn-success"
+                                   t-attf-href="/vehicle-service/job-card/reopen-request/#{inspection_id.access_token}">
+                                    Request for reopen quotation
+                                </a>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-if="not error and inspection_id.quote_state in ['sent','draft','signed']">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-4" t-if="inspection_id.quote_state in ['sent','draft']">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    The last date to validate your quotation is
+                                    <strong>
+                                        <span t-field="inspection_id.quote_expire_date"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 mb-4" t-if="inspection_id.quote_state in ['signed']">
+                                <div class="alert alert-success text-center mb-0" role="alert">
+                                    <strong>
+                                        Quotation Approved
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4 pb-0">
+                                <div class="border-0">
+                                    <p class="p-2 mb-0 border-0 evs-background text-white evs-green-border border-top border-bottom">
+                                        <i class="fa fa-file-text me-2 fs-5" aria-hidden="true"/>
+                                        Job Card Details
+                                    </p>
+                                    <div class="card-body ps-0 pe-0">
+                                        <h5 class="card-title">Ref.
+                                            <span t-field="inspection_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Check in Date :
+                                            </strong>
+                                            <span t-field="inspection_id.booking_date"/>
+                                            <br/>
+                                        </p>
+                                        <a class="btn btn-primary evs-green-border evs-background"
+                                           t-attf-href="/vehicle-service/job-card-report/#{inspection_id.access_token}/Job-Card-PDF"
+                                           id="print_job_card_report" title="Print Job Card Report" target="new">
+                                            <i class="fa fa-print me-1"/>
+                                            Job Card
+                                        </a>
+                                        <a class="btn btn-primary evs-green-border evs-background"
+                                           t-attf-href="/vehicle-service/quot-report/#{inspection_id.access_token}/Quotation-Report-PDF"
+                                           id="print_quot_repair_estimate_report" title="Print Repair Estimate Report"
+                                           target="new">
+                                            <i class="fa fa-print me-1"/>
+                                            Repair Estimate
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4 pb-0">
+                                <div class="border-0">
+                                    <p class="p-2 mb-0 border-0 evs-background text-white evs-green-border border-top border-bottom">
+                                        <i class="fa fa-user-circle-o me-2 fs-5" aria-hidden="true"/>Your Details
+                                    </p>
+                                    <div class="card-body pe-0 ps-0">
+                                        <h5 class="card-title">
+                                            <span t-field="inspection_id.customer_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Phone :
+                                            </strong>
+                                            <span t-field="inspection_id.phone"/>
+                                            <br/>
+                                            <strong>
+                                                Email :
+                                            </strong>
+                                            <span t-field="inspection_id.email"/>
+                                            <br/>
+                                            <strong>
+                                                Address :
+                                            </strong>
+                                            <span t-field="inspection_id.address_area"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4 pb-0">
+                                <div class="border-0">
+                                    <p class="p-2 mb-0 border-0 evs-background text-white evs-green-border border-top border-bottom">
+                                        <i class="fa fa-car me-2 fs-5" aria-hidden="true"/>
+                                        Vehicle Details
+                                    </p>
+                                    <div class="card-body ps-0 pe-0">
+                                        <h5 class="card-title">
+                                            <span t-field="inspection_id.vehicle_model_id"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Registration No :
+                                            </strong>
+                                            <span t-field="inspection_id.registration_no"/>
+                                            <br/>
+                                            <strong>
+                                                Color :
+                                            </strong>
+                                            <span t-field="inspection_id.color"/>
+                                            <br/>
+                                            <strong>
+                                                Fuel Type :
+                                            </strong>
+                                            <span t-field="inspection_id.fuel_type"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-2">
+                                <p class="h5 mb-2 evs-background text-white border evs-green-border p-2">
+                                    <i class="fa fa-cogs me-1"/>
+                                    Required Services
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-4">
+                                <form class="row g-3" action="/vehicle-service/job-card/submit-quot/service"
+                                      method="POST"
+                                      enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="access_token"
+                                           t-att-value="inspection_id.access_token"/>
+                                    <div class="table-responsive mt-0 mb-0">
+                                        <table class="table table-borderless table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="fw-bold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                             viewBox="0 0 512 512" width="22"
+                                                             height="22">
+                                                            <path d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                                                        </svg>
+                                                    </td>
+                                                    <td class="fw-bold">Service</td>
+                                                    <td class="fw-bold">Status</td>
+                                                    <td class="fw-bold text-end">Time</td>
+                                                    <td class="fw-bold">UOM</td>
+                                                    <td class="text-end fw-bold">Unit Price</td>
+                                                    <td class="fw-bold">Tax</td>
+                                                    <td class="text-end fw-bold">Tax Amount</td>
+                                                    <td class="text-end fw-bold">Total Amount</td>
+                                                </tr>
+                                                <t t-foreach="inspection_id.inspection_required_service_ids"
+                                                   t-as="s">
+                                                    <tr>
+                                                        <t t-if="s.display_type == 'line_section'">
+                                                            <td colspan="9"
+                                                                class="text-dark border-top border-bottom evs-section-title evs-green-border">
+                                                                <span t-field="s.name"/>
+                                                            </td>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <td class="border-bottom evs-green-border">
+                                                                <t t-if="not s.display_type">
+                                                                    <t t-if="s.service_selected">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input bg-success border border-success"
+                                                                                   t-att-name="s.id"
+                                                                                   type="checkbox"
+                                                                                   role="switch"
+                                                                                   disabled="disabled"
+                                                                                   checked="checked"/>
+                                                                        </div>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <div class="form-check form-switch evs-check-switch">
+                                                                            <input class="form-check-input"
+                                                                                   name="add"
+                                                                                   t-att-name="s.id"
+                                                                                   type="checkbox"
+                                                                                   role="switch"
+                                                                                   checked="checked"/>
+                                                                        </div>
+                                                                    </t>
+                                                                </t>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-field="s.name"/>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-field="s.required_status"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="s.estimate_time"
+                                                                      t-options='{"widget": "float_time"}'/>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-field="s.uom_id"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="s.price"/>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-out="', '.join(map(lambda x: (x.description or x.name), s.tax_ids))"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="s.tax_amount"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="s.total_amount"/>
+                                                            </td>
+                                                        </t>
+                                                    </tr>
+                                                </t>
+                                                <tr class="text-dark evs-green">
+                                                    <td class="fw-bold text-end border-bottom evs-green-border"
+                                                        colspan="3">Selected Service Time
+                                                    </td>
+                                                    <td class="fw-bold border-bottom evs-green-border">
+                                                        <span t-field="inspection_id.selected_services_time_total"
+                                                              t-options='{"widget": "float_time"}'/>
+                                                    </td>
+                                                    <td colspan="4"
+                                                        class="text-end fw-bold border-bottom evs-green-border">
+                                                        Selected Service Total
+                                                    </td>
+                                                    <td class="text-end fw-bold border-bottom evs-green-border">
+                                                        <span t-field="inspection_id.selected_services_total"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-start"
+                                         t-if="not inspection_id.service_selected">
+                                        <button type="button" class="btn text-white evs-background"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#serviceConfirmation">
+                                            <i class="fa fa-check-circle me-1"/>
+                                            Confirm Selected Services
+                                        </button>
+                                        <div class="modal fade" id="serviceConfirmation" data-bs-backdrop="static"
+                                             data-bs-keyboard="false" tabindex="-1"
+                                             aria-labelledby="serviceConfirmationLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                            Services Confirmation
+                                                        </h1>
+                                                        <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"/>
+                                                    </div>
+                                                    <div class="modal-body text-start">
+                                                        Are you sure you want to confirm selected services.
+                                                    </div>
+                                                    <div class="modal-footer text-start">
+                                                        <button class="btn btn text-white evs-background"
+                                                                type="submit">
+                                                            <i class="fa fa-check-circle me-1"/>
+                                                            Confirm Selected Services
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <span class="text-muted evs-green"
+                                              t-if="not inspection_id.service_selected">
+                                            Once you confirm required services,then the necessary part details for
+                                            selected service will appear.
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row" t-if="inspection_id.service_selected">
+                            <div class="col-md-12 col-sm-12 mb-2">
+                                <p class="h5 mb-2 evs-background text-white border evs-green-border p-2">
+                                    <i class="fa fa-wrench me-1"/>
+                                    Required Parts
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row" t-if="inspection_id.service_selected">
+                            <div class="col-md-12 col-sm-12 mb-4">
+                                <form class="row g-3" action="/vehicle-service/job-card/submit-quot/part"
+                                      method="POST"
+                                      enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="access_token"
+                                           t-att-value="inspection_id.access_token"/>
+                                    <div class="table-responsive mt-0 mb-0">
+                                        <table class="table table-borderless table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="fw-bold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                             viewBox="0 0 512 512" width="22"
+                                                             height="22">
+                                                            <path d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                                                        </svg>
+                                                    </td>
+                                                    <td class="fw-bold">Part</td>
+                                                    <td class="fw-bold col-3">Service</td>
+                                                    <td class="fw-bold">Status</td>
+                                                    <td class="text-end fw-bold">Qty.</td>
+                                                    <td class="fw-bold">UOM</td>
+                                                    <td class="text-end fw-bold">Unit Price</td>
+                                                    <td class="fw-bold">Tax</td>
+                                                    <td class="text-end fw-bold">Tax Amount</td>
+                                                    <td class="text-end fw-bold">Total Amount</td>
+                                                </tr>
+                                                <t t-foreach="inspection_id.inspection_required_parts_ids" t-as="p">
+                                                    <tr t-if="not p.is_additional_part">
+                                                        <t t-if="p.display_type == 'line_section'">
+                                                            <td colspan="10"
+                                                                class="text-dark border-top border-bottom evs-section-title evs-green-border">
+                                                                <span t-field="p.name"/>
+                                                            </td>
+                                                        </t>
+                                                        <t t-if="not p.display_type and ((p.service_id.service_selected and inspection_id.service_selected) or not inspection_id.service_selected)">
+                                                            <td class="border-bottom evs-green-border">
+                                                                <t t-if="not p.display_type">
+                                                                    <t t-if="p.part_selected">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input bg-success border border-success"
+                                                                                   t-att-name="p.id"
+                                                                                   type="checkbox"
+                                                                                   role="switch"
+                                                                                   disabled="disabled"
+                                                                                   checked="checked"/>
+                                                                        </div>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <div class="form-check form-switch evs-check-switch">
+                                                                            <input class="form-check-input"
+                                                                                   name="add"
+                                                                                   t-att-name="p.id"
+                                                                                   type="checkbox"
+                                                                                   checked="checked"
+                                                                                   role="switch"/>
+                                                                        </div>
+                                                                    </t>
+                                                                </t>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-field="p.name"/>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border col-3">
+                                                                <span t-field="p.service_id"/>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-field="p.required_status"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="p.qty"/>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-field="p.uom_id"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="p.price"/>
+                                                            </td>
+                                                            <td class="border-bottom evs-green-border">
+                                                                <span t-out="', '.join(map(lambda x: (x.description or x.name), p.tax_ids))"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="p.tax_amount"/>
+                                                            </td>
+                                                            <td class="text-end border-bottom evs-green-border">
+                                                                <span t-field="p.total_amount"/>
+                                                            </td>
+                                                        </t>
+                                                    </tr>
+                                                </t>
+                                                <tr class="text-dark evs-green">
+                                                    <td colspan="9"
+                                                        class="fw-bold text-end border-bottom evs-green-border">
+                                                        Selected Parts Total
+                                                        Amount
+                                                    </td>
+                                                    <td class="fw-bold text-end border-bottom evs-green-border">
+                                                        <span t-field="inspection_id.selected_parts_total"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-start"
+                                         t-if="not inspection_id.part_selected">
+                                        <button type="button" class="btn text-white evs-background"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#partsConfirmation">
+                                            <i class="fa fa-check-circle me-1"/>
+                                            Confirm Selected Parts
+                                        </button>
+                                        <div class="modal fade" id="partsConfirmation" data-bs-backdrop="static"
+                                             data-bs-keyboard="false" tabindex="-1"
+                                             aria-labelledby="partsConfirmationLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                            Parts Confirmation
+                                                        </h1>
+                                                        <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"/>
+                                                    </div>
+                                                    <div class="modal-body text-start">
+                                                        Are you sure you want to confirm selected parts.
+                                                    </div>
+                                                    <div class="modal-footer text-start">
+                                                        <button class="btn text-white evs-background"
+                                                                type="submit">
+                                                            <i class="fa fa-check-circle me-1"/>
+                                                            Confirm Selected Parts
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <t t-if="inspection_id._has_to_be_signed()">
+                                    <div class="col-sm-auto mt8">
+                                        <a role="button" class="btn text-white evs-background me-2 mb-2"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#quotemodalaccept" href="#">
+                                            <i class="fa fa-check"/>
+                                            <t t-if="inspection_id._has_to_be_signed()">Sign &amp; Accept</t>
+                                            <t t-else="">Accept &amp; Sign</t>
+                                        </a>
+                                        <a role="button" class="btn btn-outline-danger me-2 mb-2" data-bs-toggle="modal"
+                                           data-bs-target="#quotReject">
+                                            <i class="fa fa-times"/>
+                                            Reject
+                                        </a>
+                                        <a role="button" class="btn btn-danger me-2 mb-2" data-bs-toggle="modal"
+                                           data-bs-target="#quotCancel">
+                                            <i class="fa fa-times-circle-o"/>
+                                            Cancel
+                                        </a>
+                                    </div>
+                                </t>
+                                <!-- Sign and Accept -->
+                                <div role="dialog" class="modal fade" id="quotemodalaccept">
+                                    <div class="modal-dialog" t-if="inspection_id._has_to_be_signed()">
+                                        <form id="accept" method="POST" t-att-data-job-card-id="inspection_id.id"
+                                              t-att-data-token="inspection_id.access_token"
+                                              class="js_accept_json modal-content js_website_submit_form">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <header class="modal-header">
+                                                <h4 class="modal-title">Validate Quotation</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </header>
+                                            <t t-if="not inspection_id.service_selected">
+                                                <main class="modal-body">
+                                                    <div class="alert alert-info d-flex align-items-center mb-0"
+                                                         role="alert">
+                                                        <div>
+                                                            <i class="fa fa-exclamation-triangle"/>
+                                                            Please confirm selected services to Validate Quotation.
+                                                        </div>
+                                                    </div>
+                                                </main>
+                                            </t>
+                                            <t t-if="not inspection_id.part_selected">
+                                                <main class="modal-body">
+                                                    <div class="alert alert-info d-flex align-items-center"
+                                                         role="alert">
+                                                        <div>
+                                                            <i class="fa fa-exclamation-triangle"/>
+                                                            Please confirm selected parts to Validate Quotation.
+                                                        </div>
+                                                    </div>
+                                                </main>
+                                            </t>
+                                            <t t-if="inspection_id.service_selected and inspection_id.part_selected">
+                                                <main class="modal-body" id="sign-dialog">
+                                                    <p>
+                                                        <span>By signing this proposal, I agree to the following terms:
+                                                        </span>
+                                                        <ul>
+                                                            <li>
+                                                                <span>Accepted on the behalf of :</span>
+                                                                <strong>
+                                                                    <span t-field="inspection_id.customer_id.name"/>
+                                                                </strong>
+                                                            </li>
+                                                            <li>
+                                                                <span>For an amount of :</span>
+                                                                <strong>
+                                                                    <span t-field="inspection_id.inspection_total"/>
+                                                                </strong>
+                                                            </li>
+                                                            <t t-if="quot_term">
+                                                                <li>
+                                                                    <span>With payment terms :</span>
+                                                                    <a t-att-href="quot_term" target="_blank">
+                                                                        <u>
+                                                                            Quotation Payment Terms
+                                                                        </u>
+                                                                    </a>
+                                                                </li>
+                                                            </t>
+                                                        </ul>
+                                                    </p>
+                                                    <t t-call="portal.signature_form">
+                                                        <t t-set="call_url"
+                                                           t-value="'/vehicle/job-card/quotation/'+inspection_id.access_token+'/accept'"/>
+                                                        <t t-set="default_name"
+                                                           t-value="inspection_id.customer_id.name"/>
+                                                    </t>
+                                                </main>
+                                            </t>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Reject Quotation-->
+                                <div class="modal fade" id="quotReject" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1"
+                                     aria-labelledby="quotRejectLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                    Quotation Reject Reason
+                                                </h1>
+                                                <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </div>
+                                            <form class="row g-3"
+                                                  action="/vehicle-service/job-card/quot-reject/reason"
+                                                  method="POST"
+                                                  enctype="multipart/form-data">
+                                                <div class="modal-body text-start">
+                                                    <input type="hidden" name="csrf_token"
+                                                           t-att-value="request.csrf_token()"/>
+                                                    <input type="hidden" name="access_token"
+                                                           t-att-value="inspection_id.access_token"/>
+                                                    <textarea class="form-control"
+                                                              placeholder="Leave a reason here"
+                                                              name="reject_reason"
+                                                              id="reject_reason"
+                                                              required="required"/>
+                                                </div>
+                                                <div class="modal-footer text-start">
+                                                    <button class="btn btn-danger" type="submit">
+                                                        Submit
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Cancel Quotation-->
+                                <div class="modal fade" id="quotCancel" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1"
+                                     aria-labelledby="quotCancelLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                    Quotation Cancel Confirmation
+                                                </h1>
+                                                <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                Are you sure you want to cancel quotation.
+                                            </div>
+                                            <div class="modal-footer text-start">
+                                                <a class="btn btn-danger"
+                                                   t-attf-href="/vehicle-service/job-card/quot-cancel/#{inspection_id.access_token}">
+                                                    <i class="fa fa-times-circle-o"/>
+                                                    Cancel Quotation
+                                                </a>
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-8 col-sm-12"/>
+                            <div class="col-md-4 col-sm-12">
+                                <t t-if="inspection_id.quote_state=='signed'">
+                                    <div class="card mb-3 border-0">
+                                        <t t-if="inspection_id.signature">
+                                            <img t-att-src="image_data_uri(inspection_id.signature)"
+                                                 class="card-img-top" alt="Signature"/>
+                                        </t>
+                                        <t t-else="">
+                                            <img src="..." class="card-img-top" alt="..."/>
+                                        </t>
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <small class="text-body-secondary">
+                                                    <strong>
+                                                        Confirmed by:
+                                                    </strong>
+                                                    <span t-field="inspection_id.customer_id.name"/>
+                                                    <br/>
+                                                    <strong>
+                                                        Confirmed on:
+                                                    </strong>
+                                                    <span t-field="inspection_id.quote_accept_date_time"/>
+                                                </small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="job_card_invoice_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <div class="page">
+                            <table style="font-size: 13px;" class="table table-borderless">
+                                <h4 style="font-weight: bold; margin-top: 0px;">
+                                    Invoice
+                                </h4>
+                                <tr>
+                                    <td style="width: 50%; vertical-align: top;">
+                                        <span t-if="o.company_id.logo">
+                                            <img t-att-src="image_data_uri(o.company_id.logo)"
+                                                 style="max-width: 150px; max-height: 180px; object-fit: cover;"
+                                                 alt="Company Logo"/>
+                                        </span>
+                                    </td>
+                                    <td style="width: 50%; vertical-align: top; text-align: right;">
+                                        <span>
+                                            <span t-field="o.company_id.name"/>
+                                            <br/>
+                                            <span t-field="o.company_id.street"/>
+                                            <br/>
+                                            <span t-field="o.company_id.city"/>&#160;,
+                                            <span t-field="o.company_id.zip"/>
+                                            <br/>
+                                            <span t-field="o.company_id.phone"/>
+                                            <br/>
+                                            Repair Facility #:
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin: 10px 0px 5px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="width: 33%;padding:0px;">
+                                        <table style="margin: 0px; font-size: 13px;"
+                                               class="table table-borderless">
+                                            <tr>
+                                                <td style="padding: 3px; width: 33%;color: #348185;font-weight: bold;">
+                                                    <strong>Bill to</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 3px; width: 33%; vertical-align: middle;">
+                                                    <strong>
+                                                        <span t-field="o.customer_id.name"/>
+                                                    </strong>
+                                                    <br/>
+                                                    <span t-esc="o.customer_id.street"/>
+                                                    <t t-if="o.customer_id.street2">
+                                                        <br/>
+                                                        <span t-esc="o.customer_id.street2"
+                                                              t-if="o.customer_id.street2"/>
+                                                    </t>
+                                                    <t t-if="o.customer_id.city">
+                                                        <br/>
+                                                        <span t-esc="o.customer_id.city"
+                                                              t-if="o.customer_id.city"/>
+                                                        <t t-if="o.customer_id.country_id">
+                                                            <span t-field="o.customer_id.country_id"
+                                                                  t-if="o.customer_id.country_id"/>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="o.phone">
+                                                        <br/>
+                                                        <span t-field="o.phone"/>
+                                                    </t>
+                                                    <t t-if="o.email">
+                                                        <br/>
+                                                        <span t-field="o.email"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 33%;padding:0px;">
+                                        <table style="margin: 0px; font-size: 13px;"
+                                               class="table table-borderless">
+                                            <tr>
+                                                <td style="padding: 3px; width: 33%; vertical-align: middle;color: #348185;font-weight: bold;">
+                                                    <strong>Vehicle</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 3px; width: 33%; vertical-align: middle;">
+                                                    <strong>
+                                                        VIN :
+                                                        <span t-field="o.vin_no"/>
+                                                    </strong>
+                                                    <br/>
+                                                    <span>
+                                                        <span t-field="o.year"/>
+                                                        <span t-field="o.vehicle_model_id"/>
+                                                        -
+                                                        <span t-field="o.color"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="width: 33%;padding:0px;">
+                                        <table style="margin: 0px; font-size: 13px;"
+                                               class="table table-borderless">
+                                            <tr>
+                                                <td style="padding: 3px; width: 33%; vertical-align: middle;color: #348185;font-weight: bold;">
+                                                    <strong>RO info</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 3px; width: 33%; vertical-align: middle;">
+                                                    <strong>
+                                                        RO # :
+                                                        <span t-field="o.name"/>
+                                                    </strong>
+                                                    <br/>
+                                                    <span>
+                                                        Date :
+                                                        <span t-field="o.booking_date"/>
+                                                        <br/>
+                                                        Advisor :
+                                                        <span t-field="o.service_adviser_id"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table class="table table-borderless" style="font-size: 13px;">
+                                <tr style="border: 0px;">
+                                    <td style="padding: 3px; width: 55%; color: #348185;font-weight: bold;border: 0px;">
+                                        <strong>Service</strong>
+                                    </td>
+                                    <td style="padding: 3px; text-align: right; width: 15%;color: #348185;font-weight: bold;border: 0px;">
+                                        <strong>Parts</strong>
+                                    </td>
+                                    <td style="padding: 3px; text-align: right; width: 15%;color: #348185;font-weight: bold;border: 0px;">
+                                        <strong>Labor</strong>
+                                    </td>
+                                    <td style="padding: 3px; text-align: right; width: 15%;color: #348185;font-weight: bold;border: 0px;">
+                                        <strong>Total</strong>
+                                    </td>
+                                </tr>
+                                <t t-foreach="o.inspection_required_service_ids.filtered(lambda line: not line.display_type)"
+                                   t-as="s">
+                                    <t t-set="service_parts"
+                                       t-value="o.inspection_required_parts_ids.filtered(lambda line: line.service_id.id == s.id and (not line.is_additional_part or (line.is_additional_part and line.additional_part_status == 'part_received')))"/>
+                                    <tr class="border">
+                                        <td style="padding: 6px; width: 55%;vertical-align:middle;" class="border">
+                                            <span t-field="s.name"/>
+                                        </td>
+                                        <td style="padding: 6px; text-align: right; width: 15%;vertical-align:top;"
+                                            class="border">
+                                            <span t-esc="sum(service_parts.mapped('untaxed_amount'))"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                        <td style="padding: 6px; text-align: right; width: 15%;vertical-align:top;"
+                                            class="border">
+                                            <span t-field="s.untaxed_amount"/>
+                                        </td>
+                                        <td style="padding: 6px; text-align: right; width: 15%;vertical-align:top;"
+                                            class="border">
+                                            <span t-esc="s.untaxed_amount + sum(service_parts.mapped('untaxed_amount'))"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:#f7fbff" class="border">
+                                        <td style="width: 55%;padding:0px;" t-if="service_parts">
+                                            <table class="table table-bordered"
+                                                   style="font-size: 13px;margin-bottom:0px;">
+                                                <tr>
+                                                    <td style="width: 50%; background-color: #f7fbff;">
+                                                        <table class="table table-bordered" style="font-size: 11px;">
+                                                            <tr style="background-color: #f7fbff;">
+                                                                <td style="padding:0px;width: 100%" colspan="4">
+                                                                    <strong>Parts Info</strong>
+                                                                </td>
+                                                            </tr>
+                                                            <tr style="background-color: #f3f3f3;" class="border">
+                                                                <td class="border"
+                                                                    style="padding: 3px; color: #348185;font-weight: bold; width: 20%">
+                                                                    <strong>Number</strong>
+                                                                </td>
+                                                                <td class="border"
+                                                                    style="padding: 3px; color: #348185;font-weight: bold; width: 35%">
+                                                                    <strong>Name</strong>
+                                                                </td>
+                                                                <td class="border"
+                                                                    style="padding: 3px; color: #348185;font-weight: bold; width: 15%;text-align:right;">
+                                                                    <strong>Price</strong>
+                                                                </td>
+                                                                <td class="border"
+                                                                    style="padding: 3px; color: #348185;font-weight: bold; width: 15%;text-align:right;">
+                                                                    <strong>Qty.</strong>
+                                                                </td>
+                                                                <td class="border"
+                                                                    style="padding: 3px; color: #348185;font-weight: bold; width: 15%;text-align:right;">
+                                                                    <strong>Total</strong>
+                                                                </td>
+                                                            </tr>
+                                                            <t t-foreach="service_parts" t-as="p">
+                                                                <tr class="border">
+                                                                    <td class="border" style="padding: 3px; width: 20%">
+                                                                        <span t-field="p.product_id.default_code"/>
+                                                                    </td>
+                                                                    <td class="border" style="padding: 3px; width: 35%">
+                                                                        <span t-field="p.name"/>
+                                                                    </td>
+                                                                    <td class="border"
+                                                                        style="padding: 3px; width: 15%;text-align:right;">
+                                                                        <span t-field="p.price"/>
+                                                                    </td>
+                                                                    <td class="border"
+                                                                        style="padding: 3px; width: 15%;text-align:right;">
+                                                                        <span t-field="p.qty"/>
+                                                                    </td>
+                                                                    <td class="border"
+                                                                        style="padding: 3px; width: 15%;text-align:right;">
+                                                                        <span t-field="p.untaxed_amount"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td t-att-style="'width: 45%; border-left: aliceblue;' if service_parts else 'width: 100%; border-left: aliceblue;'"
+                                            t-att-colspan="5 if not service_parts else 3">
+                                            <table class="table table-bordered" style="font-size: 13px;">
+                                                <tr style="border: aliceblue;">
+                                                    <td style="padding: 2px;">
+                                                        <strong>Flag Time</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 45%; background-color: white;vertical-align:middle">
+                                                        <span>
+                                                            <i class="fa fa-clock-o"/>
+                                                            <span
+                                                                    t-field="s.estimate_time"
+                                                                    t-options="{'widget':'float_time'}"/>
+                                                            hours
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color:#f7fbff" class="border"
+                                        t-if="s.concern or s.cause or s.correction">
+                                        <td colspan="4">
+                                            <table class="table table-borderless" style="font-size: 11px;">
+                                                <tr style="background-color: #f3f3f3;" class="border">
+                                                    <td style="padding: 3px; width: 33%;font-weight: bold;color: #348185;"
+                                                        class="border">
+                                                        <strong>Concern</strong>
+                                                    </td>
+                                                    <td style="padding: 3px;width: 33%;font-weight: bold;color: #348185;"
+                                                        class="border">
+                                                        <strong>Cause</strong>
+                                                    </td>
+                                                    <td style="padding: 3px;width: 33%;font-weight: bold;color: #348185;"
+                                                        class="border">
+                                                        <strong>Correction</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 6px; width: 33%;"
+                                                        class="border">
+                                                        <span t-field="s.concern"/>
+                                                    </td>
+                                                    <td style="padding: 6px; width: 33%;"
+                                                        class="border">
+                                                        <span t-field="s.cause"/>
+                                                    </td>
+                                                    <td style="padding: 6px;width: 33%;"
+                                                        class="border">
+                                                        <span t-field="s.correction"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-6">
+                                </div>
+                                <div class="col-6">
+                                    <table class="table table-borderless" style="font-size: 13px;">
+                                        <tr>
+                                            <td style="padding: 2px;vertical-align: middle;width: 70%">
+                                                <strong>Subtotal</strong>
+                                            </td>
+                                            <td style="padding: 2px;vertical-align: middle;width: 30%">
+                                                <span t-esc="o.selected_parts_untaxed + o.selected_services_untaxed"
+                                                      t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px;vertical-align: middle;width: 70%">
+                                                Parts
+                                            </td>
+                                            <td style="padding: 2px;vertical-align: middle;width: 30%">
+                                                <span t-field="o.selected_parts_untaxed"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px;vertical-align: middle;width: 70%">
+                                                Labor
+                                            </td>
+                                            <td style="padding: 2px;vertical-align: middle;width: 30%">
+                                                <span t-field="o.selected_services_untaxed"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px;vertical-align: middle;width: 70%">
+                                                <strong>Shop Supplies and Environmental Fees</strong>
+                                            </td>
+                                            <td style="padding: 2px;vertical-align: middle;width: 30%">
+                                                <span t-field="o.shop_supplies_fees"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px;vertical-align: middle;width: 70%">
+                                                <strong>Sales Tax</strong>
+                                            </td>
+                                            <td style="padding: 2px;vertical-align: middle;width: 30%">
+                                                <span t-esc="o.selected_services_tax_amount + o.selected_parts_tax_amount"
+                                                      t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 2px;color: #348185;font-weight: bold;vertical-align: middle;width: 70%">
+                                                <strong>Invoice Total</strong>
+                                            </td>
+                                            <td style="padding: 2px;vertical-align: middle;width: 30%">
+                                                <strong>
+                                                    <span t-field="o.inspection_total"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row text-muted" style="text-align: center; margin-top: 5rem;">
+                                <div class="col-8">
+                                </div>
+                                <div class="col-4">
+                                    <hr style="margin: 0px;"/>
+                                    <br/>
+                                    Customer Signature
+                                </div>
+                            </div>
+                            <p style="page-break-before:always;"/>
+                            <h6 style="color: #348185;font-weight: bold;">
+                                Terms &amp; Conditions
+                            </h6>
+                            <t t-set="term_conditions"
+                               t-value="request.env.ref('tk_vehicle_management.term_condition_1').terms_conditions"/>
+                            <div style="font-size: 12px; color: #5e5b5b">
+                                <t t-esc="term_conditions"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_job_card_invoice_qweb_report" model="ir.actions.report">
+            <field name="name">Invoice</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tk_vehicle_management.job_card_invoice_report_template</field>
+            <field name="report_file">tk_vehicle_management.job_card_invoice_report_template</field>
+            <field name="binding_model_id" ref="model_vehicle_inspection"/>
+            <field name="paperformat_id" ref="inspection_report_paper_format"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

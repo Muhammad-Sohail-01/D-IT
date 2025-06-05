@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Rule to control product visibility based on allowed companies -->
+    <record id="product_template_allowed_companies_rule" model="ir.rule">
+        <field name="name">Product visibility based on allowed companies</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="domain_force">[('allowed_company_ids', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Group for users who should see all products -->
+    <record id="group_show_all_products" model="res.groups">
+        <field name="name">Show All Products</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Rule to bypass the first rule for users in the "Show All Products" group -->
+    <record id="product_template_show_all_rule" model="ir.rule">
+        <field name="name">Bypass allowed companies rule for specific group</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('company_base_access.group_show_all_products'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+</odoo>

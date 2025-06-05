@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Res Partner-->
+        <record id="res_partner_vehicle_form_inherit_view" model="ir.ui.view">
+            <field name="name">res.partner.vehicle.form.inherit.view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//span[@name='address_name']" position="before">
+                    <field name="address_area"/>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="replace">
+                    <field name="phone" required="1"/>
+                </xpath>
+                <xpath expr="//field[@name='email']" position="replace">
+                    <field name="email" context="{'gravatar_image': True}" required="1"/>
+                </xpath>
+                <div name="button_box" position="inside">
+                    <button class="oe_stat_button" type="object" name="action_view_register_vehicle"
+                            icon="fa-truck">
+                        <field string="Vehicles" name="vehicle_count" widget="statinfo"/>
+                    </button>
+                </div>
+                <xpath expr="//field[@name='state_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='zip']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='city']" position="attributes">
+                    <attribute name="class">o_address_street</attribute>
+                </xpath>
+            </field>
+        </record>
+        <!--Register Vehicle-->
+        <record id="register_vehicle_form_view" model="ir.ui.view">
+            <field name="name">register.vehicle.form.view</field>
+            <field name="model">register.vehicle</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_create_job" type="object"
+                                string="Create Job" class="btn btn-primary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button"
+                                    type="object"
+                                    name="action_view_bookings"
+                                    icon="fa-list-ul">
+                                <field name="booking_count"
+                                       string='Check ins'
+                                       widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button"
+                                    type="object"
+                                    name="action_view_inspection"
+                                    icon="fa-list-ul">
+                                <field name="inspection_count"
+                                       string='Inspections'
+                                       widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button"
+                                    type="object"
+                                    name="action_view_job_card"
+                                    icon="fa-list-ul">
+                                <field name="job_card_count"
+                                       string='Job Cards'
+                                       widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button"
+                                    type="object"
+                                    name="action_view_warranties"
+                                    icon="fa-cogs">
+                                <field name="warranty_count"
+                                       string='Warranties'
+                                       widget="statinfo"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="access_token" readonly="1" force_save="1"/>
+                                <field name="vid_no" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Customer Details">
+                            <group>
+                                <field name="customer_id"/>
+                            </group>
+                            <group>
+                                <field name="email" widget="email"/>
+                                <field name="mobile" widget="phone"/>
+                            </group>
+                        </group>
+                        <group string="Vehicle Details">
+                            <group>
+                                <field name="customer_id" invisible="1" required="1"/>
+                                <field name="brand_id" required="1"/>
+                                <field name="vehicle_model_id" required="1"/>
+                                <field name="year" required="1"/>
+                                <field name="color" required="1"/>
+                                <field name="fuel_type" required="1"/>
+                                <field name="transmission" widget="radio" options="{'horizontal':True}" required="1"/>
+                            </group>
+                            <group>
+                                <field name="vin_no" required="1" placeholder="Vin No must be 17 number"/>
+                                <field name="registration_no" required="1"/>
+                                <!-- <field name="is_warranty" widget="boolean_toggle" required="1"/> -->
+                                <!-- <field name="warranty_type" invisible="not is_warranty"/> -->
+                                <!-- <field name="insurance_provider"/> -->
+                                <field name="insurance_provider"/>
+                                <field name="policy_number"/>
+                                <field name="insurance_expire_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="register_vehicle_tree_view" model="ir.ui.view">
+            <field name="name">register.vehicle.tree.view</field>
+            <field name="model">register.vehicle</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="customer_id"/>
+                    <field name="brand_id"/>
+                    <field name="vehicle_model_id"/>
+                    <field name="registration_no"/>
+                    <field name="fuel_type"/>
+                    <field name="vin_no"/>
+                    <field name="transmission"/>
+                </tree>
+            </field>
+        </record>
+        <record id="register_vehicle_search_view" model="ir.ui.view">
+            <field name="name">register.vehicle.search.view</field>
+            <field name="model">register.vehicle</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="customer_name"/>
+                    <field name="email"/>
+                    <field name="mobile"/>
+                    <field name="brand_id"/>
+                    <field name="vehicle_model_id"/>
+                    <field name="registration_no"/>
+                    <field name="vin_no"/>
+                    <field name="year"/>
+                    <field name="fuel_type"/>
+                    <field name="transmission"/>
+                    <field name="insurance_provider"/>
+                    <field name="warranty_type"/>
+                    <filter string="Warranty" name="filter_by_warranty" domain="[('is_warranty','=',True)]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Customer" name="group_by_customer" domain="[]"
+                                context="{'group_by':'customer_id'}"/>
+                        <separator/>
+                        <filter string="Vehicle" name="group_by_vehicle" domain="[]"
+                                context="{'group_by':'brand_id'}"/>
+                        <filter string="Model" name="group_by_model" domain="[]"
+                                context="{'group_by':'vehicle_model_id'}"/>
+                        <filter string="Fuel Type" name="group_by_fuel_type" domain="[]"
+                                context="{'group_by':'fuel_type'}"/>
+                        <filter string="Warranty Type" name="group_by_warranty_type" domain="[]"
+                                context="{'group_by':'warranty_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="register_vehicle_action" model="ir.actions.act_window">
+            <field name="name">Vehicles</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">register.vehicle</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

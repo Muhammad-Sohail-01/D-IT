@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Report Template -->
+<template id="estimation_inspection_report" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+                <t t-call="web.basic_layout">
+	                <t t-foreach="docs" t-as="doc">
+	                <div class="page">
+                <!-- Include Header -->
+                <div class="header" style="border: none;">
+				    <table style="width:100%; margin-bottom: 20px;">
+				        <tr>
+				            <!-- Left Section: Company Logo -->
+				            <td style="text-align:center; width:33.33%">
+				                <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
+				                     style="max-height: 100px; max-width: 400px;" alt="Logo"/>
+				            </td>
+				            <!-- Center Section: Title -->
+				            <td style="text-align:center; width:33.33%">
+				                <h2 style="color: black; margin: 0; text-decoration: underline; text-underline-offset: 5px;">JOB CARD</h2>
+				            </td>
+				            <!-- Right Section: Job Card Details -->
+				            <td style="text-align:right; width:33.33%;">
+				                <div style="margin-bottom: 5px; font-size: 15pt;"><strong>Job Card No.:</strong> <span t-field="doc.name"/></div>
+				                <div style="margin-bottom: 5px; font-size: 13pt;"><strong>Advisor:</strong> <span t-field="doc.service_adviser_id.name"/></div>
+				                <div style="margin-bottom: 5px; font-size: 13pt;"><strong>Plate:</strong> <span t-field="doc.registration_no"/></div>
+				                <div style="font-size: 13pt;"><strong>Name:</strong> <span t-field="doc.sale_order_id.partner_id.name"/></div>
+				            </td>
+				        </tr>
+				    </table>
+				</div>
+                        <!-- Vehicle Information Table -->
+                    <table class="table o_job_info_table" style="font-family: Minion Pro; font-size: 9.57pt;
+                            border: 2px solid black; width: 100%; margin-bottom: 20px;">
+                        <tbody>
+                            <!-- First Row -->
+                            <tr>
+                                <td style="width: 33.33%; padding: 8px; border: 1px solid #ddd;">
+                                    <strong>Model:</strong>
+                                    <span t-field="doc.vehicle_model_id.name"/>
+                                </td>
+                                <td style="width: 33.33%; padding: 8px; border: 1px solid #ddd;">
+                                    <strong>VIN:</strong>
+                                    <span t-field="doc.vin_no"/>
+                                </td>
+                                <td style="width: 33.33%; padding: 8px; border: 1px solid #ddd;">
+                                    <strong>Year:</strong>
+                                    <span t-field="doc.year"/>
+                                </td>
+                            </tr>
+                            <!-- Second Row -->
+                            <tr>
+                                <td style="width: 33.33%; padding: 8px; border: 1px solid #ddd;">
+                                    <strong>Date:</strong>
+                                    <span t-field="doc.sale_order_id.date_order"/>
+                                </td>
+                                <td style="width: 33.33%; padding: 8px; border: 1px solid #ddd;">
+                                    <strong>ODO:</strong>
+                                    <span t-field="doc.miles"/>
+                                </td>
+                                <td style="width: 33.33%; padding: 8px; border: 1px solid #ddd;">
+                                    <strong>Receptionist:</strong>
+	                                <span t-esc="doc.sale_person_id.name[:30] + '...' if doc.sale_person_id.name and len(doc.sale_person_id.name) > 30 else doc.sale_person_id.name"
+	                                      t-att-title="doc.sale_person_id.name"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                        <!-- Products/Services Table -->
+			<table class="product_service_table" width="100%" style="font-family: Minion Pro; font-size: 9.57pt; margin-top: 20px; border-collapse: collapse;">
+			    <thead style="display: table-row-group; background-color: #f8f9fa; border-bottom: 2px solid black;">
+			        <tr>
+			            <th width="20%" align="center" style="padding: 8px; border: 1px solid #ddd;">CATEGORY</th>
+			            <th width="35%" align="center" style="padding: 8px; border: 1px solid #ddd;">ITEM</th>
+			            <th width="15%" align="left" style="padding: 8px; border: 1px solid #ddd;">Warranty</th>
+			            <th width="10%" align="right" style="padding: 8px; border: 1px solid #ddd;">QTY</th>
+			            <th width="10%" align="right" style="padding: 8px; border: 1px solid #ddd;">UoM</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr t-foreach="doc.sale_order_id.order_line" t-as="line">
+			            <t t-if="not line.display_type">
+			                <td style="padding: 8px; border: 1px solid #ddd;">
+			                    <span t-field="line.product_id.categ_id.name"/>
+			                </td>
+			                <td style="padding: 8px; border: 1px solid #ddd;">
+			                    <span t-field="line.name"/><br/>
+			                    <t t-if="line.is_warranty">
+			                        <span style="font-weight: bold;">*Warranty Validation Upto </span>
+			                        <span style="font-weight: bold;" t-field="line.warranty_expiry_date"/>
+			                    </t>
+			                </td>
+			                <td style="padding: 8px; border: 1px solid #ddd;">
+			                    <t t-if="line.is_warranty">
+			                        <input type="checkbox"
+			                               style="width: 20px; height: 20px; border: 2px solid black; border-radius: 4px;"
+			                               checked="checked"/>
+			                    </t>
+			                </td>
+			                <td align="right" style="padding: 8px; border: 1px solid #ddd;">
+			                    <span t-field="line.product_uom_qty"/>
+			                </td>
+			                <td align="right" style="padding: 8px; border: 1px solid #ddd;">
+			                    <span t-field="line.product_uom.name"/>
+			                </td>
+			            </t>
+			            <t t-if="line.display_type == 'line_note'">
+			                <td colspan="5" style="background-color:#CCCCCC; padding: 8px; border: 1px solid #ddd;">
+			                    <strong><span t-field="line.name"/></strong>
+			                </td>
+			            </t>
+			        </tr>
+
+			    </tbody>
+			</table>
+
+				<!-- Comments and Signature Section -->
+					<div style="display: flex; justify-content: space-between; margin-top: 30px;">
+					    <!-- Comments Box -->
+					    <div style="width: 50%; padding: 8px;">
+					        <div align="left" style="padding: 8px;">
+					            <h4 style="margin-top: 0; color: black; text-align: left; font-weight: bold; font-size: 13pt;">Comments/Remarks:</h4>
+					            <div style="min-height: 100px;"></div>
+					        </div>
+					    </div>
+					    <!-- Signature Box -->
+					    <div style="width: 50%; padding: 8px;">
+					        <div align="left" style="padding: 8px;">
+					            <h4 style="margin-top: 0; color: black; text-align: left; font-weight: bold; font-size: 13pt;">Customer Signature:</h4>
+					            <div style="min-height: 70px;"></div>
+					        </div>
+					    </div>
+					</div>
+
+                            <!-- Footer -->
+                            <div class="footer" style="margin-top: 20px;">
+                                <hr style="border: 2px solid #32CD32;"/>
+                                <div class="text-center" style="font-size: 8pt; color: #666;">
+                                    <p> </p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+
+        <!-- Paper Format -->
+    <record id="custom_paperformat_quotation" model="report.paperformat">
+	    <field name="name">Job Card Report</field>
+	    <field name="default" eval="True"/>
+	    <field name="format">A4</field>
+	    <field name="orientation">Portrait</field>
+	    <field name="margin_top">45</field>
+	    <field name="margin_bottom">23</field>
+	    <field name="margin_left">7</field>
+	    <field name="margin_right">7</field>
+	    <field name="header_line" eval="False"/>
+	    <field name="header_spacing">40</field>
+	    <field name="dpi">90</field>
+	</record>
+
+    <record id="technician_action_report_saleorder" model="ir.actions.report">
+        <field name="name">Technician Copy</field>
+        <field name="model">vehicle.inspection</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tk_vehicle_management.estimation_inspection_report</field>
+        <field name="report_file">tk_vehicle_management.estimation_inspection_report</field>
+        <field name="print_report_name">"Techician Copy"</field>
+        <field name="paperformat_id" ref="custom_paperformat_quotation"/>
+        <field name="binding_model_id" ref="model_vehicle_inspection"/>
+        <field name="binding_type">report</field>
+    </record>
+   </data>
+</odoo>

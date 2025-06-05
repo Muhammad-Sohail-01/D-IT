@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Mechanical Item-->
+        <record id="mechanical_item_1" model="vehicle.item">
+            <field name="name">Engine</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_2" model="vehicle.item">
+            <field name="name">Transmission / Clutch</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_3" model="vehicle.item">
+            <field name="name">Brakes</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_4" model="vehicle.item">
+            <field name="name">Emergency Brake</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_5" model="vehicle.item">
+            <field name="name">Cabin Air</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_6" model="vehicle.item">
+            <field name="name">Exhaust</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_7" model="vehicle.item">
+            <field name="name">Power Accessories</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_8" model="vehicle.item">
+            <field name="name">Sound Equipment</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_9" model="vehicle.item">
+            <field name="name">Door Operation</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_10" model="vehicle.item">
+            <field name="name">Rear Gate Operation</field>
+            <field name="item_category">mechanical</field>
+        </record>
+        <record id="mechanical_item_11" model="vehicle.item">
+            <field name="name">Rear View Camera</field>
+            <field name="item_category">mechanical</field>
+        </record>
+
+        <!--Interior Item-->
+        <record id="interior_item_1" model="vehicle.item">
+            <field name="name">Front Carpet</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_2" model="vehicle.item">
+            <field name="name">Rear Carpet</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_3" model="vehicle.item">
+            <field name="name">Front Driver's Seat</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_4" model="vehicle.item">
+            <field name="name">Front Passenger Seat</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_5" model="vehicle.item">
+            <field name="name">Rear Driver's Side Seat</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_6" model="vehicle.item">
+            <field name="name">Rear Center Seat</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_7" model="vehicle.item">
+            <field name="name">Rear Passenger Side Seat</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_8" model="vehicle.item">
+            <field name="name">Rear Extended Row Seats</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_9" model="vehicle.item">
+            <field name="name">Headliner</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_10" model="vehicle.item">
+            <field name="name">Door Panels</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_11" model="vehicle.item">
+            <field name="name">Dashboard</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_12" model="vehicle.item">
+            <field name="name">Center Console</field>
+            <field name="item_category">interior</field>
+        </record>
+        <record id="interior_item_13" model="vehicle.item">
+            <field name="name">Trunk</field>
+            <field name="item_category">interior</field>
+        </record>
+
+        <!-- Vehicle Components-->
+        <record id="vehicle_component_top_side_1" model="vehicle.component">
+            <field name="name">Lights</field>
+            <field name="compo_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_component_top_side_2" model="vehicle.component">
+            <field name="name">Wiper Blades</field>
+            <field name="compo_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_component_top_side_3" model="vehicle.component">
+            <field name="name">Belts &amp; Hoses</field>
+            <field name="compo_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_component_top_side_4" model="vehicle.component">
+            <field name="name">Battery</field>
+            <field name="compo_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_component_top_side_5" model="vehicle.component">
+            <field name="name">Engine Air Filter</field>
+            <field name="compo_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_component_top_side_6" model="vehicle.component">
+            <field name="name">Cabin Air Filter</field>
+            <field name="compo_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_component_top_side_7" model="vehicle.component">
+            <field name="name">Other</field>
+            <field name="compo_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_component_bottom_side_1" model="vehicle.component">
+            <field name="name">Drain Plugs</field>
+            <field name="compo_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_component_bottom_side_2" model="vehicle.component">
+            <field name="name">Steering and Suspension</field>
+            <field name="compo_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_component_bottom_side_3" model="vehicle.component">
+            <field name="name">Power Train</field>
+            <field name="compo_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_component_bottom_side_4" model="vehicle.component">
+            <field name="name">Brakes</field>
+            <field name="compo_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_component_bottom_side_5" model="vehicle.component">
+            <field name="name">Fuel Filter</field>
+            <field name="compo_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_component_bottom_side_6" model="vehicle.component">
+            <field name="name">Exhaust</field>
+            <field name="compo_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_component_1" model="vehicle.component">
+            <field name="name">Charge Port</field>
+        </record>
+        <record id="vehicle_component_2" model="vehicle.component">
+            <field name="name">Coolant Leaks</field>
+        </record>
+        <record id="vehicle_component_3" model="vehicle.component">
+            <field name="name">A/C Check</field>
+        </record>
+        <record id="vehicle_component_4" model="vehicle.component">
+            <field name="name">Horn Operation</field>
+        </record>
+        <record id="vehicle_component_5" model="vehicle.component">
+            <field name="name">Remote Keyless Entry</field>
+        </record>
+        <record id="vehicle_component_6" model="vehicle.component">
+            <field name="name">Panoramic Roof</field>
+        </record>
+        <record id="vehicle_component_7" model="vehicle.component">
+            <field name="name">Vehicle Diagnosis Code</field>
+        </record>
+        <record id="vehicle_component_8" model="vehicle.component">
+            <field name="name">Control Arm</field>
+        </record>
+
+        <!--Vehicle Condition Location-->
+        <record id="vehicle_condition_location_1" model="vehicle.condition.location">
+            <field name="location">Bumper / Energy Absorber / Cover</field>
+        </record>
+        <record id="vehicle_condition_location_2" model="vehicle.condition.location">
+            <field name="location">Bumper End</field>
+        </record>
+        <record id="vehicle_condition_location_3" model="vehicle.condition.location">
+            <field name="location">Valance Panel</field>
+        </record>
+        <record id="vehicle_condition_location_4" model="vehicle.condition.location">
+            <field name="location">Inner Fender</field>
+        </record>
+        <record id="vehicle_condition_location_5" model="vehicle.condition.location">
+            <field name="location">Fender</field>
+        </record>
+        <record id="vehicle_condition_location_6" model="vehicle.condition.location">
+            <field name="location">Cowl Panel</field>
+        </record>
+        <record id="vehicle_condition_location_7" model="vehicle.condition.location">
+            <field name="location">Door</field>
+        </record>
+        <record id="vehicle_condition_location_8" model="vehicle.condition.location">
+            <field name="location">Lower Door Skin</field>
+        </record>
+        <record id="vehicle_condition_location_9" model="vehicle.condition.location">
+            <field name="location">Rocker Panel</field>
+        </record>
+        <record id="vehicle_condition_location_10" model="vehicle.condition.location">
+            <field name="location">Dog Leg</field>
+        </record>
+        <record id="vehicle_condition_location_11" model="vehicle.condition.location">
+            <field name="location">Wheel Arch Panel</field>
+        </record>
+        <record id="vehicle_condition_location_12" model="vehicle.condition.location">
+            <field name="location">Wheelhouse</field>
+        </record>
+        <record id="vehicle_condition_location_13" model="vehicle.condition.location">
+            <field name="location">Quarter Panel</field>
+        </record>
+        <record id="vehicle_condition_location_14" model="vehicle.condition.location">
+            <field name="location">Fender Extension Panel</field>
+        </record>
+        <record id="vehicle_condition_location_15" model="vehicle.condition.location">
+            <field name="location">Header Panel</field>
+        </record>
+        <record id="vehicle_condition_location_16" model="vehicle.condition.location">
+            <field name="location">Hood</field>
+        </record>
+        <record id="vehicle_condition_location_17" model="vehicle.condition.location">
+            <field name="location">Firewall</field>
+        </record>
+        <record id="vehicle_condition_location_18" model="vehicle.condition.location">
+            <field name="location">Fender Flare</field>
+        </record>
+        <record id="vehicle_condition_location_19" model="vehicle.condition.location">
+            <field name="location">Trunk / Deck Lid</field>
+        </record>
+
+        <!--Vehicle Condition-->
+        <record id="vehicle_condition_1" model="vehicle.condition">
+            <field name="condition">Bent</field>
+            <field name="condition_code">B</field>
+        </record>
+        <record id="vehicle_condition_2" model="vehicle.condition">
+            <field name="condition">Broken</field>
+            <field name="condition_code">BR</field>
+        </record>
+        <record id="vehicle_condition_3" model="vehicle.condition">
+            <field name="condition">Cracked</field>
+            <field name="condition_code">C</field>
+        </record>
+        <record id="vehicle_condition_4" model="vehicle.condition">
+            <field name="condition">Dented</field>
+            <field name="condition_code">D</field>
+        </record>
+        <record id="vehicle_condition_5" model="vehicle.condition">
+            <field name="condition">Glass Cracked</field>
+            <field name="condition_code">GC</field>
+        </record>
+        <record id="vehicle_condition_6" model="vehicle.condition">
+            <field name="condition">Hairline Scratch</field>
+            <field name="condition_code">H</field>
+        </record>
+        <record id="vehicle_condition_7" model="vehicle.condition">
+            <field name="condition">Missing</field>
+            <field name="condition_code">M</field>
+        </record>
+        <record id="vehicle_condition_8" model="vehicle.condition">
+            <field name="condition">Pitted</field>
+            <field name="condition_code">PT</field>
+        </record>
+        <record id="vehicle_condition_9" model="vehicle.condition">
+            <field name="condition">Rusty</field>
+            <field name="condition_code">R</field>
+        </record>
+        <record id="vehicle_condition_10" model="vehicle.condition">
+            <field name="condition">Scratched</field>
+            <field name="condition_code">S</field>
+        </record>
+        <record id="vehicle_condition_11" model="vehicle.condition">
+            <field name="condition">Smashed</field>
+            <field name="condition_code">SM</field>
+        </record>
+        <record id="vehicle_condition_12" model="vehicle.condition">
+            <field name="condition">Stained</field>
+            <field name="condition_code">ST</field>
+        </record>
+        <record id="vehicle_condition_13" model="vehicle.condition">
+            <field name="condition">Torn</field>
+            <field name="condition_code">T</field>
+        </record>
+        <record id="vehicle_condition_14" model="vehicle.condition">
+            <field name="condition">Creased</field>
+            <field name="condition_code">CR</field>
+        </record>
+        <record id="vehicle_condition_15" model="vehicle.condition">
+            <field name="condition">All Correct</field>
+            <field name="condition_code">OK</field>
+        </record>
+        <record id="vehicle_fluid_top_side_1" model="vehicle.fluid">
+            <field name="name">Transmission</field>
+            <field name="fluid_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_fluid_top_side_2" model="vehicle.fluid">
+            <field name="name">Engine Oil</field>
+            <field name="fluid_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_fluid_top_side_3" model="vehicle.fluid">
+            <field name="name">Coolant</field>
+            <field name="fluid_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_fluid_top_side_4" model="vehicle.fluid">
+            <field name="name">Power Steering</field>
+            <field name="fluid_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_fluid_top_side_5" model="vehicle.fluid">
+            <field name="name">Brake Fluids</field>
+            <field name="fluid_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_fluid_top_side_5" model="vehicle.fluid">
+            <field name="name">Washer Fluid</field>
+            <field name="fluid_vehicle_side">top_side</field>
+        </record>
+        <record id="vehicle_fluid_top_side_6" model="vehicle.fluid">
+            <field name="name">Other</field>
+            <field name="fluid_vehicle_side">top_side</field>
+        </record>
+
+        <!--Fluids-->
+        <record id="vehicle_fluid_bottom_side_1" model="vehicle.fluid">
+            <field name="name">Manual Transmission</field>
+            <field name="fluid_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_fluid_bottom_side_2" model="vehicle.fluid">
+            <field name="name">Transfer Case</field>
+            <field name="fluid_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_fluid_bottom_side_3" model="vehicle.fluid">
+            <field name="name">Rear Differential</field>
+            <field name="fluid_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_fluid_bottom_side_4" model="vehicle.fluid">
+            <field name="name">Front Differential</field>
+            <field name="fluid_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_fluid_bottom_side_5" model="vehicle.fluid">
+            <field name="name">Grease Fittings</field>
+            <field name="fluid_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_fluid_bottom_side_6" model="vehicle.fluid">
+            <field name="name">30/60/90 Service</field>
+            <field name="fluid_vehicle_side">bottom_side</field>
+        </record>
+        <record id="vehicle_fluid_bottom_side_7" model="vehicle.fluid">
+            <field name="name">Other</field>
+            <field name="fluid_vehicle_side">bottom_side</field>
+        </record>
+        <!-- Vehicle Part Info -->
+        <!-- Exterior -->
+        <record id="vehicle_part_info_1" model="vehicle.part.info">
+            <field name="name">Horn Operation</field>
+            <field name="type">exterior</field>
+        </record>
+        <record id="vehicle_part_info_2" model="vehicle.part.info">
+            <field name="name">Head lights / tail lights / turn signals / brake lights / hazard warning lights /
+                exterior lamps (check for damage and operation)
+            </field>
+            <field name="type">exterior</field>
+        </record>
+        <record id="vehicle_part_info_3" model="vehicle.part.info">
+            <field name="name">Windshield wiper and washer operation</field>
+            <field name="type">exterior</field>
+        </record>
+        <record id="vehicle_part_info_4" model="vehicle.part.info">
+            <field name="name">Windshield glass</field>
+            <field name="type">exterior</field>
+        </record>
+        <record id="vehicle_part_info_5" model="vehicle.part.info">
+            <field name="name">Fuel tank cap gasket</field>
+            <field name="type">exterior</field>
+        </record>
+
+        <!-- interior -->
+        <record id="vehicle_part_info_6" model="vehicle.part.info">
+            <field name="name">Dome light / amp light / dimmer combination meter</field>
+            <field name="type">interior</field>
+        </record>
+        <record id="vehicle_part_info_7" model="vehicle.part.info">
+            <field name="name">Cabin air filter</field>
+            <field name="type">interior</field>
+        </record>
+        <record id="vehicle_part_info_8" model="vehicle.part.info">
+            <field name="name">Parking brake operation</field>
+            <field name="type">interior</field>
+        </record>
+        <record id="vehicle_part_info_9" model="vehicle.part.info">
+            <field name="name">Seat Belts</field>
+            <field name="type">interior</field>
+        </record>
+        <record id="vehicle_part_info_10" model="vehicle.part.info">
+            <field name="name">Dash Warning Lights</field>
+            <field name="type">interior</field>
+        </record>
+        <record id="vehicle_part_info_11" model="vehicle.part.info">
+            <field name="name">Shift / Start Interlock (Auto)</field>
+            <field name="type">interior</field>
+        </record>
+        <record id="vehicle_part_info_12" model="vehicle.part.info">
+            <field name="name">Clutch Operation / Start Switch (Manual)</field>
+            <field name="type">interior</field>
+        </record>
+
+        <!-- Under Hood -->
+        <record id="vehicle_part_info_13" model="vehicle.part.info">
+            <field name="name">Air filter</field>
+            <field name="type">under_hood</field>
+        </record>
+        <record id="vehicle_part_info_14" model="vehicle.part.info">
+            <field name="name">Battery condition (cables / clamps / corrosion)</field>
+            <field name="type">under_hood</field>
+        </record>
+        <record id="vehicle_part_info_15" model="vehicle.part.info">
+            <field name="name">Battery state of health</field>
+            <field name="type">under_hood</field>
+        </record>
+        <record id="vehicle_part_info_16" model="vehicle.part.info">
+            <field name="name">Cooling system (leaks)</field>
+            <field name="type">under_hood</field>
+        </record>
+        <record id="vehicle_part_info_17" model="vehicle.part.info">
+            <field name="name">Hoses (cracks / damage / leaks)</field>
+            <field name="type">under_hood</field>
+        </record>
+        <record id="vehicle_part_info_18" model="vehicle.part.info">
+            <field name="name">Drive belts (cracks / damage / wear)</field>
+            <field name="type">under_hood</field>
+        </record>
+        <record id="vehicle_part_info_19" model="vehicle.part.info">
+            <field name="name">Radiator core / air condition condenser (if equipped)</field>
+            <field name="type">under_hood</field>
+        </record>
+
+        <!-- Fluids -->
+        <record id="vehicle_part_info_20" model="vehicle.part.info">
+            <field name="name">Oil level on arrival</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_21" model="vehicle.part.info">
+            <field name="name">Windshield washer</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_22" model="vehicle.part.info">
+            <field name="name">Coolant (degree of protection)</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_23" model="vehicle.part.info">
+            <field name="name">Power steering (if equipped)</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_24" model="vehicle.part.info">
+            <field name="name">Brake reservoir</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_25" model="vehicle.part.info">
+            <field name="name">Clutch reservoir (if equipped)</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_26" model="vehicle.part.info">
+            <field name="name">Transmission / transaxle</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_27" model="vehicle.part.info">
+            <field name="name">Differential (if equipped)</field>
+            <field name="type">fluid</field>
+        </record>
+        <record id="vehicle_part_info_28" model="vehicle.part.info">
+            <field name="name">Transfer case (4WD models)</field>
+            <field name="type">fluid</field>
+        </record>
+
+        <!-- Under Vehicle -->
+        <record id="vehicle_part_info_29" model="vehicle.part.info">
+            <field name="name">Propeller / driveshaft (damage / leaks / U-joints)</field>
+            <field name="type">under_vehicle</field>
+        </record>
+        <record id="vehicle_part_info_30" model="vehicle.part.info">
+            <field name="name">Drive / CV shaft (damage / leaks / boots)</field>
+            <field name="type">under_vehicle</field>
+        </record>
+        <record id="vehicle_part_info_31" model="vehicle.part.info">
+            <field name="name">Axle hub and bearing (damage / leaks / noise)</field>
+            <field name="type">under_vehicle</field>
+        </record>
+        <record id="vehicle_part_info_32" model="vehicle.part.info">
+            <field name="name">Steering linkage (damage / leaks / worn components)</field>
+            <field name="type">under_vehicle</field>
+        </record>
+        <record id="vehicle_part_info_33" model="vehicle.part.info">
+            <field name="name">Suspension (damage / leaks / worn components)</field>
+            <field name="type">under_vehicle</field>
+        </record>
+        <record id="vehicle_part_info_34" model="vehicle.part.info">
+            <field name="name">Fluid leaks (engine / transmission / differential)</field>
+            <field name="type">under_vehicle</field>
+        </record>
+        <record id="vehicle_part_info_35" model="vehicle.part.info">
+            <field name="name">Exhaust system (damage / leaks / corrosion)</field>
+            <field name="type">under_vehicle</field>
+        </record>
+        <record id="vehicle_part_info_36" model="vehicle.part.info">
+            <field name="name">Fuel lines &amp; connections / fuel tank bands / fuel tank / vapor vent system hoses
+                (damage / leaks / corrosion)
+            </field>
+            <field name="type">under_vehicle</field>
+        </record>
+
+        <!-- Tires -->
+        <record id="vehicle_part_info_37" model="vehicle.part.info">
+            <field name="name">Left Front Tire</field>
+            <field name="type">tyre</field>
+        </record>
+        <record id="vehicle_part_info_38" model="vehicle.part.info">
+            <field name="name">Left Rear Tire</field>
+            <field name="type">tyre</field>
+        </record>
+        <record id="vehicle_part_info_39" model="vehicle.part.info">
+            <field name="name">Right Front Tire</field>
+            <field name="type">tyre</field>
+        </record>
+        <record id="vehicle_part_info_40" model="vehicle.part.info">
+            <field name="name">Right Rear Tire</field>
+            <field name="type">tyre</field>
+        </record>
+
+        <!-- Brake Conditions-->
+        <record id="vehicle_part_info_42" model="vehicle.part.info">
+            <field name="name">Front Disc Brakes</field>
+            <field name="type">brake</field>
+        </record>
+        <record id="vehicle_part_info_43" model="vehicle.part.info">
+            <field name="name">Rear Disc Brakes</field>
+            <field name="type">brake</field>
+        </record>
+        <record id="vehicle_part_info_44" model="vehicle.part.info">
+            <field name="name">Brake lines / hoses / parking brake cable</field>
+            <field name="type">brake</field>
+        </record>
+        <record id="vehicle_part_info_45" model="vehicle.part.info">
+            <field name="name">Discs / drums / calipers / wheel cylinders</field>
+            <field name="type">brake</field>
+        </record>
+
+        <!-- Vehicle Project -->
+        <record id="evm_vehicle_project" model="project.project">
+            <field name="name">Vehicle Project</field>
+        </record>
+        <!-- Task Stages -->
+        <record id="evm_vehicle_project_stage_1" model="project.task.type">
+            <field name="name">Not Started</field>
+            <field name="sequence">1</field>
+            <field name="project_ids" eval="[Command.set([ref('evm_vehicle_project')])]"/>
+        </record>
+        <record id="evm_vehicle_project_stage_2" model="project.task.type">
+            <field name="name">In Progress</field>
+            <field name="sequence">2</field>
+            <field name="project_ids" eval="[Command.set([ref('evm_vehicle_project')])]"/>
+        </record>
+        <record id="evm_vehicle_project_stage_3" model="project.task.type">
+            <field name="name">Pending</field>
+            <field name="sequence">3</field>
+            <field name="project_ids" eval="[Command.set([ref('evm_vehicle_project')])]"/>
+        </record>
+        <record id="evm_vehicle_project_stage_4" model="project.task.type">
+            <field name="name">Waiting Parts</field>
+            <field name="sequence">4</field>
+            <field name="project_ids" eval="[Command.set([ref('evm_vehicle_project')])]"/>
+        </record>
+        <record id="evm_vehicle_project_stage_5" model="project.task.type">
+            <field name="name">For Quality Check</field>
+            <field name="sequence">5</field>
+            <field name="project_ids" eval="False"
+                />
+        </record>
+        <record id="evm_vehicle_project_stage_6" model="project.task.type">
+            <field name="name">Quality Rejected</field>
+            <field name="sequence">6</field>
+            <field name="project_ids" eval="False"/>
+        </record>
+        <record id="evm_vehicle_project_stage_7" model="project.task.type">
+            <field name="name">Completed</field>
+            <field name="sequence">7</field>
+            <field name="project_ids" eval="[Command.set([ref('evm_vehicle_project')])]"/>
+        </record>
+
+    </data>
+</odoo>

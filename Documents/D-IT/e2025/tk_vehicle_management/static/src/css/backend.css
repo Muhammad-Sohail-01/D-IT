@@ -1,0 +1,85 @@
+.o_form_view:not(.o_field_highlight) .o_field_widget:not(.o_field_invalid):not(.o_field_highlight) .o_input:not(:hover):not(:focus) {
+    --o-input-border-color: #dbd6d6 !important;
+}
+
+.inspection-btn {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 0px !important;
+}
+
+.inspection-btn-tree {
+    width: 25px !important;
+    height: 25px !important;
+    border-radius: 0px !important;
+    padding: 0 !important;
+}
+
+.inspection-btn-tree > .fa-fw {
+    width: 100% !important;
+}
+
+.inspection-qc-btn-tree {
+    width: 25px !important;
+    height: 25px !important;
+    border-radius: 15px !important;
+    padding: 0 !important;
+}
+
+.boolean-size {
+    font-size: 29px;
+}
+
+.vehicle-required-boolean > .form-check > .form-check-input:checked {
+    background-color: #D44C59;
+    border-color: #D44C59;
+}
+
+.vehicle-required-boolean > .form-check > .form-check-input {
+    border-color: #D44C59;
+}
+
+.vehicle-required-boolean > .form-check > .form-check-input:hover {
+    border-color: #D44C59;
+    background-color: #D44C59;
+}
+
+.vehicle-further-boolean > .form-check > .form-check-input:checked {
+    background-color: #ECAC26;
+    border-color: #ECAC26;
+}
+
+.vehicle-further-boolean > .form-check > .form-check-input {
+    border-color: #ECAC26;
+}
+
+.vehicle-further-boolean > .form-check > .form-check-input:hover {
+    border-color: #ECAC26;
+    background-color: #ECAC26;
+}
+
+.vehicle-ok-boolean > .form-check > .form-check-input:checked {
+    background-color: #228E3B;
+    border-color: #228E3B;
+}
+
+.vehicle-ok-boolean > .form-check > .form-check-input {
+    border-color: #228E3B;
+}
+
+.vehicle-ok-boolean > .form-check > .form-check-input:hover {
+    border-color: #228E3B;
+    background-color: #228E3B;
+}
+
+.background_black .o_list_view{
+        background-color: #404040 !important;
+}
+
+
+
+
+
+
+
+

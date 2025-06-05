@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_employee_form_inherit" model="ir.ui.view">
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook//page[@name='hr_settings']" position="after">
+                    <page name="service_team" string="Service Team">
+                        <group>
+                            <group>
+                               <field name="inspection_team_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="team_leader" widget="boolean"/>
+                                <field name="service_advisor" widget="boolean"/>
+                                <field name="receptionist" widget="boolean"/>
+                                <field name="technician" widget="boolean"/>
+                                <field name="allowed_company_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="checklist_template_view_form" model="ir.ui.view">
+            <field name="name">checklist.template.view.form</field>
+            <field name="model">checklist.template</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <notebook>
+                            <page string="Checklist Lines">
+                                <field name="template_line_ids" widget="section_and_note_one2many">
+                                    <tree editable="bottom">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a line"/>
+                                            <create name="add_section_control"
+                                                    string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                        </control>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name" widget="section_and_note_text" required="1"/>
+                                        <field name="display_type" column_invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="checklist_template_tree_view" model="ir.ui.view">
+            <field name="name">checklist.template.tree.view</field>
+            <field name="model">checklist.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="checklist_template_action" model="ir.actions.act_window">
+            <field name="name">Checklist Templates</field>
+            <field name="res_model">checklist.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

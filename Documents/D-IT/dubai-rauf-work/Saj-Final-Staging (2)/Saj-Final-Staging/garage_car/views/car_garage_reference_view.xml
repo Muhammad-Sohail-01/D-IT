@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='car_social_reference_view_form' model='ir.ui.view'>
+        <field name="name">car.social.reference.form</field>
+        <field name="model">car.social.reference</field>
+        <field name="arch" type="xml">
+            <form string="Garage Reference">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Facebook..."/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='car_social_reference_view_tree' model='ir.ui.view'>
+        <field name="name">car.social.reference.tree</field>
+        <field name="model">car.social.reference</field>
+        <field name="arch" type="xml">
+            <tree string="Garage Reference">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id='car_social_reference_view_action' model='ir.actions.act_window'>
+        <field name="name">Car Social Reference</field>
+        <field name="res_model">car.social.reference</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new car social reference.
+          </p><p>
+            You can define several Car social reference (e.g. Facebook, Twitter).
+          </p>
+        </field>
+    </record>
+    
+    <menuitem action="car_social_reference_view_action" parent="car_configuration" name="Garage Reference" id="car_social_ref_menu" sequence="7"/>
+    
+</odoo>

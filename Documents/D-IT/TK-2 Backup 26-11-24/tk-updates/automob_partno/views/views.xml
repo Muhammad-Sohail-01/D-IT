@@ -1,0 +1,81 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="product_view_form_ext">
+            <field name="name">product.template.form.view.ext</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='general_information']" position="after">
+                    <page name="variants" string="Parts Numbers">
+                        <field name="partno_line_id" widget="one2many">
+                            <tree string="Part Numbers" editable="bottom">
+                                <field name="partno"/>
+                                <field name="part_internal_no"/>
+                                <field name="brand_ids" widget="many2many_tags"/>
+                                <field name="model_ids" widget="many2many_tags"/>
+                                <field name="year_ids" widget="many2many_tags"/>
+                                <field name="part_vendor_name"/>
+                                <field name="part_type"/>
+                                <field name="part_cat1" widget="many2many_tags" optional="hide"/>
+                                <field name="part_cat2" widget="many2many_tags" optional="hide"/>
+                                <field name="part_cat3" widget="many2many_tags" optional="hide"/>
+                                <field name="part_cat4" widget="many2many_tags" optional="hide"/>
+                                <field name="note"/>
+                                <field name="cost_price" optional="hide"/>
+                                <field name="sale_price" optional="hide"/>
+                                <field name="part_image" widget='image' optional="hide"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="sale_order_view_form_ext">
+            <field name="name">sale.order.form.ext</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_delivery']" position="before">
+                    <button type="object"
+                        name="action_redirect_to_job_card"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        invisible="job_card_count == 0">
+                        <field name="job_card_count" widget="statinfo" string="Job Card"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//form//header//button[@name='action_quotation_send']" position="after">
+                     <button name="action_pay_verified"  class="btn-primary" string="Prices verified" type="object" invisible="state != 'draft' or job_card_id == False"/>
+                </xpath>
+                 <xpath expr="//form//header//button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="invisible">state != 'payment_verified' or job_card_id != False </attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="payment_verified,draft,sent,sale,"/>
+                </xpath>
+               
+                
+                <xpath expr="//page[@name='order_lines']//tree//field[@name='product_template_id']" position="after">
+                    <field name="part_nubmer_id" options="{'no_create': True, 'no_edit': True}" domain="[('partno_id', '=', product_template_id)]"/> 
+                    <field name="part_internal_no" optional="hide"/>
+                    <field name="brand_id" domain="[('id', 'in', available_brand_ids)]"/>
+                    <field name="model_id" domain="[('id', 'in', available_model_ids)]"/>
+<!--                    <field name="p_type"/>-->
+                    
+                    
+                    <field name="is_warranty" optional="hide"/>
+                    <field name="warranty_expiry_date" invisible="not is_warranty" force_save="1"/>
+                    <field name="available_brand_ids" optional="hide"/>
+                    <field name="available_model_ids" optional="hide"/>
+                    
+                </xpath>
+                <xpath expr="//page[@name='order_lines']//tree//field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PDC Payment Form View -->
+    <record id="view_account_payment_pdc_form" model="ir.ui.view">
+        <field name="name">account.payment.pdc.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_deposit_pdc" string="Deposit" type="object"
+                    invisible="pdc_state not in ['registered'] or not is_pdc_payment"/>
+                <button name="action_return_pdc" string="Return" type="object"
+                    invisible="pdc_state not in ['registered'] or not is_pdc_payment"/>
+<!--                <button name="action_cancel_pdc" string="Cancel" type="object"-->
+<!--                    invisible="pdc_state not in ['registered'] or not is_pdc_payment"/>-->
+                <field name="pdc_state" invisible="1"/>
+            </xpath>
+	        <xpath expr="//form/sheet/div[@name='button_box']" position="after">
+			        <!-- <span class="bg-success" invisible="pdc_state != 'registered'">Registered</span> -->
+			        <!-- <span class="bg-info" invisible="pdc_state != 'deposited'">Deposited</span> -->
+			        <!-- <span class="bg-warning" invisible="pdc_state != 'returned'">Returned</span> -->
+<!--			        <span class="bg-danger" invisible="pdc_state != 'cancelled'">Cancelled</span>-->
+                    <widget name="web_ribbon" title="Registered" invisible="pdc_state != 'registered' or not is_pdc_payment"/>
+                    <widget name="web_ribbon" title="Deposited" invisible="pdc_state != 'deposited' or not is_pdc_payment"/>
+                    <widget name="web_ribbon" title="Returned" invisible="pdc_state != 'returned' or not is_pdc_payment"/>
+			  
+			</xpath>
+            <xpath expr="//field[@name='journal_id']" position="before">
+                <field name="is_pdc_payment"/>
+            </xpath>
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="cheque_date" invisible="not is_pdc_payment"/>
+                <field name="cheque_number" invisible="not is_pdc_payment"/>
+                <field name="deposit_date" invisible="not is_pdc_payment or pdc_state != 'registered'"/>
+                <field name="deposit_journal_id" invisible="not is_pdc_payment or pdc_state != 'registered'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Customer PDC Payment List View -->
+    <record id="view_account_payment_pdc_customer_tree" model="ir.ui.view">
+        <field name="name">account.payment.pdc.customer.tree</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Customer PDC Payments">
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="cheque_date"/>
+                <field name="cheque_number"/>
+                <field name="amount"/>
+                <field name="pdc_state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vendor PDC Payment List View -->
+    <record id="view_account_payment_pdc_vendor_tree" model="ir.ui.view">
+        <field name="name">account.payment.pdc.vendor.tree</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Vendor PDC Payments">
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="cheque_date"/>
+                <field name="cheque_number"/>
+                <field name="amount"/>
+                <field name="pdc_state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Customer PDC Payment Action -->
+    <record id="action_payment_pdc_customer" model="ir.actions.act_window">
+        <field name="name">Customer PDC Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_pdc_payment', '=', True), ('partner_type', '=', 'customer')]</field>
+        <field name="context">{'default_is_pdc_payment': True, 'default_partner_type': 'customer'}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_account_payment_pdc_customer_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_account_payment_pdc_form')})]"/>
+    </record>
+
+    <!-- Vendor PDC Payment Action -->
+    <record id="action_payment_pdc_vendor" model="ir.actions.act_window">
+        <field name="name">Vendor PDC Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_pdc_payment', '=', True), ('partner_type', '=', 'supplier')]</field>
+        <field name="context">{'default_is_pdc_payment': True, 'default_partner_type': 'supplier'}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_account_payment_pdc_vendor_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_account_payment_pdc_form')})]"/>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_payment_pdc_customer"
+        name="Customer PDC"
+        parent="account.menu_finance_receivables"
+        action="action_payment_pdc_customer"
+        sequence="20"/>
+
+    <menuitem id="menu_payment_pdc_vendor"
+        name="Vendor PDC"
+        parent="account.menu_finance_payables"
+        action="action_payment_pdc_vendor"
+        sequence="20"/>
+</odoo>

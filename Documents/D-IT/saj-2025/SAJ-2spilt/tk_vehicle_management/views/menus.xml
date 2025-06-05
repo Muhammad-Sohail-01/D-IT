@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="main_menu_vehicle_management"
+                  name="Vehicle Repair"
+                  web_icon="tk_vehicle_management,static/description/icon.png"/>
+
+        <!-- Appointment -->
+        <menuitem id="menu_vehicle_appointment"
+                  name="Appointments"
+                  parent="main_menu_vehicle_management"
+                  action="appointment.appointment_type_action"
+                  sequence="4"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist"/>
+
+        <!-- Reception -->
+        <menuitem name="Reception"
+                  id="menu_vehicle_crm"
+                  parent="main_menu_vehicle_management"
+                  sequence="5" active="False"/>
+        <menuitem id="menu_vehicle_crm_lead"
+                  name="Leads"
+                  sequence="5"
+                  action="vehicle_crm_lead_action"
+                  parent="menu_vehicle_crm"/>
+        <menuitem id="menu_vehicle_opportunity"
+                  name="Opportunities"
+                  sequence="10"
+                  action="vehicle_crm_opportunity_action"
+                  parent="menu_vehicle_crm"/>
+
+        <!-- Booking -->
+        <menuitem name="Check ins"
+                  id="menu_vehicle_booking"
+                  parent="main_menu_vehicle_management"
+                  action="vehicle_booking_action"
+                  sequence="10"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!-- Job Card-->
+        <menuitem name="Job Cards"
+                  id="menu_vehicle_inspection"
+                  parent="main_menu_vehicle_management"
+                  action="vehicle_inspection_action"
+                  sequence="15"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!-- Customer -->
+        <menuitem name="Customers"
+                  id="menu_vehicle_customer"
+                  parent="main_menu_vehicle_management"
+                  action="contacts.action_contacts"
+                  sequence="16"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!--Register Vehicle-->
+        <menuitem name="Vehicles"
+                  id="menu_register_vehicle_customer"
+                  parent="main_menu_vehicle_management"
+                  action="register_vehicle_action"
+                  sequence="17"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!--Warranty-->
+        <menuitem name="Warranties"
+                  id="menu_vehicle_warranty"
+                  parent="main_menu_vehicle_management"
+                  action="vehicle_warranty_action"
+                  sequence="18"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!-- Team -->
+        <menuitem name="Teams"
+                  id="menu_inspection_team"
+                  parent="main_menu_vehicle_management"
+                  action="inspection_team_action"
+                  sequence="20"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!-- Services-->
+        <menuitem name="Services"
+                  id="menu_vehicle_services"
+                  parent="main_menu_vehicle_management"
+                  action="vehicle_service_action"
+                  sequence="25"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!--Parts-->
+        <menuitem name="Spare Parts"
+                  id="menu_vehicle_spare_parts"
+                  parent="main_menu_vehicle_management"
+                  action="vehicle_spare_parts_action"
+                  sequence="30"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+        <menuitem name="Warranty Products"
+                  id="menu_warranty_products"
+                  parent="main_menu_vehicle_management"
+                  action="warranty_product_action"
+                  sequence="35"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_team_leader,tk_vehicle_management.vehicle_service_adviser"/>
+
+        <!--Task-->
+        <menuitem name="Task"
+                  id="menu_vehicle_project_task"
+                  parent="main_menu_vehicle_management"
+                  action="project.action_view_my_task"
+                  sequence="40"
+                  groups="tk_vehicle_management.vehicle_technician,tk_vehicle_management.vehicle_team_leader"/>
+        <menuitem name="Task"
+                  id="menu_vehicle_project_task_all"
+                  parent="main_menu_vehicle_management"
+                  action="project.action_view_all_task"
+                  sequence="31"
+                  groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_service_adviser"/>
+
+
+        <!-- Configurations -->
+        <menuitem name="Configurations"
+                  id="menu_vehicle_configuration"
+                  parent="main_menu_vehicle_management"
+                  sequence="50" groups="tk_vehicle_management.vehicle_workshop_manager"/>
+        <menuitem id="menu_vehicle_setting_app"
+                  name="Settings"
+                  parent="menu_vehicle_configuration"
+                  action="action_setting_vehicle_app"
+                  sequence="1"/>
+        <menuitem id="menu_vehicle_part_info"
+                  name="Vehicle Parts"
+                  parent="menu_vehicle_configuration"
+                  action="vehicle_part_info_action"
+                  sequence="2"/>
+        <menuitem id="menu_vehicle_inspection_type"
+                  name="Inspection Types"
+                  parent="menu_vehicle_configuration"
+                  action="inspection_type_action"
+                  sequence="3"/>
+        <menuitem name="Customer Tags"
+                  id="menu_config_customer_tag"
+                  parent="menu_vehicle_configuration"
+                  action="config_customer_tag_action"
+                  sequence="5"/>
+        <menuitem name="Consent Types"
+                  id="menu_config_concern_type"
+                  parent="menu_vehicle_configuration"
+                  action="vehicle_concern_type_action"
+                  sequence="10"/>
+        <menuitem name="Terms &amp; Conditions"
+                  id="menu_vehicle_term_conditions"
+                  parent="menu_vehicle_configuration"
+                  action="vehicle_term_conditions_action"
+                  sequence="11"/>
+        <!-- Vehicle-->
+        <menuitem id="menu_config_vehicle"
+                  name="Vehicle"
+                  parent="menu_vehicle_configuration"
+                  sequence="15"/>
+        <menuitem name="Brands"
+                  id="menu_vehicle_brand"
+                  parent="menu_config_vehicle"
+                  action="fleet.fleet_vehicle_model_brand_action"
+                  sequence="1"/>
+        <menuitem name="Models"
+                  id="menu_vehicle_model"
+                  parent="menu_config_vehicle"
+                  action="fleet.fleet_vehicle_model_action"
+                  sequence="2"/>
+        <!--Templates-->
+        <menuitem id="menu_config_templates"
+                  name="Templates"
+                  parent="menu_vehicle_configuration"
+                  sequence="20"/>
+        <menuitem name="Health Report Template"
+                  id="menu_config_health_report_template"
+                  parent="menu_config_templates"
+                  action="health_report_template_action"
+                  sequence="10"/>
+        <menuitem name="Quality Checks Template"
+                  id="menu_config_quality_template"
+                  parent="menu_config_templates"
+                  action="vehicle_quality_check_action"
+                  sequence="11"/>
+        <menuitem id="menu_checklist_template"
+                  name="Checklist Templates"
+                  parent="menu_config_templates"
+                  action="checklist_template_action" sequence="20"/>
+        <menuitem id="menu_job_image_template"
+                  name="Job Card Image Templates"
+                  parent="menu_config_templates"
+                  action="job_image_template_action" sequence="25"/>
+
+        <!-- Warranty -->
+        <menuitem id="menu_config_warranty"
+                  name="Warranty"
+                  parent="menu_vehicle_configuration"
+                  sequence="25"/>
+        <menuitem name="Warranty Coverage"
+                  id="menu_warranty_coverage"
+                  parent="menu_config_warranty"
+                  action="warranty_coverage_action"
+                  sequence="1"/>
+        <menuitem name="Warranty Duration"
+                  id="menu_warranty_duration"
+                  parent="menu_config_warranty"
+                  action="warranty_duration_action"
+                  sequence="2"/>
+
+
+    </data>
+</odoo>

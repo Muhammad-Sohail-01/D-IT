@@ -1,0 +1,174 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <data>-->
+<!--        <record id="crm_vehicle_form_inherit_view" model="ir.ui.view">-->
+<!--            <field name="name">crm.partner.vehicle.form.inherit.view</field>-->
+<!--            <field name="model">crm.lead</field>-->
+<!--            <field name="inherit_id" ref="crm.crm_lead_view_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//label[@for='email_from_group_lead_info']" position="before">-->
+<!--                    <field name="address_area"/>-->
+<!--                    <field name="customer_tag_ids" widget="many2many_tags" string="Customer Tags"-->
+<!--                           options="{'color_field': 'color'}"/>-->
+<!--                </xpath>-->
+<!--                &lt;!&ndash;Vehicle Booking&ndash;&gt;-->
+<!--                <xpath expr="//div[@name='button_box']" position="inside">-->
+<!--                    <field name="booking_id" invisible="1"/>-->
+<!--                    <button name="action_view_bookings" type="object" class="oe_stat_button" icon="fa-calendar"-->
+<!--                            invisible="not booking_id">-->
+<!--                        Check in-->
+<!--                    </button>-->
+<!--                    <button class="oe_stat_button" type="object" name="action_view_invoices"-->
+<!--                            icon="fa-money" invisible="invoice_count == 0"-->
+<!--                            string="Invoices">-->
+<!--                        <field name="invoice_count" string='Invoices'-->
+<!--                               widget="statinfo"/>-->
+<!--                    </button>-->
+<!--                    <button class="oe_stat_button" type="object" name="action_view_delivery_orders"-->
+<!--                            icon="fa-truck" invisible="do_count == 0"-->
+<!--                            string="Part Orders">-->
+<!--                        <field name="do_count" string='Part Orders'-->
+<!--                               widget="statinfo"/>-->
+<!--                    </button>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//field[@name='active']" position="before">-->
+<!--                    <div class="row text-end">-->
+<!--                        <div class="col-12">-->
+<!--                            <button name="action_view_activities" type="object"-->
+<!--                                    class="btn btn-outline-success me-1 ms-1"-->
+<!--                                    icon="fa-clock-o">-->
+<!--                                Activities-->
+<!--                            </button>-->
+<!--                            <button name="action_view_job_card" type="object" class="btn btn-outline-warning me-1 ms-1"-->
+<!--                                    icon="fa-cube">-->
+<!--                                Job Card-->
+<!--                            </button>-->
+<!--                            <button name="action_view_inspection" type="object"-->
+<!--                                    class="btn btn-outline-primary me-1 ms-1"-->
+<!--                                    icon="fa-sticky-note-o">-->
+<!--                                Inspection Report-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//notebook" position="before">-->
+<!--                    <group string="Vehicle Service">-->
+<!--                        <group>-->
+<!--                            <field name="service_adviser_id"/>-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            <field name="technician_id"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                    <group string="Appointment Details" invisible="not vehicle_appointment_id">-->
+<!--                        <group>-->
+<!--                            <field name="vehicle_appointment_id" string="Appointment" readonly="1" force_sace="1"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                </xpath>-->
+<!--                &lt;!&ndash;Vehicle Details&ndash;&gt;-->
+<!--                <xpath expr="//notebook" position="inside">-->
+<!--                    <page string="Vehicle Details" name="vehicle_details">-->
+<!--                        <group string="Vehicle Details">-->
+<!--                            <group>-->
+<!--                                <field name="brand_id"/>-->
+<!--                                <field name="vehicle_model_id"/>-->
+<!--                                <field name="year"/>-->
+<!--                                <field name="vehicle_color"/>-->
+<!--                                <field name="fuel_type"/>-->
+<!--                                <field name="transmission" widget="radio" options="{'horizontal':True}"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="vin_no"/>-->
+<!--                                <field name="registration_no"/>-->
+<!--                                <field name="miles"/>-->
+<!--                                <field name="is_warranty" widget="boolean_toggle"/>-->
+<!--                                <field name="warranty_type" invisible="not is_warranty"/>-->
+<!--                                <field name="insurance_provider"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </page>-->
+<!--                    <page string="Vehicle License" name="vehicle_license">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-6">-->
+<!--                                <h6>-->
+<!--                                    Front-->
+<!--                                </h6>-->
+<!--                                <hr class="mb-1 mt-1"/>-->
+<!--                                <field name="licence_image_front" widget="image"/>-->
+<!--                            </div>-->
+<!--                            <div class="col-6">-->
+<!--                                <h6>-->
+<!--                                    Back-->
+<!--                                </h6>-->
+<!--                                <hr class="mb-1 mt-1"/>-->
+<!--                                <field name="licence_image_back" widget="image"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </page>-->
+<!--                    <page string="Consent">-->
+<!--                        <field name="vehicle_concern_ids" widget="section_and_note_one2many">-->
+<!--                            <tree editable="bottom">-->
+<!--                                <control>-->
+<!--                                    <create name="add_product_control"-->
+<!--                                            string="Add a line"/>-->
+<!--                                    <create name="add_section_control"-->
+<!--                                            string="Add a title"-->
+<!--                                            context="{'default_display_type': 'line_section'}"/>-->
+<!--                                </control>-->
+<!--                                <field name="sequence" widget="handle"/>-->
+<!--                                <field name="concern_type_id" required="not display_type"/>-->
+<!--                                <field name="display_type" column_invisible="1"/>-->
+<!--                                <field name="name" widget="section_and_note_text"-->
+<!--                                       required="1"/>-->
+<!--                            </tree>-->
+<!--                        </field>-->
+<!--                    </page>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//header" position="inside">-->
+<!--                    <field name="booking_id" invisible="1"/>-->
+<!--                    <button name="action_create_booking" type="object" string="Create Check in"-->
+<!--                            invisible="booking_id" class="btn btn-primary"/>-->
+<!--                </xpath>-->
+
+<!--                &lt;!&ndash;Remove state zip from lead form&ndash;&gt;-->
+<!--                &lt;!&ndash;Lead&ndash;&gt;-->
+<!--                <xpath expr="//field[@name='state_id'][1]" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//field[@name='zip'][1]" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//field[@name='city'][1]" position="attributes">-->
+<!--                    <attribute name="class">o_address_street</attribute>-->
+<!--                </xpath>-->
+<!--                &lt;!&ndash;Opportunity&ndash;&gt;-->
+<!--                <xpath expr="//page[@name='lead']/group/group[1]/div/field[@name='state_id']" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//page[@name='lead']/group/group[1]/div/field[@name='zip']" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//page[@name='lead']/group/group[1]/div/field[@name='city']" position="attributes">-->
+<!--                    <attribute name="class">o_address_street</attribute>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        <record id="vehicle_crm_lead_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Leads</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">crm.lead</field>-->
+<!--            <field name="domain">['|', ('type','=','lead'), ('type','=',False)]</field>-->
+<!--            <field name="context">{'default_type':'lead'}</field>-->
+<!--            <field name="view_mode">tree,kanban,form,calendar,pivot,activity</field>-->
+<!--        </record>-->
+<!--        <record id="vehicle_crm_opportunity_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Opportunities</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">crm.lead</field>-->
+<!--            <field name="domain">[('type','=','opportunity')]</field>-->
+<!--            <field name="context">{'default_type':'opportunity'}</field>-->
+<!--            <field name="view_mode">tree,kanban,form,calendar,pivot,activity</field>-->
+<!--        </record>-->
+<!--    </data>-->
+<!--</odoo>-->

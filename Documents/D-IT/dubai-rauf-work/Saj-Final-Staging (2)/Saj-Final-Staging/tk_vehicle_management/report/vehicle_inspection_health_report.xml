@@ -1,0 +1,1011 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Inspection Report Without Service-Parts-->
+        <template id="vehicle_inspection_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <div class="page">
+                            <t t-set="print_service" t-value="False"/>
+                            <!-- Header-->
+                            <table style="margin: 0px; font-size: 10px;" class="table table-borderless">
+                                <tr>
+                                    <td style="width: 15%;">
+                                    </td>
+                                    <td style="width: 70%; vertical-align: top; text-align: center;">
+                                        <h5 style="font-weight: bold; margin: 0px;">
+                                            Vehicle Inspection Report
+                                        </h5>
+                                        <h6 style="font-weight: bold; margin: 0px;">
+                                            <span t-field="o.company_id.name"/>
+                                        </h6>
+                                        <span>
+                                            <t t-if="o.company_id.street">
+                                                <span t-field="o.company_id.street"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.street2">
+                                                <span t-field="o.company_id.street2"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.city">
+                                                <span t-field="o.company_id.city"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.zip">
+                                                <span t-field="o.company_id.zip"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.state_id">
+                                                <span t-field="o.company_id.state_id"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.country_id">
+                                                <span t-field="o.company_id.country_id"/>
+                                                ,
+                                            </t>
+                                            |
+                                            <span t-field="o.company_id.phone"/>
+                                            |
+                                            <span t-field="o.company_id.email"/>
+                                        </span>
+                                        <br/>
+                                        <span>
+                                            <span t-field="o.company_id.website"/>
+                                        </span>
+                                    </td>
+                                    <td style="width: 15%; vertical-align: top;">
+                                        <t t-if="o.company_id.logo">
+                                            <img t-att-src="image_data_uri(o.company_id.logo)"
+                                                 style="max-width: 130px; max-height: 80px; object-fit: cover;"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div style="border-top: 1px solid #dee3ec; margin-bottom: 8px; margin-top: 8px;"/>
+                            <table style="margin: 0px 0px 0px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 8%; vertical-align: middle;">
+                                        <strong>
+                                            Customer:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 42%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id.customer_id"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 10%; vertical-align: middle;">
+                                        <strong>
+                                            Year/Model:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 40%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.year"/>
+                                        /
+                                        <span t-field="o.vehicle_model_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin: 4px 0px 0px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 5%;vertical-align: middle;">
+                                        <strong>
+                                            Date:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 11%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id.booking_date"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 4%; vertical-align: middle;">
+                                        <strong>
+                                            VIN:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 20%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id.vin_no"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 7%; vertical-align: middle;">
+                                        <strong>
+                                            Kilometers:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 20%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.miles"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 13%; vertical-align: middle;">
+                                        <strong>
+                                            Repair Order #:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 20%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin: 4px 0px 0px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 5%; vertical-align: middle;">
+                                        <strong>
+                                            Tag #:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 35%; vertical-align: middle;padding-left:3px;">
+                                        -
+                                    </td>
+                                    <td style="padding: 0px; width: 13%; vertical-align: middle;">
+                                        <strong>
+                                            Service Advisor:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 47%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.service_adviser_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin: 4px 0px 8px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 12%; vertical-align: middle;">
+                                        <strong>
+                                            Technician #1:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 21%; vertical-align: middle;padding-left:3px;">
+                                        <t t-if="o.technician_ids">
+                                            #
+                                            <span t-esc="o.technician_ids[0].name"/>
+                                        </t>
+                                    </td>
+                                    <td style="padding: 0px; width: 12%; vertical-align: middle;">
+                                        <strong>
+                                            Technician #2:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 21%; vertical-align: middle;padding-left:3px;">
+                                        #
+                                        <t t-if="o.technician_ids and len(o.technician_ids.ids) >= 2">
+                                            <span t-esc="o.technician_ids[1].name"/>
+                                        </t>
+                                    </td>
+                                    <td style="padding: 0px; width: 12%; vertical-align: middle;">
+                                        <strong>
+                                            Technician #3:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 21%; vertical-align: middle;padding-left:3px;">
+                                        #
+                                        <t t-if="o.technician_ids and len(o.technician_ids.ids) >= 3">
+                                            <span t-esc="o.technician_ids[2].name"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Color information-->
+                            <table style="margin: 4px 0px 8px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 5%;">
+                                        <div style="border: 10px solid green; height: 2px; width: 2px;"></div>
+                                    </td>
+                                    <td style="padding: 0px; width: 25%; vertical-align: middle;">
+                                        Checked and OK at this time
+                                    </td>
+                                    <td style="padding: 0px; width: 5%;">
+                                        <div style="border: 10px solid #ff8d00; height: 2px; width: 2px;"></div>
+                                    </td>
+                                    <td style="padding: 0px; width: 25%; vertical-align: middle;">
+                                        Requires future attention
+                                    </td>
+                                    <td style="padding: 0px; width: 5%;">
+                                        <div style="border: 10px solid red;height: 2px; width: 2px;"></div>
+                                    </td>
+                                    <td style="padding: 0px; width: 25%; vertical-align: middle;">
+                                        Requires immediate attention
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Main template -->
+                            <t t-set="print_service" t-value="False"/>
+                            <t t-call="tk_vehicle_management.main_section_vehicle_inspection_template"/>
+                            <!-- Recommendations-->
+                            <table style="margin:10px 0px 0px 0px; font-size: 10px;" class="table table-borderless">
+                                <tr>
+                                    <td style="font-size: 12px; padding: 0px; width: 100%;" colspan="2">
+                                        <strong>Comments &amp; Recommendations:</strong>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 2rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 2rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 2rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 3rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                            </table>
+                            <!-- Terms Conditions -->
+                            <p style="page-break-before:always;"/>
+                            <h6 style="font-weight:800;font-size: 13px; background-color: #348185;color: white; padding: 5px 3px;margin-bottom:0px;">
+                                Terms &amp; Conditions
+                            </h6>
+                            <t t-set="term_conditions"
+                               t-value="request.env.ref('tk_vehicle_management.term_condition_3').terms_conditions"/>
+                            <div style="font-size: 12px; color: #5e5b5b">
+                                <t t-esc="term_conditions"/>
+                            </div>
+                            <table style="margin:5rem 0px 0px 0px; font-size: 10px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 50%; vertical-align: middle;">
+                                        <strong>Customer Signature</strong>
+                                    </td>
+                                    <td style="padding: 0px; width: 50%; vertical-align: middle; text-align: right;">
+                                        <strong>Date</strong>
+                                        <span t-field="o.inspection_id.booking_date"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <record id="vehicle_inspection_report" model="ir.actions.report">
+            <field name="name">Vehicle Inspection Report</field>
+            <field name="model">vehicle.health.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tk_vehicle_management.vehicle_inspection_report_template</field>
+            <field name="report_file">tk_vehicle_management.vehicle_inspection_report_template</field>
+            <field name="binding_model_id" ref="model_vehicle_health_report"/>
+            <field name="paperformat_id" ref="inspection_report_paper_format"/>
+            <field name="binding_type">report</field>
+        </record>
+        <!--Inspection Report With Service + Parts-->
+        <template id="vehicle_inspection_report_service_part_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <div class="page">
+                            <!-- Header-->
+                            <table style="margin: 0px; font-size: 10px;" class="table table-borderless">
+                                <tr>
+                                    <td style="width: 15%;">
+                                    </td>
+                                    <td style="width: 70%; vertical-align: top; text-align: center;">
+                                        <h5 style="font-weight: bold; margin: 0px;">
+                                            Vehicle Inspection Report
+                                        </h5>
+                                        <h6 style="font-weight: bold; margin: 0px;">
+                                            <span t-field="o.company_id.name"/>
+                                        </h6>
+                                        <span>
+                                            <t t-if="o.company_id.street">
+                                                <span t-field="o.company_id.street"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.street2">
+                                                <span t-field="o.company_id.street2"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.city">
+                                                <span t-field="o.company_id.city"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.zip">
+                                                <span t-field="o.company_id.zip"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.state_id">
+                                                <span t-field="o.company_id.state_id"/>
+                                                ,
+                                            </t>
+                                            <t t-if="o.company_id.country_id">
+                                                <span t-field="o.company_id.country_id"/>
+                                                ,
+                                            </t>
+                                            |
+                                            <span t-field="o.company_id.phone"/>
+                                            |
+                                            <span t-field="o.company_id.email"/>
+                                        </span>
+                                        <br/>
+                                        <span>
+                                            <span t-field="o.company_id.website"/>
+                                        </span>
+                                    </td>
+                                    <td style="width: 15%; vertical-align: top;">
+                                        <t t-if="o.company_id.logo">
+                                            <img t-att-src="image_data_uri(o.company_id.logo)"
+                                                 style="max-width: 130px; max-height: 80px; object-fit: cover;"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div style="border-top: 1px solid #dee3ec; margin-bottom: 8px; margin-top: 8px;"/>
+                            <table style="margin: 0px 0px 0px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 8%; vertical-align: middle;">
+                                        <strong>
+                                            Customer:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 42%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id.customer_id"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 10%; vertical-align: middle;">
+                                        <strong>
+                                            Year/Model:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 40%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.year"/>
+                                        /
+                                        <span t-field="o.vehicle_model_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin: 4px 0px 0px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 5%;vertical-align: middle;">
+                                        <strong>
+                                            Date:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 11%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id.booking_date"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 4%; vertical-align: middle;">
+                                        <strong>
+                                            VIN:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 20%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id.vin_no"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 7%; vertical-align: middle;">
+                                        <strong>
+                                            Kilometers:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 20%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.miles"/>
+                                    </td>
+                                    <td style="padding: 0px; width: 13%; vertical-align: middle;">
+                                        <strong>
+                                            Repair Order #:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 20%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.inspection_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin: 4px 0px 0px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 5%; vertical-align: middle;">
+                                        <strong>
+                                            Tag #:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 35%; vertical-align: middle;padding-left:3px;">
+                                        -
+                                    </td>
+                                    <td style="padding: 0px; width: 13%; vertical-align: middle;">
+                                        <strong>
+                                            Service Advisor:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 47%; vertical-align: middle;padding-left:3px;">
+                                        <span t-field="o.service_adviser_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="margin: 4px 0px 8px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 12%; vertical-align: middle;">
+                                        <strong>
+                                            Technician #1:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 21%; vertical-align: middle;padding-left:3px;">
+                                        <t t-if="o.technician_ids">
+                                            #
+                                            <span t-esc="o.technician_ids[0].name"/>
+                                        </t>
+                                    </td>
+                                    <td style="padding: 0px; width: 12%; vertical-align: middle;">
+                                        <strong>
+                                            Technician #2:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 21%; vertical-align: middle;padding-left:3px;">
+                                        #
+                                        <t t-if="o.technician_ids and len(o.technician_ids.ids) >= 2">
+                                            <span t-esc="o.technician_ids[1].name"/>
+                                        </t>
+                                    </td>
+                                    <td style="padding: 0px; width: 12%; vertical-align: middle;">
+                                        <strong>
+                                            Technician #3:
+                                        </strong>
+                                    </td>
+                                    <td style="padding: 0px; border-bottom: 1px solid #dee3ec; width: 21%; vertical-align: middle;padding-left:3px;">
+                                        #
+                                        <t t-if="o.technician_ids and len(o.technician_ids.ids) >= 3">
+                                            <span t-esc="o.technician_ids[2].name"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Color information-->
+                            <table style="margin: 4px 0px 8px 0px; font-size: 13px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 5%;">
+                                        <div style="border: 10px solid green; height: 2px; width: 2px;"></div>
+                                    </td>
+                                    <td style="padding: 0px; width: 25%; vertical-align: middle;">
+                                        Checked and OK at this time
+                                    </td>
+                                    <td style="padding: 0px; width: 5%;">
+                                        <div style="border: 10px solid #ff8d00; height: 2px; width: 2px;"></div>
+                                    </td>
+                                    <td style="padding: 0px; width: 25%; vertical-align: middle;">
+                                        Requires future attention
+                                    </td>
+                                    <td style="padding: 0px; width: 5%;">
+                                        <div style="border: 10px solid red;height: 2px; width: 2px;"></div>
+                                    </td>
+                                    <td style="padding: 0px; width: 25%; vertical-align: middle;">
+                                        Requires immediate attention
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Main Section Template -->
+                            <t t-set="print_service" t-value="True"/>
+                            <t t-call="tk_vehicle_management.main_section_vehicle_inspection_template"/>
+                            <!-- Recommendations-->
+                            <table style="margin:10px 0px 0px 0px; font-size: 10px;" class="table table-borderless">
+                                <tr>
+                                    <td style="font-size: 12px; padding: 0px; width: 100%;" colspan="2">
+                                        <strong>Comments &amp; Recommendations:</strong>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 2rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 2rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 2rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #dee3ec; height: 3rem;">
+                                    <td style="padding: 0px; width: 100%; vertical-align: middle;" colspan="2"></td>
+                                </tr>
+                            </table>
+                            <!-- Terms Conditions -->
+                            <p style="page-break-before:always;"/>
+                            <h6 style="font-weight:800;font-size: 13px; background-color: #348185;color: white; padding: 5px 3px;margin-bottom:0px;">
+                                Terms &amp; Conditions
+                            </h6>
+                            <t t-set="term_conditions"
+                               t-value="request.env.ref('tk_vehicle_management.term_condition_3').terms_conditions"/>
+                            <div style="font-size: 12px; color: #5e5b5b">
+                                <t t-esc="term_conditions"/>
+                            </div>
+                            <table style="margin:5rem 0px 0px 0px; font-size: 10px;" class="table table-borderless">
+                                <tr>
+                                    <td style="padding: 0px; width: 50%; vertical-align: middle;">
+                                        <strong>Customer Signature</strong>
+                                    </td>
+                                    <td style="padding: 0px; width: 50%; vertical-align: middle; text-align: right;">
+                                        <strong>Date</strong>
+                                        <span t-field="o.inspection_id.booking_date"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <!-- Main Template-->
+        <template id="main_section_vehicle_inspection_template">
+            <!-- Exterior -->
+            <t t-set="section_title" t-value="'Exterior'"/>
+            <t t-set="section_items" t-value="o.vehicle_outer_inspection_ids"/>
+            <t t-set="section_notes" t-value="o.outer_body_inspection"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section"/>
+
+            <!-- Interior -->
+            <t t-set="section_title" t-value="'Interior'"/>
+            <t t-set="section_items" t-value="o.vehicle_inner_inspection_ids"/>
+            <t t-set="section_notes" t-value="o.inner_body_inspection"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section"/>
+
+            <!-- Under Hood-->
+            <t t-set="section_title" t-value="'Under Hood'"/>
+            <t t-set="section_items" t-value="o.vehicle_mechanical_inspection_ids"/>
+            <t t-set="section_notes" t-value="o.mechanical_condition"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section"/>
+
+            <!-- Fluid -->
+            <t t-set="section_title" t-value="'Fluids'"/>
+            <t t-set="section_items" t-value="o.vehicle_fluid_inspection_ids"/>
+            <t t-set="section_notes" t-value="o.vehicle_fluid"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section"/>
+
+            <!-- Under Vehicle-->
+            <t t-set="section_title" t-value="'Under Vehicle'"/>
+            <t t-set="section_items" t-value="o.under_vehicle_inspection_ids"/>
+            <t t-set="section_notes" t-value="o.under_vehicle"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section"/>
+
+            <!-- Tyre -->
+            <t t-set="section_title" t-value="'Tires'"/>
+            <t t-set="section_items" t-value="o.vehicle_tyre_inspection_ids"/>
+            <t t-set="section_notes" t-value="o.tyre_inspection"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section_tyre"/>
+
+            <!-- Brake-->
+            <t t-set="section_title" t-value="'Brake Condition'"/>
+            <t t-set="section_items" t-value="o.brake_condition_ids"/>
+            <t t-set="section_notes" t-value="o.brake_condition"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section"/>
+
+            <!-- Multi Point-->
+            <t t-set="section_title" t-value="'Multi Point'"/>
+            <t t-set="section_items" t-value="o.vehicle_components_inspection_ids"/>
+            <t t-set="section_notes" t-value="o.vehicle_component"/>
+            <t t-call="tk_vehicle_management.vehicle_inspection_section"/>
+
+            <!-- TOTAL -->
+            <table style="margin: 0px; font-size: 11px;" t-if="print_service"
+                   class="table table-borderless">
+                <tr>
+                    <td style="padding:3px; padding-right:5px;width:60%;font-weight:800;font-size: 12px;text-align:right;">
+
+                    </td>
+                    <td style="padding:3px; padding-right:5px;width:30%;font-weight:800;font-size: 12px;text-align:right;">
+                        Services Untaxed Total
+                    </td>
+                    <td style="padding:3px; padding-right:5px;width:15%;font-weight:800;font-size: 12px;text-align:right;">
+                        <span t-field="o.untaxed_service_amount"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:3px; padding-right:5px;width:60%;font-weight:800;font-size: 12px;text-align:right;">
+
+                    </td>
+                    <td style="border-bottom: 1px solid #dee3ec;padding:3px; padding-right:5px;width:30%;font-weight:800;font-size: 12px;text-align:right;">
+                        Services Taxes Total (<span
+                            t-out="', '.join(map(lambda x: (x.description or x.name), o.tax_ids))"/>)
+                    </td>
+                    <td style="border-bottom: 1px solid #dee3ec;padding:3px; padding-right:5px;width:15%;font-weight:800;font-size: 12px;text-align:right;">
+                        <span t-field="o.service_tax_amount"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:3px; padding-right:5px;width:60%;font-weight:800;font-size: 12px;text-align:right;">
+
+                    </td>
+                    <td style="padding:3px; padding-right:5px;width:30%;font-weight:800;font-size: 12px;text-align:right;">
+                        Part Untaxed Total
+                    </td>
+                    <td style="padding:3px; padding-right:5px;width:15%;font-weight:800;font-size: 12px;text-align:right;">
+                        <span t-field="o.untaxed_part_amount"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:3px; padding-right:5px;width:60%;font-weight:800;font-size: 12px;text-align:right;">
+
+                    </td>
+                    <td style="border-bottom: 1px solid #7dc4c9;padding:3px; padding-right:5px;width:25%;font-weight:800;font-size: 12px;text-align:right;">
+                        Parts Taxes Total (<span
+                            t-out="', '.join(map(lambda x: (x.description or x.name), o.tax_ids))"/>)
+                    </td>
+                    <td style="border-bottom: 1px solid #7dc4c9;padding:3px; padding-right:5px;width:15%;font-weight:800;font-size: 12px;text-align:right;">
+                        <span t-field="o.part_tax_amount"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:3px; padding-right:5px;width:60%;font-weight:800;font-size: 12px;text-align:right;">
+
+                    </td>
+                    <td style="border-bottom: 1px solid #7dc4c9;padding:3px; padding-right:5px;width:25%;font-weight:800;font-size: 12px;text-align:right;">
+                        Total
+                    </td>
+                    <td style="border-bottom: 1px solid #7dc4c9;padding:3px; padding-right:5px;width:15%;font-weight:800;font-size: 12px;text-align:right;">
+                        <span t-esc="o.parts_total + o.service_total"
+                              t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                    </td>
+                </tr>
+            </table>
+        </template>
+
+        <!-- Section Template-->
+        <template id="vehicle_inspection_section">
+            <table style="margin:0px;font-size: 12px;" class="table table-borderless"
+                   t-if="section_notes">
+                <tr>
+                    <td style="font-size: 13px; background-color: #348185;color: white; padding: 2px 6px;">
+                        <strong t-esc="section_title"/>
+                    </td>
+                </tr>
+            </table>
+            <table style="margin:0px;margin-bottom:8px; font-size: 12px;" class="table table-borderless"
+                   t-if="section_notes">
+                <t t-foreach="section_items" t-as="e">
+                    <tr style="border-bottom:1px solid #7dc4c9;">
+                        <td style="padding: 2px; width: 2%;padding-right: 5px;vertical-align: middle;">
+                            <t t-if="e.okay_for_now">
+                                <div style="height: 20px; width: 20px; background-color: green; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div style="height: 20px; width: 20px; border: 2.5px solid green; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;"/>
+                            </t>
+                        </td>
+                        <td style="padding: 2px; width: 2%;padding-right: 5px;vertical-align: middle;">
+                            <t t-if="e.further_attention">
+                                <div style="height: 20px; width: 20px; background-color: #ff8d00; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div style="height: 20px; width: 20px; border: 2.5px solid #ff8d00; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;"/>
+                            </t>
+                        </td>
+                        <td style="padding: 2px; width: 2%;padding-right: 5px;vertical-align: middle;">
+                            <t t-if="e.required_attention">
+                                <div style="height: 20px; width: 20px; background-color: red; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div style="height: 20px; width: 20px; border: 2.5px solid red; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;"/>
+                            </t>
+                        </td>
+                        <td style="padding: 0px; width: 94%; vertical-align: middle;">
+                            <span t-field="e.part_id"/>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee3ec;" t-if="e.notes">
+                        <td colspan="4"
+                            style="padding: 2px; width: 100%; vertical-align: middle;font-size:11px;background: #fffbe7;">
+                            <span style="font-weight: 700;">Notes :</span>
+                            <span t-field="e.notes"/>
+                        </td>
+                    </tr>
+                    <t t-set="images" t-value="e.image_ids"/>
+                    <t t-call="tk_vehicle_management.vehicle_inspection_images" t-if="e.image_ids"/>
+                    <t t-set="services" t-value="e.service_ids"/>
+                    <t t-set="parts" t-value="e.part_ids"/>
+                    <t t-call="tk_vehicle_management.vehicle_inspection_services"
+                       t-if="e.service_ids and print_service"/>
+                </t>
+            </table>
+        </template>
+
+        <!-- Image Template-->
+        <template id="vehicle_inspection_images">
+            <tr style="border-bottom: 1px solid #dee3ec;">
+                <td colspan="4" style="padding: 0px; width: 100%; vertical-align: middle;">
+                    <table class="table table-bordered" style="width: 100%; margin: 0px;">
+                        <t t-set="img_count" t-value="0"/>
+                        <tr>
+                            <td style="padding-left:0px;width:25rem;">
+                                <t t-foreach="images" t-as="img">
+                                    <t t-set="img_count" t-value="img_count + 1"/>
+                                    <div style="display: inline-block;text-align:center;padding:4px! important;">
+                                        <t t-if="img.avtar">
+                                            <img t-att-src="image_data_uri(img.avtar)"
+                                                 style="width: 140px; height: 140px;"/>
+                                        </t>
+                                        <t t-else="">
+                                            <img src="/tk_vehicle_management/static/src/img/place_holder.png"
+                                                 style="width: 250px; height: 250px; margin: 10px;"/>
+                                        </t>
+                                    </div>
+                                    <t t-if="img_count % 5 == 0">
+                                        <br/>
+                                    </t>
+                                </t>
+                            </td>
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </template>
+        <!-- Vehicle Service  + Part Template-->
+        <template id="vehicle_inspection_services">
+            <tr style="'border-bottom: 1px solid #dee3ec;">
+                <td colspan="4" style="padding: 0px; width: 100%;">
+                    <table style="margin: 0px; font-size: 11px;" class="table table-borderless">
+                        <tr style="border-bottom: 1px solid #dee3ec;">
+                            <td style="padding:3px; padding-right:5px;width:40%;font-weight:800;font-size: 12px;background: #89dae1;">
+                                Services
+                            </td>
+                            <td style="padding:3px; padding-right:5px;width:60%;font-weight:800;font-size: 12px;background: #89dae1;">
+                                <t t-if="parts">Parts</t>
+                            </td>
+                        </tr>
+                        <t t-foreach="services" t-as="service">
+                            <t t-set="is_part_available"
+                               t-value="parts.filtered(lambda line: line.service_id.id == service.id)"/>
+                            <tr style="border-bottom: 1px solid #dee3ec;">
+                                <td t-att-colspan="2 if not parts or not is_part_available else 0"
+                                    t-att-style="'padding:3px; padding-right:5px;width:40%;border-right:1px solid #dee3ec;background: #f5f9fd;' if parts and is_part_available else 'padding:3px; padding-right:5px;width:100%;background: #f5f9fd;'">
+                                    <spna style="font-weight: 700;">Service :</spna>
+                                    <span t-field="service.name"/>
+                                    <p style="margin:0px;">
+                                        <spna style="font-weight: 700;">Price :</spna>
+                                        <span t-field="service.lst_price"
+                                              t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        <t t-if="service.estimate_time > 0.0">
+                                            <span>
+                                                &#160;
+                                                &#160;
+                                                &#160;
+                                                &#160;
+                                                &#160;
+                                                <spna style="font-weight: 700;">Hours :</spna>
+                                                <span t-field="service.estimate_time"
+                                                      t-options="{'widget': 'float_time'}"/>
+                                            </span>
+                                        </t>
+                                    </p>
+                                </td>
+                                <td style="padding:0px;width:60%;" t-if="parts and is_part_available">
+                                    <table style="margin: 0px; font-size: 11px;" t-if="parts and is_part_available"
+                                           class="table table-borderless">
+                                        <tr style="border-bottom:1px solid #dee3ec;">
+                                            <td style="padding:3px; padding-left:5px;width:50%;font-weight: 700;background:#c9eef1;">
+                                                Part
+                                            </td>
+                                            <td style="padding:3px; padding-left:5px;width:10%;text-align:right;font-weight: 700;background:#c9eef1;">
+                                                Qty
+                                            </td>
+                                            <td style="padding:3px; padding-left:5px;width:20%;text-align:left;font-weight: 700;background:#c9eef1;">
+                                                Unit
+                                            </td>
+                                            <td style="padding:3px; padding-left:5px;width:20%;text-align:right;font-weight: 700;background:#c9eef1;">
+                                                Price
+                                            </td>
+                                        </tr>
+                                        <t t-foreach="parts" t-as="part" t-if="part.service_id.id == service.id">
+                                            <tr>
+                                                <td style="padding:0px; padding-left:5px;width:50%;background:#e5f6f7;">
+                                                    <span t-field="part.product_id.name"/>
+                                                </td>
+                                                <td style="padding:0px; padding-left:5px;width:10%;text-align:right;background:#e5f6f7;">
+                                                    <span t-field="part.qty"/>
+                                                </td>
+                                                <td style="padding:0px; padding-left:5px;width:20%;text-align:left;background:#e5f6f7;">
+                                                    <span t-field="part.uom_id"/>
+                                                </td>
+                                                <td style="padding:0px; padding-left:5px;width:20%;text-align:right;background:#e5f6f7;">
+                                                    <span t-field="part.product_id.lst_price"
+                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                </td>
+            </tr>
+        </template>
+
+        <!-- Vehicle Inspection Tyre Template-->
+        <template id="vehicle_inspection_section_tyre">
+            <table style="margin:0px;font-size: 12px;" class="table table-borderless"
+                   t-if="section_notes">
+                <tr>
+                    <td style="font-size: 13px; background-color: #348185;color: white; padding: 2px 6px;">
+                        <strong t-esc="section_title"/>
+                    </td>
+                </tr>
+            </table>
+            <table style="margin:0px;margin-bottom:8px; font-size: 12px;" class="table table-borderless"
+                   t-if="section_notes">
+                <t t-foreach="section_items" t-as="e">
+                    <tr style="border-bottom:1px solid #7dc4c9;">
+                        <td style="padding: 2px; width: 2%;padding-right: 5px;vertical-align: middle;">
+                            <t t-if="e.okay_for_now">
+                                <div style="height: 20px; width: 20px; background-color: green; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div style="height: 20px; width: 20px; border: 2.5px solid green; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;"/>
+                            </t>
+                        </td>
+                        <td style="padding: 2px; width: 2%;padding-right: 5px;vertical-align: middle;">
+                            <t t-if="e.further_attention">
+                                <div style="height: 20px; width: 20px; background-color: #ff8d00; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div style="height: 20px; width: 20px; border: 2.5px solid #ff8d00; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;"/>
+                            </t>
+                        </td>
+                        <td style="padding: 2px; width: 2%;padding-right: 5px;vertical-align: middle;">
+                            <t t-if="e.required_attention">
+                                <div style="height: 20px; width: 20px; background-color: red; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div style="height: 20px; width: 20px; border: 2.5px solid red; text-align: center; vertical-align: middle; padding: 3px;padding-top: 4px;color:white;"/>
+                            </t>
+                        </td>
+                        <td style="padding: 0px; width: 94%; vertical-align: middle;">
+                            <p style="margin:0px">
+                                <span t-field="e.part_id" style="margin-right:30px"/>
+                                <span>
+                                    <t t-if="e.incoming">
+                                        <span>
+                                            <span style="font-weight: 700;">Incoming</span>
+                                            :
+                                            <span t-field="e.incoming"/>
+                                        </span>
+                                        <span>|</span>
+                                    </t>
+                                    <t t-if="e.adjust_to">
+                                        <span>
+                                            <span style="font-weight: 700;">Adjust to</span>
+                                            :
+                                            <span t-field="e.adjust_to"/>
+                                        </span>
+                                        <span>|</span>
+                                    </t>
+                                    <t t-if="e.tread_depth">
+                                        <span>
+                                            <span style="font-weight: 700;">Tread Depth</span>
+                                            :
+                                            <span t-field="e.tread_depth"/>
+                                        </span>
+                                    </t>
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee3ec;" t-if="e.notes">
+                        <td colspan="4"
+                            style="padding: 2px; width: 100%; vertical-align: middle;font-size:11px;background: #fffbe7;">
+                            <span style="font-weight: 700;">Notes :</span>
+                            <span t-field="e.notes"/>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee3ec;" t-if="e.image_ids">
+                        <td colspan="4" style="padding: 0px; width: 100%; vertical-align: middle;">
+                            <table class="table table-bordered" style="width: 100%; margin: 0px;">
+                                <t t-set="img_count" t-value="0"/>
+                                <tr>
+                                    <td style="padding-left:0px;width:25rem;">
+                                        <t t-foreach="e.image_ids" t-as="img">
+                                            <t t-set="img_count" t-value="img_count + 1"/>
+                                            <div style="display: inline-block;text-align:center;padding:4px! important;">
+                                                <t t-if="img.avtar">
+                                                    <img t-att-src="image_data_uri(img.avtar)"
+                                                         style="width: 140px; height: 140px;"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <img src="/tk_vehicle_management/static/src/img/place_holder.png"
+                                                         style="width: 250px; height: 250px; margin: 10px;"/>
+                                                </t>
+                                            </div>
+                                            <t t-if="img_count % 5 == 0">
+                                                <br/>
+                                            </t>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee3ec;" t-if="e.service_ids and print_service">
+                        <td colspan="4" style="padding: 0px; width: 100%;">
+                            <table style="margin: 0px; font-size: 11px;" class="table table-borderless">
+                                <tr style="border-bottom: 1px solid #dee3ec;">
+                                    <td style="padding:3px; padding-right:5px;width:40%;font-weight:800;font-size: 12px;background: #89dae1;">
+                                        Services
+                                    </td>
+                                    <td style="padding:3px; padding-right:5px;width:60%;font-weight:800;font-size: 12px;background: #89dae1;">
+                                        <t t-if="e.part_ids">Parts</t>
+                                    </td>
+                                </tr>
+                                <t t-foreach="e.service_ids" t-as="service">
+                                    <t t-set="is_part_available"
+                                       t-value="e.part_ids.filtered(lambda line: line.service_id.id == service.id)"/>
+                                    <tr style="border-bottom: 1px solid #dee3ec;">
+                                        <td t-att-colspan="2 if not e.part_ids or not is_part_available else 0"
+                                            t-att-style="'padding:3px; padding-right:5px;width:40%;border-right:1px solid #dee3ec;background: #f5f9fd;' if e.part_ids and is_part_available else 'padding:3px; padding-right:5px;width:100%;background: #f5f9fd;'">
+                                            <spna style="font-weight: 700;">Service :</spna>
+                                            <span t-field="service.name"/>
+                                            <p style="margin:0px;">
+                                                <spna style="font-weight: 700;">Price :</spna>
+                                                <span t-field="service.lst_price"
+                                                      t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                <t t-if="service.estimate_time > 0.0">
+                                                    <span>
+                                                        &#160;
+                                                        &#160;
+                                                        &#160;
+                                                        &#160;
+                                                        &#160;
+                                                        <spna style="font-weight: 700;">Hours :</spna>
+                                                        <span t-field="service.estimate_time"
+                                                              t-options="{'widget': 'float_time'}"/>
+                                                    </span>
+                                                </t>
+                                            </p>
+                                        </td>
+                                        <td style="padding:0px;width:60%;" t-if="e.part_ids and is_part_available">
+                                            <table style="margin: 0px; font-size: 11px;"
+                                                   t-if="e.part_ids and is_part_available"
+                                                   class="table table-borderless">
+                                                <tr style="border-bottom:1px solid #dee3ec;">
+                                                    <td style="padding:3px; padding-left:5px;width:50%;font-weight: 700;background:#c9eef1;">
+                                                        Part
+                                                    </td>
+                                                    <td style="padding:3px; padding-left:5px;width:10%;text-align:right;font-weight: 700;background:#c9eef1;">
+                                                        Qty
+                                                    </td>
+                                                    <td style="padding:3px; padding-left:5px;width:20%;text-align:left;font-weight: 700;background:#c9eef1;">
+                                                        Unit
+                                                    </td>
+                                                    <td style="padding:3px; padding-left:5px;width:20%;text-align:right;font-weight: 700;background:#c9eef1;">
+                                                        Price
+                                                    </td>
+                                                </tr>
+                                                <t t-foreach="e.part_ids" t-as="part"
+                                                   t-if="part.service_id.id == service.id">
+                                                    <tr>
+                                                        <td style="padding:0px; padding-left:5px;width:50%;background:#e5f6f7;">
+                                                            <span t-field="part.product_id.name"/>
+                                                        </td>
+                                                        <td style="padding:0px; padding-left:5px;width:10%;text-align:right;background:#e5f6f7;">
+                                                            <span t-field="part.qty"/>
+                                                        </td>
+                                                        <td style="padding:0px; padding-left:5px;width:20%;text-align:left;background:#e5f6f7;">
+                                                            <span t-field="part.uom_id"/>
+                                                        </td>
+                                                        <td style="padding:0px; padding-left:5px;width:20%;text-align:right;background:#e5f6f7;">
+                                                            <span t-field="part.product_id.lst_price"
+                                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </td>
+                    </tr>
+                </t>
+            </table>
+        </template>
+
+        <record id="vehicle_inspection_report_service_part_qweb" model="ir.actions.report">
+            <field name="name">Vehicle Inspection Report (Services + Parts)</field>
+            <field name="model">vehicle.health.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tk_vehicle_management.vehicle_inspection_report_service_part_template</field>
+            <field name="report_file">tk_vehicle_management.vehicle_inspection_report_service_part_template</field>
+            <field name="binding_model_id" ref="model_vehicle_health_report"/>
+            <field name="paperformat_id" ref="inspection_report_paper_format"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

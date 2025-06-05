@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Customer Tags-->
+        <record id="customer_tag_view_tree" model="ir.ui.view">
+            <field name="name">customer.tag.view.tree</field>
+            <field name="model">customer.tags</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" required="1"/>
+                    <field name="color" widget="color_picker"/>
+                </tree>
+            </field>
+        </record>
+        <record id="config_customer_tag_action" model="ir.actions.act_window">
+            <field name="name">Customer Tags</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.tags</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <!-- Vehicle Concerns-->
+        <record id="vehicle_concern_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.concern.view.tree</field>
+            <field name="model">concern.type</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" required="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vehicle_concern_type_action" model="ir.actions.act_window">
+            <field name="name">Concern Types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">concern.type</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <!--Concern Template-->
+        <record id="vehicle_concern_template_view_form" model="ir.ui.view">
+            <field name="name">vehicle.concern.template.view.form</field>
+            <field name="model">vehicle.concern.template</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Consent">
+                                <field name="concern"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_concern_template_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.concern.template.view.tree</field>
+            <field name="model">vehicle.concern.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vehicle_concern_template_action" model="ir.actions.act_window">
+            <field name="name">Concern Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.concern.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Warranty Coverage-->
+        <record id="warranty_coverage_view_tree" model="ir.ui.view">
+            <field name="name">warranty.coverage.view.tree</field>
+            <field name="model">warranty.attributes</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" required="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="warranty_coverage_action" model="ir.actions.act_window">
+            <field name="name">Warranty Coverage</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">warranty.attributes</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <!--Vehicle Model & Brand-->
+        <record id='fleet.fleet_vehicle_model_brand_action' model='ir.actions.act_window'>
+            <field name="name">Brands</field>
+        </record>
+        <!--Model Search View-->
+        <record id="vehicle_model_search_inherit_view" model="ir.ui.view">
+            <field name="name">vehicle.model.search.inherit.view</field>
+            <field name="model">fleet.vehicle.model</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_model_view_search"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='groupby_brand']" position="attributes">
+                    <attribute name="string">Brands</attribute>
+                </xpath>
+            </field>
+        </record>
+        <!-- Vehicle Part Info -->
+        <record id="vehicle_part_info_view_form" model="ir.ui.view">
+            <field name="name">vehicle.part.info.view.form</field>
+            <field name="model">vehicle.part.info</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+
+                            </group>
+                        </group>
+                        <group>
+                            <field name="type" widget="radio" options="{'horizontal':True}" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_part_info_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.part.info.view.tree</field>
+            <field name="model">vehicle.part.info</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vehicle_part_info_view_search" model="ir.ui.view">
+            <field name="name">vehicle.part.info.view.search</field>
+            <field name="model">vehicle.part.info</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="type"/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_by_type" string="Type" context="{'group_by':'type'}" domain="[]"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="vehicle_part_info_action" model="ir.actions.act_window">
+            <field name="name">Vehicle Parts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.part.info</field>
+            <field name="context">{'search_default_group_by_type': 1}</field>
+            <field name="view_mode">tree,form,search</field>
+        </record>
+        <!-- Inspection Type -->
+        <record id="inspection_type_view_tree" model="ir.ui.view">
+            <field name="name">inspection.type.view.tree</field>
+            <field name="model">inspection.type</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name" required="1"/>
+                    <field name="hours" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+        <record id="inspection_type_action" model="ir.actions.act_window">
+            <field name="name">Inspection Types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inspection.type</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <!-- Terms & Conditions-->
+        <record id="vehicle_term_condition_view_form" model="ir.ui.view">
+            <field name="name">vehicle.term.condition.view.form</field>
+            <field name="model">vehicle.terms.conditions</field>
+            <field name="arch" type="xml">
+                <form delete="0" create="0">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Terms &amp; Conditions">
+                                <field name="terms_conditions"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_term_condition_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.term.condition.view.tree</field>
+            <field name="model">vehicle.terms.conditions</field>
+            <field name="arch" type="xml">
+                <tree delete="0" create="0">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vehicle_term_conditions_action" model="ir.actions.act_window">
+            <field name="name">Terms &amp; Conditions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.terms.conditions</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Vehicle Quality Check Template -->
+        <record id="vehicle_qc_check_view_form" model="ir.ui.view">
+            <field name="name">vehicle.qc.check.view.form</field>
+            <field name="model">vehicle.qc.template</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Template">
+                                <field name="template_line_ids" widget="section_and_note_one2many">
+                                    <tree editable="bottom" default_order="sequence asc, id asc">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a checkpoint"/>
+                                            <create name="add_section_control"
+                                                    string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                        </control>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="display_type" column_invisible="1"/>
+                                        <field name="name" required="1" widget="section_and_note_text"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_qc_check_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.qc.check.view.tree</field>
+            <field name="model">vehicle.qc.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vehicle_quality_check_action" model="ir.actions.act_window">
+            <field name="name">Quality Check Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.qc.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Job Card Image Template-->
+        <record id="vehicle_job_card_image_template_view_form" model="ir.ui.view">
+            <field name="name">vehicle.job.card.image.template.view.form</field>
+            <field name="model">job.image.template</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Inner Body Images">
+                                <group>
+                                    <field name="inner_body_image_ids" widget="many2many_tags"/>
+                                </group>
+                            </page>
+                            <page string="Outer Body Images">
+                                <group>
+                                    <field name="outer_body_image_ids" widget="many2many_tags"/>
+                                </group>
+                            </page>
+                            <page string="Other Images">
+                                <group>
+                                    <field name="other_image_ids" widget="many2many_tags"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_job_card_image_template_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.job.card.image.template.view.tree</field>
+            <field name="model">job.image.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="job_image_template_action" model="ir.actions.act_window">
+            <field name="name">Job Card Image Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">job.image.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Warranty Duration View -->
+        <record id="vehicle_warranty_duration_view_form" model="ir.ui.view">
+            <field name="name">vehicle.warranty.duration.view.form</field>
+            <field name="model">warranty.duration</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" string="Title" placeholder="e.g 1 Year" required="1"/>
+                            </group>
+                        </group>
+                        <br/>
+                        <group>
+                            <group>
+                                <label for="duration_count" class="mt-1"/>
+                                <div name="duration_count">
+                                    <field name="duration_count" class="oe_inline" required="1"/>
+                                    /
+                                    <field name="unit" required="1"
+                                           class="oe_inline"/>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_warranty_duration_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.warranty.duration.view.tree</field>
+            <field name="model">warranty.duration</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string="Title"/>
+                </tree>
+            </field>
+        </record>
+        <record id="warranty_duration_action" model="ir.actions.act_window">
+            <field name="name">Warranty Durations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">warranty.duration</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="user_quot_additional_part_details" name="Quotation">
+            <t t-call="website.layout">
+                <t t-call="tk_vehicle_management.vehicle_main_avtar_template">
+                    <t t-set="vehicle_main_title" t-value="'Revised Job Card Quotation'"/>
+                </t>
+                <div class="container py-4">
+                    <t t-if="error">
+                        <div t-attf-class="alert alert-{{error['type']}} mb-0" role="alert">
+                            <h4 class="alert-heading">
+                                <span t-esc="error['title']"/>
+                            </h4>
+                            <p>
+                                <span t-esc="error['message']"/>
+                            </p>
+                        </div>
+                    </t>
+                    <t t-if="not error and additional_part.quote_state in ['sent','draft','signed']">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-4"
+                                 t-if="additional_part.quote_state in ['sent','draft']">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    The last date to validate your quotation is
+                                    <strong>
+                                        <span t-field="additional_part.quote_expire_date"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 mb-4" t-if="additional_part.quote_state in ['signed']">
+                                <div class="alert alert-success text-center mb-0" role="alert">
+                                    <strong>
+                                        Additional Part Quotation Approved
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4 pb-0">
+                                <div class="border-0">
+                                    <p class="p-2 mb-0 border-0 evs-background text-white evs-green-border border-top border-bottom">
+                                        <i class="fa fa-file-text me-2 fs-5" aria-hidden="true"/>
+                                        Job Card Details
+                                    </p>
+                                    <div class="card-body ps-0 pe-0">
+                                        <h5 class="card-title">Ref.
+                                            <span t-field="additional_part.inspection_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Check in Date :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.booking_date"/>
+                                            <br/>
+                                        </p>
+                                        <a class="btn text-white evs-green-border evs-background"
+                                           t-if="additional_part.quote_state != 'signed'"
+                                           t-attf-href="/vehicle-service/updated-quot/#{additional_part.inspection_id.access_token}/Updated-Repair-Estimate-Report-PDF"
+                                           id="print_updated_quot_report" title="Updated Quotation" target="new">
+                                            <i class="fa fa-print me-1"/>
+                                            Updated Quotation
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4 pb-0">
+                                <div class="border-0">
+                                    <p class="p-2 mb-0 border-0 evs-background text-white evs-green-border border-top border-bottom">
+                                        <i class="fa fa-user-circle-o me-2 fs-5" aria-hidden="true"/>Your Details
+                                    </p>
+                                    <div class="card-body pe-0 ps-0">
+                                        <h5 class="card-title">
+                                            <span t-field="additional_part.inspection_id.customer_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Phone :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.phone"/>
+                                            <br/>
+                                            <strong>
+                                                Email :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.email"/>
+                                            <br/>
+                                            <strong>
+                                                Address :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.address_area"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4 pb-0">
+                                <div class="border-0">
+                                    <p class="p-2 mb-0 border-0 evs-background text-white evs-green-border border-top border-bottom">
+                                        <i class="fa fa-car me-2 fs-5" aria-hidden="true"/>
+                                        Vehicle Details
+                                    </p>
+                                    <div class="card-body ps-0 pe-0">
+                                        <h5 class="card-title">
+                                            <span t-field="additional_part.inspection_id.vehicle_model_id"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Registration No :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.registration_no"/>
+                                            <br/>
+                                            <strong>
+                                                Color :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.color"/>
+                                            <br/>
+                                            <strong>
+                                                Fuel Type :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.fuel_type"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <t t-if="additional_part.quote_state in ['draft','sent']">
+                            <!-- New Service -->
+                            <t t-if="additional_part.additional_service_ids">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-2 evs-background text-white border evs-green-border p-2">
+                                            <i class="fa fa-wrench me-1"/>
+                                            Additional Services - Newly Added Service
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-4">
+                                        <form class="row g-3"
+                                              action="/vehicle-service/job-card/additional-service/submit"
+                                              method="POST"
+                                              enctype="multipart/form-data">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="access_token"
+                                                   t-att-value="additional_part.access_token"/>
+                                            <div class="table-responsive mt-0 mb-0">
+                                                <table class="table table-borderless table-sm">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fw-bold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     viewBox="0 0 512 512" width="22"
+                                                                     height="22">
+                                                                    <path d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                                                                </svg>
+                                                            </td>
+                                                            <td class="fw-bold">Service</td>
+                                                            <td class="fw-bold">Status</td>
+                                                            <td class="fw-bold text-end">Time</td>
+                                                            <td class="fw-bold">UOM</td>
+                                                            <td class="text-end fw-bold">Unit Price</td>
+                                                            <td class="fw-bold">Tax</td>
+                                                            <td class="text-end fw-bold">Tax Amount</td>
+                                                            <td class="text-end fw-bold">Total Amount</td>
+                                                        </tr>
+                                                        <t t-foreach="additional_part.additional_service_ids.filtered(lambda line : not line.service_rejected)"
+                                                           t-as="s">
+                                                            <tr>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <t t-if="s.additional_service_selected">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input bg-success border border-success"
+                                                                                   t-att-name="s.id"
+                                                                                   type="checkbox"
+                                                                                   role="switch"
+                                                                                   disabled="disabled"
+                                                                                   checked="checked"/>
+                                                                        </div>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <div class="form-check form-switch evs-check-switch">
+                                                                            <input class="form-check-input"
+                                                                                   name="add"
+                                                                                   t-att-name="s.id"
+                                                                                   type="checkbox"
+                                                                                   role="switch"
+                                                                                   checked="checked"/>
+                                                                        </div>
+                                                                    </t>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="s.name"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="s.required_status"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="s.estimate_time"
+                                                                          t-options='{"widget": "float_time"}'/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="s.uom_id"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="s.price"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-out="', '.join(map(lambda x: (x.description or x.name), s.tax_ids))"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="s.tax_amount"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="s.total_amount"/>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                        <tr class="text-dark evs-green">
+                                                            <td class="fw-bold text-end border-bottom evs-green-border"
+                                                                colspan="3">Selected Service Time
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border text-end">
+                                                                <span t-esc="sum(additional_part.additional_service_ids.filtered(lambda line:line.additional_service_selected).mapped('estimate_time'))"
+                                                                      t-options='{"widget": "float_time"}'/>
+                                                            </td>
+                                                            <td colspan="4"
+                                                                class="text-end fw-bold border-bottom evs-green-border">
+                                                                Selected Service Total
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                <span t-field="additional_part.service_total_amount"/>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="text-start"
+                                                 t-if="not additional_part.confirm_selection_service">
+                                                <button type="button" class="btn text-white evs-background"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#additionalServiceConfirmation">
+                                                    <i class="fa fa-check-circle"/>
+                                                    Confirm Selected Service
+                                                </button>
+                                                <div class="modal fade" id="additionalServiceConfirmation"
+                                                     data-bs-backdrop="static"
+                                                     data-bs-keyboard="false" tabindex="-1"
+                                                     aria-labelledby="additionalServiceConfirmationLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                                    Service Confirmation
+                                                                </h1>
+                                                                <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"/>
+                                                            </div>
+                                                            <div class="modal-body text-start">
+                                                                Are you sure you want to confirm selected services.
+                                                            </div>
+                                                            <div class="modal-footer text-start">
+                                                                <button class="btn text-white evs-background"
+                                                                        type="submit">
+                                                                    <i class="fa fa-check-circle"/>
+                                                                    Confirm Selected Services
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </t>
+                            <!-- New Service Parts-->
+                            <t t-set="new_additional_service_parts"
+                               t-value="additional_part.additional_part_ids.filtered(lambda line : line.service_id.id in additional_part.additional_service_ids.ids)"/>
+                            <div t-if="new_additional_service_parts and not additional_part.confirm_selection_service"
+                                 class="mb-4">
+                                <span class="text-muted evs-green">
+                                    * Once you confirm additional services,then the necessary part details for
+                                    selected service will appear.
+                                </span>
+                            </div>
+                            <t t-if="new_additional_service_parts and additional_part.confirm_selection_service">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-2 evs-background text-white border evs-green-border p-2">
+                                            <i class="fa fa-wrench me-1"/>
+                                            Additional Parts - Newly Added Services Parts
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-4">
+                                        <form class="row g-3"
+                                              action="/vehicle-service/job-card/additional-service-part/submit"
+                                              method="POST"
+                                              enctype="multipart/form-data">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="access_token"
+                                                   t-att-value="additional_part.access_token"/>
+                                            <div class="table-responsive mt-0 mb-0">
+                                                <table class="table table-borderless table-sm">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fw-bold border-bottom evs-green-border">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     viewBox="0 0 512 512" width="22"
+                                                                     height="22">
+                                                                    <path d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                                                                </svg>
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Part</td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Service
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Status
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Qty.
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border">UOM</td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Tax</td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Unit
+                                                                Price
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Tax
+                                                                Amount
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Total
+                                                                Amount
+                                                            </td>
+                                                        </tr>
+                                                        <t t-foreach="new_additional_service_parts.filtered(lambda line : line.service_id.additional_service_selected)"
+                                                           t-as="p">
+                                                            <tr t-if="not p.additional_part_rejected">
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <t t-if="p.additional_part_selected">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input bg-success border border-success"
+                                                                                   t-att-name="p.id"
+                                                                                   type="checkbox"
+                                                                                   role="switch"
+                                                                                   disabled="disabled"
+                                                                                   checked="checked"/>
+                                                                        </div>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <div class="form-check form-switch evs-check-switch">
+                                                                            <input class="form-check-input"
+                                                                                   name="add"
+                                                                                   t-att-name="p.id"
+                                                                                   type="checkbox"
+                                                                                   checked="checked"
+                                                                                   role="switch"/>
+                                                                        </div>
+                                                                    </t>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.name"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.service_id"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.required_status"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.qty"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.uom_id"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-out="', '.join(map(lambda x: (x.description or x.name), p.tax_ids))"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.price"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.tax_amount"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.total_amount"/>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                        <tr class="text-dark evs-green">
+                                                            <td colspan="9"
+                                                                class="text-end fw-bold border-bottom evs-green-border">
+                                                                Approved
+                                                                Part
+                                                                Total
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                <span t-field="additional_part.service_part_total_amount"/>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="text-start"
+                                                 t-if="not additional_part.confirm_selection_service_part">
+                                                <button type="button" class="btn text-white evs-background"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#additionalServicePartConfirmation">
+                                                    <i class="fa fa-check-circle"/>
+                                                    Confirm Selected Parts
+                                                </button>
+                                                <div class="modal fade" id="additionalServicePartConfirmation"
+                                                     data-bs-backdrop="static"
+                                                     data-bs-keyboard="false" tabindex="-1"
+                                                     aria-labelledby="additionalServicePartConfirmationLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                                    Newly Services Parts Confirmation
+                                                                </h1>
+                                                                <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"/>
+                                                            </div>
+                                                            <div class="modal-body text-start">
+                                                                Are you sure you want to confirm selected parts.
+                                                            </div>
+                                                            <div class="modal-footer text-start">
+                                                                <button class="btn text-white evs-background"
+                                                                        type="submit">
+                                                                    <i class="fa fa-check-circle"/>
+                                                                    Confirm Selected Parts
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- Existing Service Part-->
+                            <t t-set="existing_additional_parts"
+                               t-value="additional_part.additional_part_ids.filtered(lambda line : line.service_id.service_selected and line.id not in new_additional_service_parts.ids)"/>
+                            <t t-if="existing_additional_parts">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-2 evs-background text-white border evs-green-border p-2">
+                                            <i class="fa fa-wrench me-1"/>
+                                            Additional Part Details - Existing Service
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-4">
+                                        <form class="row g-3" action="/vehicle-service/job-card/additional-part/submit"
+                                              method="POST"
+                                              enctype="multipart/form-data">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="access_token"
+                                                   t-att-value="additional_part.access_token"/>
+                                            <div class="table-responsive mt-0 mb-0">
+                                                <table class="table table-borderless table-sm">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fw-bold border-bottom evs-green-border">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     viewBox="0 0 512 512" width="22"
+                                                                     height="22">
+                                                                    <path d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                                                                </svg>
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Part</td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Service
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Required
+                                                                Time
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Status
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Qty.
+                                                            </td>
+                                                            <td class="fw-bold border-bottom evs-green-border">UOM</td>
+                                                            <td class="fw-bold border-bottom evs-green-border">Tax</td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Unit
+                                                                Price
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Tax
+                                                                Amount
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                Total
+                                                                Amount
+                                                            </td>
+                                                        </tr>
+                                                        <t t-foreach="existing_additional_parts"
+                                                           t-as="p">
+                                                            <tr t-if="not p.additional_part_rejected">
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <t t-if="p.additional_part_selected">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input bg-success border border-success"
+                                                                                   t-att-name="p.id"
+                                                                                   type="checkbox"
+                                                                                   role="switch"
+                                                                                   disabled="disabled"
+                                                                                   checked="checked"/>
+                                                                        </div>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <div class="form-check form-switch evs-check-switch">
+                                                                            <input class="form-check-input"
+                                                                                   name="add"
+                                                                                   t-att-name="p.id"
+                                                                                   type="checkbox"
+                                                                                   checked="checked"
+                                                                                   role="switch"/>
+                                                                        </div>
+                                                                    </t>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.name"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.service_id"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.required_time"
+                                                                          t-options="{'widget':'float_time'}"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.required_status"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.qty"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-field="p.uom_id"/>
+                                                                </td>
+                                                                <td class="border-bottom evs-green-border">
+                                                                    <span t-out="', '.join(map(lambda x: (x.description or x.name), p.tax_ids))"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.price"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.tax_amount"/>
+                                                                </td>
+                                                                <td class="text-end border-bottom evs-green-border">
+                                                                    <span t-field="p.total_amount"/>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                        <tr class="text-dark evs-green">
+                                                            <td colspan="10"
+                                                                class="text-end fw-bold border-bottom evs-green-border">
+                                                                Approved Part Total
+                                                            </td>
+                                                            <td class="text-end fw-bold border-bottom evs-green-border">
+                                                                <span t-field="additional_part.total_amount"/>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="text-start"
+                                                 t-if="not additional_part.confirm_selection">
+                                                <button type="button" class="btn text-white evs-background"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#additionalPartConfirmation">
+                                                    <i class="fa fa-check-circle"/>
+                                                    Confirm Selected Parts
+                                                </button>
+                                                <div class="modal fade" id="additionalPartConfirmation"
+                                                     data-bs-backdrop="static"
+                                                     data-bs-keyboard="false" tabindex="-1"
+                                                     aria-labelledby="additionalPartConfirmationLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                                    Parts Confirmation
+                                                                </h1>
+                                                                <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"/>
+                                                            </div>
+                                                            <div class="modal-body text-start">
+                                                                Are you sure you want to confirm selected parts.
+                                                            </div>
+                                                            <div class="modal-footer text-start">
+                                                                <button class="btn text-white evs-background"
+                                                                        type="submit">
+                                                                    <i class="fa fa-check-circle"/>
+                                                                    Confirm Selected Parts
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class="row mb-4">
+                                <div class="col-md-12 col-sm-12">
+                                    <t t-if="additional_part._has_to_be_signed()">
+                                        <div class="col-sm-auto mt16">
+                                            <a role="button" class="btn text-white evs-background me-2 mb-2"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#quotemodalacceptAdditional" href="#">
+                                                <i class="fa fa-check"/>
+                                                <t t-if="additional_part._has_to_be_signed()">Sign &amp; Accept</t>
+                                                <t t-else="">Accept &amp; Sign</t>
+                                            </a>
+                                            <a role="button" class="btn btn-danger me-2 mb-2" data-bs-toggle="modal"
+                                               data-bs-target="#quotAdditionalPartCancel">
+                                                <i class="fa fa-times-circle-o"/>
+                                                Cancel
+                                            </a>
+                                        </div>
+                                    </t>
+                                    <!-- Sign and Accept -->
+                                    <div role="dialog" class="modal fade" id="quotemodalacceptAdditional">
+                                        <div class="modal-dialog" t-if="additional_part._has_to_be_signed()">
+                                            <form id="accept" method="POST" t-att-data-job-card-id="additional_part.id"
+                                                  t-att-data-token="additional_part.access_token"
+                                                  class="js_accept_json modal-content js_website_submit_form">
+                                                <input type="hidden" name="csrf_token"
+                                                       t-att-value="request.csrf_token()"/>
+                                                <header class="modal-header">
+                                                    <h4 class="modal-title">Validate Quotation</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"/>
+                                                </header>
+                                                <t t-set="check_service_confirm"
+                                                   t-value="additional_part.additional_service_ids and not additional_part.confirm_selection_service"/>
+                                                <t t-set="check_service_part_confirm"
+                                                   t-value="additional_part.additional_part_ids.filtered(lambda line : line.service_id.id in additional_part.additional_service_ids.ids) and not additional_part.confirm_selection_service_part"/>
+                                                <t t-set="check_existing_part_confirm"
+                                                   t-value="existing_additional_parts and not additional_part.confirm_selection"/>
+                                                <t t-if="check_service_confirm or check_service_part_confirm or check_existing_part_confirm">
+                                                    <main class="modal-body">
+                                                        <div class="alert alert-info d-flex align-items-center"
+                                                             role="alert" t-if="check_service_confirm">
+                                                            <div>
+                                                                <i class="fa fa-exclamation-triangle"/>
+                                                                Please confirm services to Validate Quotation.
+                                                            </div>
+                                                        </div>
+                                                        <div class="alert alert-info d-flex align-items-center"
+                                                             role="alert" t-if="check_service_part_confirm">
+                                                            <div>
+                                                                <i class="fa fa-exclamation-triangle"/>
+                                                                Please confirm services parts to Validate Quotation.
+                                                            </div>
+                                                        </div>
+                                                        <div class="alert alert-info d-flex align-items-center"
+                                                             role="alert" t-if="check_existing_part_confirm">
+                                                            <div>
+                                                                <i class="fa fa-exclamation-triangle"/>
+                                                                Please confirm selected parts(existing) to Validate
+                                                                Quotation.
+                                                            </div>
+                                                        </div>
+                                                    </main>
+                                                </t>
+                                                <t t-if="not any([check_service_confirm, check_service_part_confirm, check_existing_part_confirm])">
+                                                    <main class="modal-body" id="sign-dialog">
+                                                        <p>
+                                                            <span>By signing this proposal, I agree to the following
+                                                                terms:
+                                                            </span>
+                                                            <ul>
+                                                                <li>
+                                                                    <span>Accepted on the behalf of :</span>
+                                                                    <strong>
+
+                                                                        <span t-field="additional_part.inspection_id.customer_id.name"/>
+                                                                    </strong>
+                                                                </li>
+                                                                <li>
+                                                                    <span>For an amount of :</span>
+                                                                    <strong>
+                                                                        <span t-field="additional_part.final_amount"/>
+                                                                    </strong>
+                                                                </li>
+                                                                <t t-if="quot_term">
+                                                                    <li>
+                                                                        <span>With payment terms :</span>
+                                                                        <a t-att-href="quot_term" target="_blank">
+                                                                            <u>
+                                                                                Quotation Payment Terms
+                                                                            </u>
+                                                                        </a>
+                                                                    </li>
+                                                                </t>
+                                                            </ul>
+                                                        </p>
+                                                        <t t-call="portal.signature_form">
+                                                            <t t-set="call_url"
+                                                               t-value="'/vehicle/job-card/additional-part/quotation/'+additional_part.access_token+'/accept'"/>
+                                                            <t t-set="default_name"
+                                                               t-value="additional_part.inspection_id.customer_id.name"/>
+                                                        </t>
+                                                    </main>
+                                                </t>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- Cancel Quotation-->
+                                    <div class="modal fade" id="quotAdditionalPartCancel" data-bs-backdrop="static"
+                                         data-bs-keyboard="false" tabindex="-1"
+                                         aria-labelledby="quotAdditionalPartCancelLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                        Additional Part Cancel Confirmation
+                                                    </h1>
+                                                    <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"/>
+                                                </div>
+                                                <div class="modal-body text-start">
+                                                    Are you sure you want to cancel the additional part request? This
+                                                    will
+                                                    reject all the additional part requests and not include in ongoing
+                                                    service.
+                                                </div>
+                                                <div class="modal-footer text-start">
+                                                    <a class="btn btn-danger"
+                                                       t-attf-href="/vehicle-service/job-card/additional-part/quotation/#{additional_part.access_token}/cancel">
+                                                        <i class="fa fa-times-circle-o"/>
+                                                        Cancel Quotation
+                                                    </a>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-8 col-sm-12"/>
+                                <div class="col-md-4 col-sm-12">
+                                    <t t-if="additional_part.quote_state=='signed'">
+                                        <div class="card mb-3 border-0">
+                                            <t t-if="additional_part.signature">
+                                                <img t-att-src="image_data_uri(additional_part.signature)"
+                                                     class="card-img-top" alt="Signature"/>
+                                            </t>
+                                            <t t-else="">
+                                                <img src="..." class="card-img-top" alt="..."/>
+                                            </t>
+                                            <div class="card-body">
+                                                <p class="card-text">
+                                                    <small class="text-body-secondary">
+                                                        <strong>
+                                                            Confirmed by:
+                                                        </strong>
+                                                        <span t-field="additional_part.inspection_id.customer_id.name"/>
+                                                        <br/>
+                                                        <strong>
+                                                            Confirmed on:
+                                                        </strong>
+                                                        <span t-field="additional_part.quote_accept_date_time"/>
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<odoo>
+  <data>
+       <record model="ir.ui.view" id="sale_view_form_ext">
+            <field name="name">sale.order.form.view.ext</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='payment_term_id']" position="after">
+                     <field name="insurance_invoice" widget="boolean_toggle"/>
+                     <field name="insurance_company" invisible="insurance_invoice != True"/>
+                     <field name="amount_nature" widget="radio" invisible="insurance_invoice != True" options="{'horizontal':True}"/>
+                     <field name="receivable_insurance_fix" invisible="insurance_invoice != True or amount_nature != 'fixed'"/>
+                     <field name="receivable_insurance" invisible="insurance_invoice != True or amount_nature != 'percentage'"/>
+                      <span invisible="amount_nature != 'percentage'"
+                            class="oe_inline">%</span>
+                     <field name="insurance_amount_percentage" invisible="1"/>
+                 </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="invoice_view_form_ext">
+            <field name="name">account.move.form.view.ext</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//div[@name='journal_div']//field[@name='journal_id']//.." position="after">
+<!--                     <field name="insurance_company"/>-->
+                 </xpath>
+            </field>
+        </record>
+  </data>
+</odoo>

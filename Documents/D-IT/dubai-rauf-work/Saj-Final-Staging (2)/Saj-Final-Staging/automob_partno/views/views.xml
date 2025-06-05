@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+
+     <record model="ir.ui.view" id="product_view_form_ext">
+            <field name="name">product.template.form.view.ext</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//page[@name='general_information']" position="after">
+                     <page name="variants" string="Parts Numbers">
+                        <field name="partno_line_id" widget="one2many">
+                        <tree string="Part Numbers" editable="bottom">
+                            <field name="partno"/>
+                            <field name="brand_ids" widget="many2many_tags"/>
+                            <field name="model_ids" widget="many2many_tags"/>
+                            <field name="year_ids" widget="many2many_tags"/>
+                            
+                            
+                        </tree>
+                        </field>
+                </page>
+                 </xpath>
+            </field>
+        </record>
+       <record model="ir.ui.view" id="sale_order_view_form_ext">
+            <field name="name">sale.order.form.ext</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//page[@name='order_lines']//tree//field[@name='product_template_id']" position="after">
+
+                     <field name="part_nubmer_id" domain="[('partno_id', '=', product_template_id)]"/>
+                     <field name="brand_id" domain="[('id', 'in', available_brand_ids)]"/>
+                     <field name="model_id" domain="[('id', 'in', available_model_ids)]"/>
+                     <field name="p_type"/>
+                     <field name="is_warranty" optional="hide"/>
+                     <field name="warranty_expiry_date" invisible="not is_warranty"/>
+                     <field name="available_brand_ids" optional="hide"/>
+                     <field name="available_model_ids" optional="hide"/>
+                     
+                     
+                     
+                 </xpath>
+            </field>
+       </record>
+
+  </data>
+</odoo>

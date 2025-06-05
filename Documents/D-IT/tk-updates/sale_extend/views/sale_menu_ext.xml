@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="sale.menu_sale_quotations">
+            <field name="name">Estimation</field>
+        </record>
+        <record model="ir.ui.menu" id="sale.menu_sale_order">
+            <field name="name">Job Card</field>
+        </record>
+    </data>
+</odoo>

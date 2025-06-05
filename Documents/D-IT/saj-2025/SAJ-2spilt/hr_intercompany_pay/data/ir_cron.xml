@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="cron_update_l10n_ae_number_of_days" model="ir.cron">
+            <field name="name">Hr intercompany pay: Update Leave Days (UAE)</field>
+            <field name="model_id" ref="model_hr_contract"/>
+            <field name="state" eval="'code'"/>
+            <field name="code">env['hr.contract'].update_l10n_ae_number_of_days()</field>
+            <field name="code" eval="'model._update_l10n_ae_number_of_days()'"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">weeks</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

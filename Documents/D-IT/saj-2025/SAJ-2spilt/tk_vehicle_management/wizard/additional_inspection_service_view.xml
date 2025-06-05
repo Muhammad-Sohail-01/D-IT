@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="additional_service_inspection_view_form" model="ir.ui.view">
+            <field name="name">additional.service.inspection.view.form</field>
+            <field name="model">inspection.additional.service</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="inspection_id" invisible="1" required="1"/>
+                            <field name="type" widget="radio" options="{'horizontal':True}"/>
+                        </group>
+                    </group>
+                    <group string="Service Details">
+                        <group>
+                            <field name="service_ids" widget="many2many_tags" required="1"
+                                   options="{'no_quick_create':True}" context="{'default_detailed_type':'service'}"/>
+                        </group>
+                        <group>
+                            <field name="service_tax_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Part Details" invisible="type != 'service_part'" colspan="12">
+                        <field name="service_part_ids" nolabel="1" colspan="2">
+                            <tree editable="bottom">
+                                <field name="services_ids" column_invisible="1"/>
+                                <field name="service_id" required="1"
+                                       options="{'no_open':True,'no_create_edit':True, 'no_create':True}"/>
+                                <field name="product_id" required="1"/>
+                                <field name="name" required="1"/>
+                                <field name="qty" required="1"/>
+                                <field name="company_id" column_invisible="1"/>
+                                <field name="currency_id" column_invisible="1"/>
+                                <field name="uom_id" required="1"/>
+                                <field name="price" required="1"/>
+                                <field name="tax_ids" widget="many2many_tags"/>
+                                <field name="untaxed_amount" sum="Total Untaxed Amount" optional="hide"/>
+                                <field name="tax_amount" sum="Total Tax Amount" optional="hide"/>
+                                <field name="total_amount" sum="Total Part Amount"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button string="Add Additional Services" type="object" class="btn btn-outline-success"
+                                name="action_add_additional_services" invisible="type != 'service'"/>
+                        <button string="Add Additional Services + Parts" type="object" class="btn btn-outline-success"
+                                name="action_add_additional_services" invisible="type != 'service_part'"/>
+                        <button string="Cancel" special="cancel" class="btn btn-outline-danger"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="additional_service_inspection_action" model="ir.actions.act_window">
+            <field name="name">Add Additional Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inspection.additional.service</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

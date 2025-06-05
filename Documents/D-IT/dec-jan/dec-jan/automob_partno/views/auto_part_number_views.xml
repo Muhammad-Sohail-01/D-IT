@@ -1,0 +1,86 @@
+<odoo>
+
+     <record id="vehicle_inspection_search_view" model="ir.ui.view">
+            <field name="name">auto.mobile.partno.search</field>
+            <field name="model">auto.mobile.partno.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="partno"/>
+                    <field name="partno_id"/>
+                    <field name="part_internal_no"/>
+                    <field name="part_vendor_name"/>
+                    <field name="part_type"/>
+                    <field name="part_cat1"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Part NO" name="partno" domain="[]"
+                                context="{'group_by':'partno'}"/>
+                        <separator/>
+                        <filter string="Product" name="partno_id" domain="[]"
+                                context="{'group_by':'partno_id'}"/>
+                        
+                    </group>
+                </search>
+            </field>
+        </record>
+    
+    
+    <!-- Tree View -->
+    <record id="view_mobile_partno_tree" model="ir.ui.view">
+        <field name="name">mobile.partno.tree</field>
+        <field name="model">auto.mobile.partno.line</field>
+        <field name="arch" type="xml">
+            <tree string="Part Numbers">
+                <field name="partno"/>
+                <field name="partno_id"/>
+                <field name="part_internal_no"/>
+                <field name="part_type"/>
+                <field name="brand_ids" widget="many2many_tags"/>
+                <field name="model_ids" widget="many2many_tags"/>
+                <field name="cost_price"/>
+                <field name="sale_price"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View  part no -->
+    <record id="view_mobile_partno_form" model="ir.ui.view">
+        <field name="name">mobile.partno.form</field>
+        <field name="model">auto.mobile.partno.line</field>
+        <field name="arch" type="xml">
+            <form string="Part Number Details">
+                <sheet>
+                    <group>
+                        <field name="partno"/>
+                        <field name="partno_id"/>
+                        <field name="part_internal_no" readonly="1"/>
+                        <field name="part_vendor_name"/>
+                        <field name="part_type"/>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Categories">
+                            <group>
+                                <field name="part_cat1" widget="many2many_tags"/>
+                                <field name="part_cat2" widget="many2many_tags"/>
+                                <field name="part_cat3" widget="many2many_tags"/>
+                                <field name="part_cat4" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                        <page string="Vehicle Details">
+                            <group>
+                                <field name="brand_ids" widget="many2many_tags"/>
+                                <field name="model_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    
+
+    <!-- Menuitem -->
+    <!-- <menuitem id="menu_mobile_partno_main" name="Mobile Part Numbers" parent="your_parent_menu_id"
+              action="action_mobile_partno"/> -->
+</odoo>

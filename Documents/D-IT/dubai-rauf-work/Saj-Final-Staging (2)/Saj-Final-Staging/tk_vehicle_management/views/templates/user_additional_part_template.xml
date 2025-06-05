@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="user_quot_additional_part_details" name="Quotation">
+            <t t-call="website.layout">
+                <t t-call="tk_vehicle_management.vehicle_main_avtar_template">
+                    <t t-set="vehicle_main_title" t-value="'Revised Job Card Quotation'"/>
+                </t>
+                <div class="container py-4">
+                    <t t-if="error">
+                        <div t-attf-class="alert alert-{{error['type']}} mb-0" role="alert">
+                            <h4 class="alert-heading">
+                                <span t-esc="error['title']"/>
+                            </h4>
+                            <p>
+                                <span t-esc="error['message']"/>
+                            </p>
+                        </div>
+                    </t>
+                    <t t-if="not error and additional_part.quote_state in ['sent','draft','signed']">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-4"
+                                 t-if="additional_part.quote_state in ['sent','draft']">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    The last date to validate your quotation is
+                                    <strong>
+                                        <span t-field="additional_part.quote_expire_date"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 mb-4" t-if="additional_part.quote_state in ['signed']">
+                                <div class="alert alert-success text-center mb-0" role="alert">
+                                    <strong>
+                                        Additional Part Quotation Approved
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4">
+                                <div class="card border-primary info-overview">
+                                    <div class="card-header">Job Card Details</div>
+                                    <div class="card-body text-primary">
+                                        <h5 class="card-title">Ref.
+                                            <span t-field="additional_part.inspection_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Check in Date :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.booking_date"/>
+                                        </p>
+                                        <a class="btn btn-outline-primary"
+                                           t-if="additional_part.quote_state != 'signed'"
+                                           t-attf-href="/vehicle-service/updated-quot/#{additional_part.inspection_id.access_token}/Updated-Repair-Estimate-Report-PDF"
+                                           id="print_updated_quot_report" title="Updated Quotation" target="new">
+                                            <i class="fa fa-print"/>
+                                            Updated Quotation
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4">
+                                <div class="card border-primary info-overview">
+                                    <div class="card-header">Your Details</div>
+                                    <div class="card-body text-primary">
+                                        <h5 class="card-title">
+                                            <span t-field="additional_part.inspection_id.customer_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Phone :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.phone"/>
+                                            <br/>
+                                            <strong>
+                                                Email :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.email"/>
+                                            <br/>
+                                            <strong>
+                                                Address :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.address_area"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4">
+                                <div class="card border-primary info-overview">
+                                    <div class="card-header">Vehicle Details</div>
+                                    <div class="card-body text-primary">
+                                        <h5 class="card-title">
+                                            <span t-field="additional_part.inspection_id.vehicle_model_id"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Registration No :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.registration_no"/>
+                                            <br/>
+                                            <strong>
+                                                Color :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.color"/>
+                                            <br/>
+                                            <strong>
+                                                Fuel Type :
+                                            </strong>
+                                            <span t-field="additional_part.inspection_id.fuel_type"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-2">
+                                <p class="h5 mb-2 text-primary border-bottom border-primary pb-2">
+                                    <i class="fa fa-wrench me-1"/>
+                                    Additional Part Details
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-4">
+                                <div class="card border-0">
+                                    <form class="row g-3" action="/vehicle-service/job-card/additional-part/submit"
+                                          method="POST"
+                                          enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="access_token"
+                                               t-att-value="additional_part.access_token"/>
+                                        <div class="card-body table-responsive mt-0 p-0">
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="fw-bold">Select Part</td>
+                                                        <td class="fw-bold">Part</td>
+                                                        <td class="fw-bold">Service</td>
+                                                        <td class="fw-bold">Required Time</td>
+                                                        <td class="fw-bold">Requirement Status</td>
+                                                        <td class="text-end fw-bold">Qty.</td>
+                                                        <td class="fw-bold">UOM</td>
+                                                        <td class="fw-bold">Tax</td>
+                                                        <td class="text-end fw-bold">Unit Price</td>
+                                                        <td class="text-end fw-bold">Tax Amount</td>
+                                                        <td class="text-end fw-bold">Total Amount</td>
+                                                    </tr>
+                                                    <t t-foreach="additional_part.additional_part_ids" t-as="p">
+                                                        <tr t-if="not p.additional_part_rejected">
+                                                            <td>
+                                                                <t t-if="p.additional_part_selected">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input bg-success border border-success"
+                                                                               t-att-name="p.id"
+                                                                               type="checkbox"
+                                                                               role="switch"
+                                                                               disabled="disabled"
+                                                                               checked="checked"/>
+                                                                    </div>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input"
+                                                                               name="add"
+                                                                               t-att-name="p.id"
+                                                                               type="checkbox"
+                                                                               role="switch"/>
+                                                                    </div>
+                                                                </t>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="p.name"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="p.service_id"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="p.required_time"
+                                                                      t-options="{'widget':'float_time'}"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="p.required_status"/>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <span t-field="p.qty"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="p.uom_id"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-out="', '.join(map(lambda x: (x.description or x.name), p.tax_ids))"/>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <span t-field="p.price"/>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <span t-field="p.tax_amount"/>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <span t-field="p.total_amount"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                    <tr class="border bg-primary text-white">
+                                                        <td colspan="10" class="text-end fw-bold">
+                                                            Approved Part Total
+                                                        </td>
+                                                        <td class="text-end fw-bold">
+                                                            <span t-field="additional_part.total_amount"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="card-footer text-body-secondary text-start"
+                                             t-if="not additional_part.confirm_selection">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#additionalPartConfirmation">
+                                                <i class="fa fa-check-circle"/>
+                                                Confirm Selected Parts
+                                            </button>
+                                            <div class="modal fade" id="additionalPartConfirmation"
+                                                 data-bs-backdrop="static"
+                                                 data-bs-keyboard="false" tabindex="-1"
+                                                 aria-labelledby="additionalPartConfirmationLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                                Parts Confirmation
+                                                            </h1>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"/>
+                                                        </div>
+                                                        <div class="modal-body text-start">
+                                                            Are you sure you want to confirm selected parts.
+                                                        </div>
+                                                        <div class="modal-footer text-start">
+                                                            <button class="btn btn-success" type="submit">
+                                                                <i class="fa fa-check-circle"/>
+                                                                Confirm Selected Parts
+                                                            </button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <t t-if="additional_part._has_to_be_signed()">
+                                    <div class="col-sm-auto mt16">
+                                        <a role="button" class="btn btn-primary m-2" data-bs-toggle="modal"
+                                           data-bs-target="#quotemodalacceptAdditional" href="#">
+                                            <i class="fa fa-check"/>
+                                            <t t-if="additional_part._has_to_be_signed()">Sign &amp; Accept</t>
+                                            <t t-else="">Accept &amp; Sign</t>
+                                        </a>
+                                        <a role="button" class="btn btn-danger m-2" data-bs-toggle="modal"
+                                           data-bs-target="#quotAdditionalPartCancel">
+                                            <i class="fa fa-times-circle-o"/>
+                                            Cancel
+                                        </a>
+                                    </div>
+                                </t>
+                                <!-- Sign and Accept -->
+                                <div role="dialog" class="modal fade" id="quotemodalacceptAdditional">
+                                    <div class="modal-dialog" t-if="additional_part._has_to_be_signed()">
+                                        <form id="accept" method="POST" t-att-data-job-card-id="additional_part.id"
+                                              t-att-data-token="additional_part.access_token"
+                                              class="js_accept_json modal-content js_website_submit_form">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <header class="modal-header">
+                                                <h4 class="modal-title">Validate Quotation</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </header>
+                                            <t t-if="not additional_part.confirm_selection">
+                                                <main class="modal-body">
+                                                    <div class="alert alert-info d-flex align-items-center"
+                                                         role="alert">
+                                                        <div>
+                                                            <i class="fa fa-exclamation-triangle"/>
+                                                            Please confirm selected parts to Validate Quotation.
+                                                        </div>
+                                                    </div>
+                                                </main>
+                                            </t>
+                                            <t t-if="additional_part.confirm_selection">
+                                                <main class="modal-body" id="sign-dialog">
+                                                    <p>
+                                                        <span>By signing this proposal, I agree to the following terms:
+                                                        </span>
+                                                        <ul>
+                                                            <li>
+                                                                <span>Accepted on the behalf of :</span>
+                                                                <strong>
+
+                                                                    <span t-field="additional_part.inspection_id.customer_id.name"/>
+                                                                </strong>
+                                                            </li>
+                                                            <li>
+                                                                <span>For an amount of :</span>
+                                                                <strong>
+                                                                    <span t-field="additional_part.total_amount"/>
+                                                                </strong>
+                                                            </li>
+                                                            <t t-if="quot_term">
+                                                                <li>
+                                                                    <span>With payment terms :</span>
+                                                                    <a t-att-href="quot_term" target="_blank">
+                                                                        <u>
+                                                                            Quotation Payment Terms
+                                                                        </u>
+                                                                    </a>
+                                                                </li>
+                                                            </t>
+                                                        </ul>
+                                                    </p>
+                                                    <t t-call="portal.signature_form">
+                                                        <t t-set="call_url"
+                                                           t-value="'/vehicle/job-card/additional-part/quotation/'+additional_part.access_token+'/accept'"/>
+                                                        <t t-set="default_name"
+                                                           t-value="additional_part.inspection_id.customer_id.name"/>
+                                                    </t>
+                                                </main>
+                                            </t>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Cancel Quotation-->
+                                <div class="modal fade" id="quotAdditionalPartCancel" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1"
+                                     aria-labelledby="quotAdditionalPartCancelLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                    Additional Part Cancel Confirmation
+                                                </h1>
+                                                <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                Are you sure you want to cancel the additional part request? This will
+                                                reject all the additional part requests and not include in ongoing
+                                                service.
+                                            </div>
+                                            <div class="modal-footer text-start">
+                                                <a class="btn btn-danger"
+                                                   t-attf-href="/vehicle-service/job-card/additional-part/quotation/#{additional_part.access_token}/cancel">
+                                                    <i class="fa fa-times-circle-o"/>
+                                                    Cancel Quotation
+                                                </a>
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-8 col-sm-12"/>
+                            <div class="col-md-4 col-sm-12">
+                                <t t-if="additional_part.quote_state=='signed'">
+                                    <div class="card mb-3 border-0">
+                                        <t t-if="additional_part.signature">
+                                            <img t-att-src="image_data_uri(additional_part.signature)"
+                                                 class="card-img-top" alt="Signature"/>
+                                        </t>
+                                        <t t-else="">
+                                            <img src="..." class="card-img-top" alt="..."/>
+                                        </t>
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <small class="text-body-secondary">
+                                                    <strong>
+                                                        Confirmed by:
+                                                    </strong>
+                                                    <span t-field="additional_part.inspection_id.customer_id.name"/>
+                                                    <br/>
+                                                    <strong>
+                                                        Confirmed on:
+                                                    </strong>
+                                                    <span t-field="additional_part.quote_accept_date_time"/>
+                                                </small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

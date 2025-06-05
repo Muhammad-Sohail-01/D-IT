@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="additional_part_inspection_view_form" model="ir.ui.view">
+            <field name="name">additional.part.inspection.view.form</field>
+            <field name="model">inspection.additional.part</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group string="Part Details">
+                        <group>
+                            <field name="inspection_id" invisible="1"/>
+                            <field name="product_id" required="1"/>
+                            <field name="name" required="1"/>
+                            <field name="tax_ids" widget="many2many_tags"/>
+                            <field name="service_ids" invisible="1"/>
+                            <field name="service_id" required="1"
+                                   options="{'no_create':True,'no_create_edit':True,'no_quick_create':True}"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="required_time" widget="float_time"/>
+                            <field name="is_link_with_task"/>
+                        </group>
+                        <group>
+                            <field name="qty" required="1"/>
+                            <field name="uom_id" required="1"/>
+                            <field name="price" required="1"/>
+                            <field name="untaxed_amount"/>
+                            <field name="tax_amount"/>
+                            <field name="total_amount"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Add Additional Part" type="object" class="btn btn-outline-success"
+                                name="action_add_additional_part"/>
+                        <button string="Cancel" special="cancel" class="btn btn-outline-danger" icon="fa-window-close"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="additional_part_inspection_action" model="ir.actions.act_window">
+            <field name="name">Add Additional Part</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inspection.additional.part</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

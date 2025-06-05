@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Loan Form View -->
+    <record id="view_hr_loan_form" model="ir.ui.view">
+        <field name="name">hr.loan.form</field>
+        <field name="model">hr.loan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            invisible="state != 'draft'"
+                            class="oe_highlight"/>
+                    <button name="action_approve"
+                            string="Approve"
+                            type="object"
+                            invisible="state != 'submitted'"
+                            groups="hr_loan.group_loan_manager"
+                            class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"
+                                   invisible="state != 'draft'"
+                                   required="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="date_request"/>
+                        </group>
+                        <group>
+                            <field name="loan_type_id"
+                                   invisible="state != 'draft'"
+                                   required="1"/>
+                            <field name="loan_amount"
+                                   invisible="state != 'draft'"
+                                   required="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="installment_count"
+                                   invisible="state != 'draft'"
+                                   required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Loan Tree View -->
+    <record id="view_hr_loan_tree" model="ir.ui.view">
+        <field name="name">hr.loan.tree</field>
+        <field name="model">hr.loan</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-success="state == 'approved'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="loan_amount"/>
+                <field name="date_request"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Loan Search View -->
+    <record id="view_hr_loan_search" model="ir.ui.view">
+        <field name="name">hr.loan.search</field>
+        <field name="model">hr.loan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter string="My Loans"
+                        name="my_loans"
+                        domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter string="Draft"
+                        name="draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Submitted"
+                        name="submitted"
+                        domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved"
+                        name="approved"
+                        domain="[('state', '=', 'approved')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee"
+                            name="employee"
+                            context="{'group_by': 'employee_id'}"/>
+                    <filter string="Department"
+                            name="department"
+                            context="{'group_by': 'department_id'}"/>
+                    <filter string="Status"
+                            name="status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

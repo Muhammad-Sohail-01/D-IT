@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_contact_type" model="ir.ui.view">
+	    <field name="name">res.partner.form.inherit.contact.type</field>
+	    <field name="model">res.partner</field>
+	    <field name="inherit_id" ref="base.view_partner_form"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//div[hasclass('oe_title')]" position="after">
+	            <separator string="Contact Types"/>
+                <div class="o_row">
+                    <label for="contact_type_affiliate"/>
+                    <field name="contact_type_affiliate"/>
+                    <label for="contact_type_employee"/>
+                    <field name="contact_type_employee"/>
+                    <label for="contact_type_sale_associate"/>
+                    <field name="contact_type_sale_associate"/>
+                    <label for="contact_type_insurance"/>
+                    <field name="contact_type_insurance"/>
+                </div>
+	        </xpath>
+	    </field>
+	</record>
+</odoo>

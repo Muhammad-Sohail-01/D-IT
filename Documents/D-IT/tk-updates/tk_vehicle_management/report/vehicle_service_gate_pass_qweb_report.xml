@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="vehicle_inspection_gate_pass_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <table style="margin: 0px;" class="table table-borderless">
+                            <tr>
+                                <td style="padding:25px;border:2px solid #d0dfbc;">
+                                    <h5 style="background-color: #d0dfbc; padding: 7px 5px; text-align: center;margin-top:6px;font-size: 16px;letter-spacing:1px;">
+                                        VEHICLE GATE PASS
+                                    </h5>
+                                    <h6 style="text-align: center;">
+                                        <span style="font-size:15px;text-align: center;">
+                                            EVS - DUBAI
+                                        </span>
+                                        <br/>
+                                        <span style="font-size:12px;text-align: center;">
+                                            <i class="fa fa-phone me-1" aria-hidden="true"/>
+                                            <span t-field="o.company_id.phone"/>
+                                        </span>
+                                        <br/>
+                                        <span style="font-size:12px;text-align: center;">
+                                            <i class="fa fa-envelope me-1" aria-hidden="true"/>
+                                            <span t-field="o.company_id.email"/>
+                                        </span>
+                                    </h6>
+                                    <table style="margin: 0px;margin-bottom:5px; font-size: 11px;"
+                                           class="table table-borderless">
+                                        <tr>
+                                            <td colspan="2"
+                                                style="width:100%;padding:0px;padding-bottom:5px;text-align:right;font-size:13px;">
+                                                Date &amp; Time :
+                                                <t t-esc="datetime.datetime.now().strftime('%d %B %Y %I:%M %p')"/>
+                                            </td>
+                                        </tr>
+                                        <tr style="border:2px solid #d0dfbc;">
+                                            <td style="width:50%;padding:7px 5px;border-right:2px solid #d0dfbc;font-size:13px;">
+                                                CUSTOMER
+                                            </td>
+                                            <td style="width:50%;padding:7px 5px;font-size:13px;">
+                                                VEHICLE
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:50%;padding:5px;border-right:2px solid #d0dfbc;border-left:2px solid #d0dfbc;border-bottom:2px solid #d0dfbc;font-size:13px;vertical-align:middle;">
+                                                Name :
+                                                <span t-field="o.customer_id"/>
+                                                <br/>
+                                                Phone :
+                                                <span t-field="o.phone"/>
+                                                <br/>
+                                                Email :
+                                                <span t-field="o.email"/>
+                                            </td>
+                                            <td style="width:50%;padding:5px;font-size:13px;border-right:2px solid #d0dfbc;border-bottom:2px solid #d0dfbc;vertical-align:middle;">
+                                                <span t-field="o.vehicle_model_id"/>
+                                                <br/>
+                                                Reg No. :
+                                                <span t-field="o.registration_no"/>
+                                                <br/>
+                                                Vin No :
+                                                <span t-field="o.vin_no"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="margin: 0px;margin-bottom:5px; font-size: 11px;"
+                                           class="table table-borderless">
+                                        <tr>
+                                            <td style="width:25%;padding:3px;border:2px solid #d0dfbc;vertical-align:middle;">
+                                                Ro No :
+                                            </td>
+                                            <td style="width:25%;padding:3px;border:2px solid #d0dfbc;border-left:0px;vertical-align:middle;">
+                                                Ro Date :
+                                            </td>
+                                            <td style="width:25%;padding:3px;border:2px solid #d0dfbc;border-left:0px;vertical-align:middle;">
+                                                Invoice No :
+                                                <span t-field="o.invoice_id"/>
+                                            </td>
+                                            <td style="width:25%;padding:3px;border:2px solid #d0dfbc;border-left:0px;vertical-align:middle;">
+                                                Invoice Date :
+                                                <span t-field="o.invoice_id.invoice_date"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="margin: 0px;margin-top:45px;"
+                                           class="table table-borderless">
+                                        <tr>
+                                            <td style="width:25%;padding:3px;font-size:13px;">
+                                                (Customer's Signature)
+                                            </td>
+                                            <td style="width:25%;padding:3px;border-left:0px;text-align:right;font-size:13px;">
+                                                (Authorized Signature)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <record id="action_vehicle_service_gate_pass_qweb_report" model="ir.actions.report">
+            <field name="name">Gate Pass</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tk_vehicle_management.vehicle_inspection_gate_pass_report_template</field>
+            <field name="report_file">tk_vehicle_management.vehicle_inspection_gate_pass_report_template</field>
+            <field name="print_report_name">'Gate Pass - %s' % (object.registration_no)</field>
+            <field name="paperformat_id" ref="job_card_gate_pass_report_paper_format"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

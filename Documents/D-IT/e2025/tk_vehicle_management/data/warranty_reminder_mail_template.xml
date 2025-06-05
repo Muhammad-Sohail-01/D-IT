@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vehicle_warranty_reminder_mail_template" model="mail.template">
+            <field name="name">Vehicle Management : Warranty Reminder Every 6 Month</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_warranty"/>
+            <field name="subject">Reminder: Complimentary Car Check-Up Under Warranty</field>
+            <field name="email_from">{{object.company_id.email}}</field>
+            <field name="partner_to">{{ object.customer_id.id }}</field>
+            <field name="lang">{{ object.customer_id.lang }}</field>
+            <field name="body_html" type="html">
+                <p>
+                    Dear
+                    <br/>
+                    <t t-out="object.customer_id.name"/>,
+                    <br/>
+                    <br/>
+                    I hope this message finds you well.
+                    We are writing to remind you that your vehicle,
+                    <strong>
+                        <span t-field="object.vehicle_model_id"/>
+                    </strong>
+                    is due for a complimentary
+                    check-up as part of its warranty coverage. Regular maintenance is crucial to ensure your car remains
+                    in optimal condition and to prevent any potential issues.
+                    <br/>
+                    <br/>
+                    Please contact us at your earliest convenience to confirm your appointment.
+                    <br/>
+                    <br/>
+                    Thanks for choosing us to service your vehicle.
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <span>
+                    <t t-out="object.company_id.name"/>
+                    <br/>
+                    <t t-out="object.company_id.phone"/>
+                    <br/>
+                    <t t-out="object.company_id.email"/>
+                    <br/>
+                    <t t-out="object.company_id.website"/>
+                </span>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

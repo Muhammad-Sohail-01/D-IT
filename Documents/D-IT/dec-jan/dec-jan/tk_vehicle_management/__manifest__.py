@@ -1,0 +1,145 @@
+# -*- coding: utf-8 -*-
+# Copyright 2020 - Today Techkhedut.
+# Part of Techkhedut. See LICENSE file for full copyright and licensing details.
+{
+    'name': 'EVS Vehicle Repair',
+    'description': """EVS Vehicle Repair""",
+    'summary': """EVS Vehicle Repair""",
+    'version': '4.1',
+    'author': 'TechKhedut Inc.',
+    'category': 'services',
+    'company': 'TechKhedut Inc.',
+    'maintainer': 'TechKhedut Inc.',
+    'website': "https://www.techkhedut.com",
+    'depends': [
+                'base',
+                'sale',
+                'mail',
+                'contacts',
+                'crm',
+                'fleet',
+                'partner_firstname',
+                'project',
+                'website',
+                'portal',
+                'hr_timesheet',
+                'timesheet_grid',
+                'stock',
+                'account',
+                'account_accountant',
+                'appointment',
+                'website_appointment',
+                'whatsapp',
+                'sale_management',
+                'hr',
+                'hr_employee_ext',
+               
+                   ],
+    'data': [
+        # Data
+        'data/ir_cron.xml',
+        'data/sequence.xml',
+        'data/inspection_data.xml',
+        'data/report_paper_format.xml',
+        'data/vehicle_whatsapp_template.xml',
+        'data/terms_conditions_data.xml',
+        'data/mail_activity_type_data.xml',
+
+        # Security
+        'security/groups.xml',
+        'security/ir.model.access.csv',
+        'security/security.xml',
+
+        # Wizard
+        'wizard/inspection_reject_reason_view.xml',
+        'wizard/assign_team_views.xml',
+        'wizard/task_assign_view.xml',
+        'wizard/service_concern_view.xml',
+        'wizard/sale_warranty_view.xml',
+        'wizard/vehicle_register_view.xml',
+        'wizard/additional_inspection_part_view.xml',
+        'wizard/cancel_inspection_view.xml',
+        'wizard/job_card_task_reset_view.xml',
+        'wizard/additional_inspection_service_view.xml',
+        'wizard/advance_payment_wizard_view.xml',
+
+        # Views
+        'views/vehicle_crm_inherit_view.xml',
+        'views/vehicle_booking_view.xml',
+        'views/configuration_views.xml',
+        'views/res_partner_inherit_view.xml',
+        'views/vehicle_inspection_view.xml',
+        'views/checklist_template_view.xml',
+        'views/vehicle_fleet_inherit_view.xml',
+        'views/vehicle_health_report_views.xml',
+        'views/inspection_team_views.xml',
+        'views/res_user_inherit_view.xml',
+        'views/project_task_vehicle_inherit_view.xml',
+        'views/vehicle_job_card_view.xml',
+        'views/vehicle_service_part_inherit_view.xml',
+        'views/vehicle_product_inherit_view.xml',
+        'views/vehicle_res_config_inherit_view.xml',
+        'views/vehicle_stock_picking_inherit_view.xml',
+        'views/vehicle_account_move_inherit_view.xml',
+        'views/vehicle_warranty_view.xml',
+        'views/health_report_template_view.xml',
+        'views/vehicle_appointment_inherit_view.xml',
+        'views/vehicle_res_company_inherit_view.xml',
+        'views/vehicle_sale_order_inherit_view_form.xml',
+
+        # Web Template
+        'views/templates/user_quot_template.xml',
+        'views/templates/user_additional_part_template.xml',
+        'views/templates/vehicle_portal_templates.xml',
+        'views/templates/vehicle_appointment_registration_template_inherit.xml',
+        'views/templates/user_consent_template.xml',
+        'views/templates/technician_task_inherit_portal_template.xml',
+
+        # Report
+        'report/inspection_scratch_report.xml',
+        'report/inspection_concern_report.xml',
+        'report/vehicle_inspection_health_report.xml',
+        'report/vehicle_service_gate_pass_qweb_report.xml',
+        'report/job_card_invoice_report.xml',
+        'report/quality_check_report.xml',
+        'report/job_card_main_quotation_qweb_report.xml',
+        'report/job_card_updated_quotation_qweb_report.xml',
+        'report/job_card_technician_qweb.xml',
+        
+
+        # Menu
+        'views/menus.xml',
+
+        # Mail Template
+        'data/customer_quotation_mail_template.xml',
+        'data/qc_check_mail_template.xml',
+        'data/task_requested_part_mail_template.xml',
+        'data/customer_quotation_action_mail_template.xml',
+        'data/service_appointment_reminder_mail_template.xml',
+        'data/warranty_reminder_mail_template.xml',
+        'data/delivery_order_validate_mail_template.xml',
+
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'tk_vehicle_management/static/src/css/backend.css',
+        ],
+        'web.assets_frontend': [
+            'tk_vehicle_management/static/src/scss/vehicle_inspection.scss',
+            'tk_vehicle_management/static/src/css/vehicle-frontend.css',
+            'tk_vehicle_management/static/src/css/bootstrap-select.min.css',
+            'tk_vehicle_management/static/src/js/bootstrap-select.min.js',
+            'tk_vehicle_management/static/src/js/appointment.js',
+            'tk_vehicle_management/static/src/js/web_timer.js',
+            'tk_vehicle_management/static/src/js/portal_inspection.js',
+            'tk_vehicle_management/static/src/js/web_portal.js',
+        ],
+    },
+    'images': ['static/description/banner.gif'],
+    'application': True,
+    'installable': True,
+    'auto_install': False,
+    'price': 199.00,
+    'currency': 'USD',
+    'license': 'OPL-1',
+}

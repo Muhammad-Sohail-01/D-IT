@@ -1,0 +1,13 @@
+<odoo>
+  <data>
+    <record id="view_tk_inspection_form_part_inherit" model="ir.ui.view">
+            <field name="model">vehicle.inspection</field>
+            <field name="inherit_id"  ref="tk_vehicle_management.vehicle_inspection_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='inspection_required_parts_ids']//field[@name='product_id']" position="after">
+                    <field name="part_number_id" domain="[('partno_product_id', '=', product_id)]" optional="hide"/>
+                </xpath>
+            </field>
+    </record>
+    </data>
+</odoo>

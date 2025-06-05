@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Appointment -->
+        <record id="wh_template_1" model="whatsapp.template">
+            <field name="name">Vehicle Management : Confirmation Text - In Next Two Weeks</field>
+            <field name="body">
+Hello {{1}}!
+
+This is a friendly reminder for your service appointment at Winchester Mitsubishi on {{2}} for your
+{{3}} .
+
+Please reply 'C' to confirm or contact us at 9715 or visit
+{{4}}.
+
+Thank you!
+            </field>
+        </record>
+        <record id="wh_template_2" model="whatsapp.template">
+            <field name="name">Vehicle Management : Confirmation Text - For Tomorrow</field>
+            <field name="body">
+Hi {{1}},
+
+This is {{2}} Service Department to remind you of your appointment with us on {{3}} for your {{4}}.
+
+If for any reason you need to cancel/reschedule your appointment you can click here to update your
+appointment
+{{5}}.
+
+Thanks for choosing {{6}}! We look forward to providing you with first class service.
+            </field>
+        </record>
+        <record id="wh_template_3" model="whatsapp.template">
+            <field name="name">Vehicle Management : Missed No Show Appointment Yesterday Text</field>
+            <field name="body">
+Hello {{1}}!
+
+Our system indicates that you missed your scheduled service appointment yesterday. Would you like to
+reschedule? Please call/text us at971-50 ?????? or schedule online at
+{{2}}.
+
+Thank you! Adam Appointment Coordinator
+            </field>
+        </record>
+
+        <!-- Quotation -->
+        <record id="wh_template_4" model="whatsapp.template">
+            <field name="name">Vehicle Management : Job Card Quotation Template</field>
+            <field name="body">
+Dear *{{1}}*
+
+Thank you for choosing our service for your vehicle's maintenance needs. As per your request, we have prepared a quotation for the service required.
+
+Please review the quotation details. If everything looks satisfactory, kindly confirm your approval before *{{2}}* using below link.
+
+{{3}}
+
+Should you have any questions or require further clarification, feel free to reach out to our customer service team.
+
+Thank you for choosing {{4}}.
+            </field>
+        </record>
+        <record id="wh_template_5" model="whatsapp.template">
+            <field name="name">Vehicle Management : Additional Part Quotation Template</field>
+            <field name="body">
+Dear *{{1}}*
+
+We appreciate your ongoing trust in our services and for choosing *{{2}}* for your vehicle's maintenance needs.
+
+During the servicing of your Vehicle, our technicians discovered additional requirements that necessitate the inclusion of extra parts. As a result, we have revised the initial service quotation to reflect these updates.
+
+The attached quotation provides a breakdown of the additional parts required, their costs, and the updated total for your reference.
+
+If everything looks satisfactory, kindly confirm your approval before *{{3}}* using below link.
+
+{{4}}
+
+Should you have any questions about the updated quotation, the additional parts, or if you would like to proceed with the service, please feel free to contact our service team
+
+Thank you for choosing *{{2}}*
+            </field>
+        </record>
+
+    <!-- Consent Whatsapp Template -->
+    <record id="wh_template_6" model="whatsapp.template">
+        <field name="name">Vehicle Management : Consent Message Template</field>
+        <field name="body">
+Hi *{{1}}*,
+
+We hope you're doing well!
+
+We're reaching out to get your consent regarding the service for your vehicle. Please click the link below to approve or reject the consent before *{{4}}*.
+
+*{{2}}*
+
+If you have any questions, feel free to reply to this message or give us a call or contact our service team.
+
+Thank you!
+
+Best regards,
+*{{3}}*
+            </field>
+        </record>
+<!--Vehicle QC Check Reminder-->
+     <record id="wh_template_7" model="whatsapp.template">
+        <field name="name">Vehicle Management : Complete Qc Checks</field>
+        <field name="body">
+Hi {{1}},
+
+I hope you're well. I wanted to inform you that the job card *{{2}}* has had its quality check completed and is now ready for delivery.
+
+Thank you!
+        </field>
+     </record>
+
+<!--Vehicle QC Check Completed-->
+     <record id="wh_template_8" model="whatsapp.template">
+        <field name="name">Vehicle Management : Quality Check Reminder to Team Leaders</field>
+        <field name="body">
+Dear Team Leaders
+
+The task assigned to you has been completed.
+
+To proceed further, we kindly request a Quality Check (QC) to be conducted on the task. Your thorough review and feedback will be crucial in ensuring the final quality of work.
+
+Once you have completed the QC, kindly provide your approval or feedback for any necessary revisions.
+
+Task Details :
+Job Card Ref : {{1}}
+Task Name : {{2}}
+        </field>
+     </record>
+<!--Vehicle Check IN Notification : Service Advisor-->
+    <record id="wh_template_9" model="whatsapp.template">
+        <field name="name">Vehicle Management : Service Adviser - Create Check in Notification</field>
+        <field name="body">Hi *{{1}}*,
+
+A new customer check in has been created.
+
+Check-in No: *{{2}}*
+Check-in Date: *{{3}}*
+Vehicle Details: *{{4}}*
+Customer Name: *{{5}}*
+Customer Phone: *{{6}}*
+Customer Email: *{{7}}*
+
+Please review the booking and make the necessary arrangements.
+
+Thank you!
+        </field>
+    </record>
+<!--Vehicle Check In Notification : Customer-->
+    <record id="wh_template_10" model="whatsapp.template">
+        <field name="name">Vehicle Management : Customer - Create Check in Notification</field>
+        <field name="body">Hi *{{1}}*,
+
+Thank you for booking with us! Your service appointment check-in has been successfully created.
+
+Check in No: *{{2}}*
+Check-in Date: *{{3}}*
+Vehicle Details: *{{4}}*
+
+If you have any questions or need to reschedule, please don't hesitate to contact us.
+
+We look forward to serving you!
+
+Best regards
+        </field>
+    </record>
+    </data>
+</odoo>

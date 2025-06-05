@@ -1,0 +1,630 @@
+<odoo>
+    <data>
+        <template id="job_card_invoice_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <style>
+                            .header, .footer {
+                            display: none !important;
+                            }
+                            .container {
+                            width: 100% !important;
+                            max-width: none !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                            }
+                            .service-header {
+                            background-color: #73b957;
+                            color: white;
+                            padding: 8px;
+                            }
+                            .parts-header {
+                            background-color: #73b957;
+                            color: white;
+                            padding: 8px;
+                            }
+                            .table-header {
+                            background-color: #bcbcbc;
+                            color: white;
+                            }
+                            .total-section {
+	                        background-color: white;
+	                        text-color: black;
+	                        padding: 15px;
+	                        }
+
+                            @media print {
+                            .service-header, .parts-header, .table-header, .total-section {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            }
+                            }
+                        </style>
+                        <div class="page"
+                             t-att-style="'background: url({}); background-size:1200px 1700px; width:1200px; height:1700px;'.format(image_data_uri(o.company_id.print_template))">
+                            <div class="row" style="margin-top: 60mm; padding-top: 30px;">
+                                <div class="col-4">
+                                </div>
+                                <div class="col-4 text-center">
+                                    <t t-if="o.move_type == 'out_refund'">
+                                        <h1 t-if="o.company_id.is_vat_registered">TAX CREDIT NOTE</h1>
+                                        <h1 t-if="not o.company_id.is_vat_registered">CREDIT NOTE</h1>
+                                    </t>
+                                    <t t-else="">
+                                        <h1 t-if="o.company_id.is_vat_registered">TAX INVOICE</h1>
+                                        <h1 t-if="not o.company_id.is_vat_registered">INVOICE</h1>
+                                    </t>
+                                </div>
+                                <!--                        <div class="col-4 text-end" style="margin-top: 150px; padding-right: 20px; font-size: 22px;">-->
+                                <!--                            <div>Invoice No: <span t-field="o.name"/></div>-->
+                                <!--                        </div>-->
+                            </div>
+                            <div class="row mb-4"
+                                 style="padding-left:35px; padding-right: 20px; font-size: 22px; margin-top: 120px;">
+                                <div class="col-4">
+                                    <t t-set="invoice_service"
+                                       t-value="o.invoice_line_ids.filtered(lambda line: line.product_id.detailed_type == 'service')"/>
+                                    <strong class="d-block mb-2">Customer Details</strong>
+                                    <div>Name:
+                                        <span t-field="invoice_service.partner_id.name"/>
+                                    </div>
+                                    <div>Address:
+                                        <span t-field="invoice_service.partner_id.street"/>
+                                    </div>
+                                    <div>Mobile:
+                                        <span t-field="invoice_service.partner_id.phone"/>
+                                    </div>
+                                    <div>TRN:
+                                        <span t-field="invoice_service.partner_id.vat"/>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <div t-field="o.brand_id.name" style="font-weight: bold;"/>
+                                    <div>Model:
+                                        <span t-field="o.vehicle_model_id.name"/>
+                                    </div>
+                                    <div>Year:
+                                        <span t-field="o.year"/>
+                                    </div>
+                                    <div>Registration No:
+                                        <span t-field="o.registration_no"/>
+                                    </div>
+                                    <div>VIN:
+                                        <span t-field="o.vin_no"/>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div>Invoice No:
+                                        <span t-field="o.name"/>
+                                    </div>
+                                    <div>Date:
+                                        <span t-field="o.invoice_date"/>
+                                    </div>
+                                    <div>Service advisor:
+                                        <span t-field="o.invoice_user_id.name"/>
+                                    </div>
+                                    <div>Job Card #:
+                                        <span t-field="inspection.name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div t-if="invoice_service" class="mt-5"
+                                 style="margin-left: 3mm; margin-right: 3mm; padding-left:32px; padding-right: 10px;">
+                                <h4 class="service-header">Services</h4>
+                                <table class="table table-bordered">
+                                    <thead class="table-header">
+                                        <tr>
+                                            <th>Service</th>
+                                            <th class="text-center">Qty</th>
+                                            <th class="text-end">Price</th>
+                                            <th class="text-end">Dis %</th>
+                                            <th t-if="o.company_id.is_vat_registered" class="text-end">VAT</th>
+                                            <th class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="invoice_service"
+                                           t-as="service_line">
+                                            <tr>
+                                                <td>
+                                                    <span t-field="service_line.name"/>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span t-field="service_line.quantity"/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-field="service_line.price_unit"/>
+                                                </td>
+                                                <td class="text-end"><span t-field="service_line.discount"/>%
+                                                </td>
+                                                <td t-if="o.company_id.is_vat_registered" class="text-end">
+                                                    <span t-esc="service_line.price_total - service_line.price_subtotal"
+                                                          t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-field="service_line.price_total"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--                            <t t-set="invoice_service"-->
+                            <!--                               t-value="o.invoice_line_ids.filtered(lambda line: line.product_id.detailed_type == 'service')"/>-->
+                            <!--                            <t t-set="service_service"-->
+                            <!--                               t-value="inspection.inspection_required_service_ids.filtered(lambda line: line.product_id and not line.is_additional)"/>-->
+                            <!--                            <t t-set="matched_service"-->
+                            <!--                               t-value="service_service.filtered(lambda part: part.product_id.id in invoice_service.mapped('product_id.id'))"/>-->
+
+                            <!--                            <t t-if="matched_service">-->
+                            <!--                                <table class="table table-borderless" style="font-size: 13px;">-->
+                            <!--                                    <thead>-->
+                            <!--                                        <tr style="border: 0px;">-->
+                            <!--                                            <td style="padding: 3px; width: 55%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Service</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Flag Time</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Price</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Total</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                    </thead>-->
+                            <!--                                    <tbody>-->
+                            <!--                                        <t t-foreach="matched_service" t-as="s">-->
+                            <!--                                            <tr class="border">-->
+                            <!--                                                <td style="padding: 6px; width: 55%; vertical-align: middle;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-field="s.product_id.name"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span>-->
+                            <!--                                                        <i class="fa fa-clock-o"/>-->
+                            <!--                                                        <span t-field="s.estimate_time"-->
+                            <!--                                                              t-options="{'widget':'float_time'}"/>-->
+                            <!--                                                        hours-->
+                            <!--                                                    </span>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-field="s.price"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-esc="s.total_amount"/>-->
+                            <!--                                                </td>-->
+                            <!--                                            </tr>-->
+                            <!--                                        </t>-->
+                            <!--                                    </tbody>-->
+                            <!--                                </table>-->
+                            <!--                            </t>-->
+                            <!-- Additional Services -->
+                            <!--                            <t t-set="invoice_service_additional"-->
+                            <!--                               t-value="o.invoice_line_ids.filtered(lambda line: line.product_id)"/>-->
+                            <!--                            <t t-set="service_service_additional"-->
+                            <!--                               t-value="inspection.inspection_required_service_ids.filtered(lambda line: line.product_id and line.is_additional)"/>-->
+                            <!--                            <t t-set="matched_service_additional"-->
+                            <!--                               t-value="service_service_additional.filtered(lambda part: part.product_id.id in invoice_service_additional.mapped('product_id.id'))"/>-->
+
+                            <!--                            <t t-if="matched_service_additional">-->
+                            <!--                                <table class="table table-borderless" style="font-size: 13px;">-->
+                            <!--                                    <thead>-->
+                            <!--                                        <tr style="background-color: #f7fbff;">-->
+                            <!--                                            <td style="padding:0px;width: 100%" colspan="4">-->
+                            <!--                                                <strong>Additional Service</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                        <tr style="border: 0px;">-->
+                            <!--                                            <td style="padding: 3px; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Service</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Flag Time</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Price</strong>-->
+                            <!--                                            </td>-->
+
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Total</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                    </thead>-->
+                            <!--                                    <tbody>-->
+
+                            <!--                                        <t t-foreach="matched_service_additional" t-as="matched">-->
+                            <!--                                            <tr>-->
+                            <!--                                                <td style="padding: 6px; width: 55%; vertical-align: middle;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-field="matched.product_id.name"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span>-->
+                            <!--                                                        <i class="fa fa-clock-o"/>-->
+                            <!--                                                        <span t-field="matched.estimate_time"-->
+                            <!--                                                              t-options="{'widget':'float_time'}"/>-->
+                            <!--                                                        hours-->
+                            <!--                                                    </span>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-field="matched.price"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-esc="matched.total_amount"/>-->
+                            <!--                                                </td>-->
+                            <!--                                            </tr>-->
+
+                            <!--                                        </t>-->
+
+                            <!--                                    </tbody>-->
+                            <!--                                </table>-->
+                            <!--                            </t>-->
+                            <t t-set="invoice_parts"
+                               t-value="o.invoice_line_ids.filtered(lambda line: line.product_id.detailed_type == 'product')"/>
+                            <t t-set="service_parts"
+                               t-value="inspection.inspection_required_parts_ids.filtered(lambda line: line.product_id and not line.is_additional)"/>
+                            <t t-set="matched_parts"
+                               t-value="service_parts.filtered(lambda part: part.product_id.id in invoice_parts.mapped('product_id.id'))"/>
+                            <t t-if="invoice_parts">
+                                <div class="mt-4"
+                                     style="margin-left: 3mm; margin-right: 3mm; padding-left:32px; padding-right: 10px;">
+                                    <h4 class="parts-header">Parts</h4>
+                                    <table class="table table-bordered">
+                                        <thead class="table-header">
+                                            <tr>
+                                                <th>Part No</th>
+                                                <th>Product Name</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-end">Price</th>
+                                                <th class="text-end">Dis %</th>
+                                                <th t-if="o.company_id.is_vat_registered" class="text-end">VAT</th>
+                                                <th class="text-end">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="invoice_parts"
+                                               t-as="proudcut_line">
+                                                <tr>
+                                                    <td>
+                                                        <span t-field="proudcut_line.product_id.default_code"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="proudcut_line.name"/>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span t-field="proudcut_line.quantity"/>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <span t-field="proudcut_line.price_unit"/>
+                                                    </td>
+                                                    <td class="text-end"><span t-field="proudcut_line.discount"/>%
+                                                    </td>
+                                                    <td t-if="o.company_id.is_vat_registered" class="text-end">
+                                                        <span t-esc="proudcut_line.price_total - proudcut_line.price_subtotal"
+                                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <span t-field="proudcut_line.price_total"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                            <!--additional parts table -->
+                            <!--                            <t t-set="invoice_parts_additional"-->
+                            <!--                               t-value="o.invoice_line_ids.filtered(lambda line: line.product_id)"/>-->
+                            <!--                            <t t-set="service_parts_additional"-->
+                            <!--                               t-value="inspection.inspection_required_parts_ids.filtered(lambda line: line.product_id and line.is_additional)"/>-->
+                            <!--                            <t t-set="matched_parts_additional"-->
+                            <!--                               t-value="service_parts_additional.filtered(lambda part: part.product_id.id in invoice_parts_additional.mapped('product_id.id'))"/>-->
+                            <!--                            <t t-if="matched_parts_additional">-->
+                            <!--                                <table class="table table-borderless" style="font-size: 13px;">-->
+                            <!--                                    <thead>-->
+                            <!--                                        <tr style="background-color: #f7fbff;">-->
+                            <!--                                            <td style="padding:0px;width: 100%" colspan="4">-->
+                            <!--                                                <strong>Additional Parts</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                        <tr style="border: 0px;">-->
+                            <!--                                            <td style="padding: 3px; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Number</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Name</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Qty.</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Price</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Discount%</strong>-->
+                            <!--                                            </td>-->
+
+                            <!--                                            <td style="padding: 3px; text-align: right; width: 15%; color: #348185; font-weight: bold; border: 0px;">-->
+                            <!--                                                <strong>Total</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                    </thead>-->
+                            <!--                                    <tbody>-->
+                            <!--                                        <t t-foreach="matched_parts_additional" t-as="matched">-->
+                            <!--                                            <tr>-->
+
+                            <!--                                                <td class="border" style="padding: 3px; width: 20%">-->
+                            <!--                                                    <span t-field="matched.product_id.default_code"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; width: 55%; vertical-align: middle;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-field="matched.product_id.name"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-esc="matched.qty"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-field="matched.price"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-esc="matched.discount"/>-->
+                            <!--                                                </td>-->
+                            <!--                                                <td style="padding: 6px; text-align: right; width: 15%; vertical-align: top;"-->
+                            <!--                                                    class="border">-->
+                            <!--                                                    <span t-esc="matched.total_amount"/>-->
+                            <!--                                                </td>-->
+                            <!--                                            </tr>-->
+
+                            <!--                                        </t>-->
+
+                            <!--                                    </tbody>-->
+                            <!--                                </table>-->
+                            <!--                            </t>-->
+                            <div class="row" style="margin-left: 15mm; margin-right: 3mm;">
+                                <div class="col-6 ms-auto">
+                                    <div class="total-section">
+                                        <table class="table table-sm text-black mb-0" style="border: 1px solid black;">
+                                            <tr>
+                                                <td>Subtotal</td>
+                                                <td class="text-end">
+                                                    <span t-field="o.amount_untaxed"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Parts</td>
+                                                <td class="text-end">
+                                                    <span t-esc="sum(o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'product').mapped('price_total'))"
+                                                          t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Labor</td>
+                                                <td class="text-end">
+                                                    <span t-esc="sum(o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'service').mapped('price_total'))"
+                                                          t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                            <tr t-if="o.company_id.is_vat_registered">
+                                                <td>VAT</td>
+                                                <td class="text-end">
+                                                    <span t-field="o.amount_tax"/>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-top">
+                                                <td>
+                                                    <strong>Invoice Total</strong>
+                                                </td>
+                                                <td class="text-end">
+                                                    <strong>
+                                                        <span t-field="o.amount_total"/>
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--                            <div class="row" style="text-align: right;">-->
+                            <!--                                <div class="col-6">-->
+                            <!--                                </div>-->
+                            <!--                                <div class="col-6">-->
+                            <!--                                    <table class="table table-borderless" style="font-size: 13px;">-->
+                            <!--                                        <tr>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 70%">-->
+                            <!--                                                <strong>Subtotal</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 2px; vertical-align: middle; width: 30%;">-->
+                            <!--                                                <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                    &lt;!&ndash; <span t-esc="sum(line.price_total for line in o.invoice_line_ids if line.product_id.type == 'prodcut')"-->
+                            <!--                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}" /> &ndash;&gt;-->
+                            <!--                                                    <span t-esc="o.amount_untaxed"/>-->
+                            <!--                                                </td>-->
+
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                        <tr>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 70%">-->
+                            <!--                                                Parts-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                &lt;!&ndash; <span t-field="o.selected_parts_untaxed"/> &ndash;&gt;-->
+                            <!--                                                <td style="padding: 2px; vertical-align: middle; width: 30%;">-->
+                            <!--                                                    <span t-esc="sum(line.price_total for line in o.invoice_line_ids if line.product_id.detailed_type == 'product')"-->
+                            <!--                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>-->
+                            <!--                                                </td>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                        <tr>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 70%">-->
+                            <!--                                                Labor-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                    &lt;!&ndash; <span t-field="o.selected_services_untaxed"/> &ndash;&gt;-->
+                            <!--                                                    <span t-esc="sum(line.price_total for line in o.invoice_line_ids if line.product_id.detailed_type == 'service')"-->
+                            <!--                                                          t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>-->
+                            <!--                                                </td>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                        &lt;!&ndash; <tr>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 70%">-->
+                            <!--                                                <strong>Shop Supplies and Environmental Fees</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                <span t-field="o.shop_supplies_fees"/>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr> &ndash;&gt;-->
+                            <!--                                        <tr>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 70%">-->
+                            <!--                                                <strong>Sales Tax</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                    <span t-esc="o.amount_tax"/>-->
+                            <!--                                                </td>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                        <tr>-->
+                            <!--                                            <td style="padding: 2px;color: #348185;font-weight: bold;vertical-align: middle;width: 70%">-->
+                            <!--                                                <strong>Invoice Total</strong>-->
+                            <!--                                            </td>-->
+                            <!--                                            <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                <td style="padding: 2px;vertical-align: middle;width: 30%">-->
+                            <!--                                                    <strong>-->
+                            <!--                                                        <span t-field="o.amount_total"/>-->
+                            <!--                                                    </strong>-->
+                            <!--                                                </td>-->
+                            <!--                                            </td>-->
+                            <!--                                        </tr>-->
+                            <!--                                    </table>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+
+                            <div class="row" style="margin-left: 26mm; margin-right: 7mm;">
+                                <t t-if="o.amount_residual != 0">
+                                <div class="col-6 ms-auto">
+                                    <div>
+                                        <table class="table text-black mb-0" style="border: 1px solid black;">
+                                            <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
+                                                <td style="border: 1px solid black; color: black;">
+                                                    <strong>Amount Due</strong>
+                                                </td>
+                                                <td class="text-end" style="border: 1px solid black; color: black;">
+                                                    <strong>
+                                                        <span t-field="o.amount_residual"/>
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                </t>
+                            </div>
+
+                            <div class="row mt-5" style="margin-left: 15mm; margin-right: 15mm;">
+                                <div class="col-6 ms-auto">
+                                    <div class="border-top pt-2">
+                                        <p class="text-center">Customer Signature</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Bank Details -->
+                            <t t-if="o.company_id.bank_name or o.company_id.account_number or o.company_id.iban">
+                                <div class="p-3 mt-4" style="margin-left: 15mm; margin-right: 15mm;">
+                                    <style>
+                                        .bank-details {
+                                        display: flex;
+                                        flex-direction: column;
+                                        width: 100%;
+                                        max-width: 400px; /* Adjust width as needed */
+                                        }
+                                        .bank-details div {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        padding: 4px 0;
+                                        }
+                                        .bank-details strong {
+                                        min-width: 150px; /* Adjust for consistent alignment */
+                                        text-align: left;
+                                        }
+                                        .bank-details span {
+                                        text-align: right;
+                                        flex-grow: 1;
+                                        }
+                                    </style>
+
+                                    <div class="bank-details">
+                                        <div t-if="o.company_id.bank_name">
+                                            <strong>BANK NAME:</strong>
+                                            <span t-field="o.company_id.bank_name"></span>
+                                        </div>
+                                        <div t-if="o.company_id.account_name">
+                                            <strong>COMPANY NAME:</strong>
+                                            <span t-field="o.company_id.account_name"></span>
+                                        </div>
+                                        <div t-if="o.company_id.account_number">
+                                            <strong>ACCOUNT:</strong>
+                                            <span t-field="o.company_id.account_number"></span>
+                                        </div>
+                                        <div t-if="o.company_id.iban">
+                                            <strong>IBAN:</strong>
+                                            <span t-field="o.company_id.iban"></span>
+                                        </div>
+                                        <div t-if="o.company_id.swift_code">
+                                            <strong>SWIFT CODE:</strong>
+                                            <span t-field="o.company_id.swift_code"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+
+
+                            <p style="page-break-before:always;"/>
+                            <h6 style="color: #348185;font-weight: bold; font-size: 22px;">
+                                Terms &amp; Conditions
+                            </h6>
+                            <t t-set="term_conditions"
+                               t-value="request.env.ref('tk_vehicle_management.term_condition_1').terms_conditions"/>
+                            <div style="font-size: 16px; color: #5e5b5b">
+                                <t t-esc="term_conditions"/>
+                            </div>
+
+
+                            <!-- <div class="row" style="text-align: right;">
+                                <div class="col-6">
+                                </div>
+                                <div class="col-6">
+
+                                </div>
+                            </div> -->
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <record id="action_job_card_invoice_qweb_report" model="ir.actions.report">
+            <field name="name">Invoice</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tk_vehicle_management.job_card_invoice_report_template</field>
+            <field name="report_file">tk_vehicle_management.job_card_invoice_report_template</field>
+            <field name="binding_model_id" ref="model_vehicle_inspection"/>
+            <field name="paperformat_id" ref="inspection_report_paper_format"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree/List View -->
+    <record id="view_auto_mobile_partno_tree" model="ir.ui.view">
+        <field name="name">auto.mobile.partno.line.tree</field>
+        <field name="model">auto.mobile.partno.line</field>
+        <field name="arch" type="xml">
+            <tree string="Part Numbers">
+                <field name="partno_id"/>
+                <field name="partno_product_id"/>
+                <field name="partno"/>
+                <field name="part_internal_no"/>
+                <field name="part_vendor_name"/>
+                <field name="part_type"/>
+                <field name="part_cat1" widget="many2many_tags"/>
+                <field name="part_cat2" widget="many2many_tags"/>
+                <field name="part_cat3" widget="many2many_tags"/>
+                <field name="part_cat4" widget="many2many_tags"/>
+                <field name="brand_ids" widget="many2many_tags"/>
+                <field name="model_ids" widget="many2many_tags"/>
+                <field name="year_ids" widget="many2many_tags"/>
+                <field name="cost_price"/>
+                <field name="sale_price"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_auto_mobile_partno_search" model="ir.ui.view">
+        <field name="name">auto.mobile.partno.line.search</field>
+        <field name="model">auto.mobile.partno.line</field>
+        <field name="arch" type="xml">
+            <search string="Part Numbers">
+                <field name="partno"/>
+                <field name="partno_id"/>
+                <field name="partno_product_id"/>
+                <field name="part_internal_no"/>
+                <field name="part_vendor_name"/>
+                <field name="brand_ids"/>
+                <field name="model_ids"/>
+                <separator/>
+                <filter string="I Type" name="i_type" domain="[('part_type', '=', 'i')]"/>
+                <filter string="O Type" name="o_type" domain="[('part_type', '=', 'o')]"/>
+                <filter string="G Type" name="g_type" domain="[('part_type', '=', 'g')]"/>
+                <filter string="H Type" name="h_type" domain="[('part_type', '=', 'h')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'partno_product_id'}"/>
+                    <filter string="Type" name="group_by_type" context="{'group_by': 'part_type'}"/>
+                    <filter string="Brand" name="group_by_brand" context="{'group_by': 'brand_ids'}"/>
+                    <filter string="Model" name="group_by_model" context="{'group_by': 'model_ids'}"/>
+                    <filter string="Main Category" name="group_by_cat1" context="{'group_by': 'part_cat1'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_auto_mobile_partno" model="ir.actions.act_window">
+        <field name="name">Part Numbers</field>
+        <field name="res_model">auto.mobile.partno.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_auto_mobile_partno_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Part Number!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <!-- Sales Menu -->
+    <menuitem id="menu_auto_mobile_partno_sale"
+              name="Part Numbers"
+              action="action_auto_mobile_partno"
+              parent="sale.sale_menu_root"
+              sequence="20"/>
+
+    <!-- Purchase Menu -->
+    <menuitem id="menu_auto_mobile_partno_purchase"
+              name="Part Numbers"
+              action="action_auto_mobile_partno"
+              parent="purchase.menu_purchase_root"
+              sequence="20"/>
+
+    <!-- Inventory Menu -->
+    <menuitem id="menu_auto_mobile_partno_inventory"
+              name="Part Numbers"
+              action="action_auto_mobile_partno"
+              parent="stock.menu_stock_root"
+              sequence="20"/>
+
+</odoo>

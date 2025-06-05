@@ -1,0 +1,60 @@
+<odoo>
+    <record id="search_product_lot_filter_inherit" model="ir.ui.view">
+        <field name="name">Spare Parts Lots Filter</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.search_product_lot_filter"/> 
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='create_date']">
+                <field name="part_number_id"/>
+                <field name="part_internal_number"/>
+                <field name="brand_id"/>
+                <field name="model_id" />
+                <field name="year_display"/> 
+                <field name="part_vendor_name"/> 
+                <field name="part_type"/> 
+                <field name="note"/> 
+                <field name="cost_price"/> 
+                <field name="sale_price"/>
+                <field name="part_main_category"/>
+                <field name="sub_category"/>
+                <field name="part_element"/>
+                <field name="catalog_name"/>
+                <field name="part_image" widget="image" options="{'size': [40, 40]}" string="Image"/> 
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_production_lot_form_inherit" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.inherit</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/> <!-- Replace module_name with the actual module name -->
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="after">
+                <div class="o_col_right" style="text-align:right; margin-top: 10px;">
+                    <!-- If needed, image field can go here -->
+                </div>
+            </xpath>
+
+            <!-- Add extra fields -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="part_number_id" invisible="context.show_duplicate_fields != True"/>
+                <field name="part_internal_number" invisible="context.show_duplicate_fields != True"/>
+                <field name="brand_id" invisible="context.show_duplicate_fields != True"/>
+                <field name="model_id" invisible="context.show_duplicate_fields != True"/>
+                <field name="year_display" force_save="1" invisible="context.show_duplicate_fields != True"/> 
+                <field name="part_vendor_name" force_save="1" invisible="context.show_duplicate_fields != True"/> 
+                <field name="part_type" force_save="1" invisible="context.show_duplicate_fields != True"/> 
+                <field name="note" force_save="1" invisible="context.show_duplicate_fields != True"/> 
+                <field name="cost_price" force_save="1" invisible="context.show_duplicate_fields != True"/> 
+                <field name="sale_price" force_save="1" invisible="context.show_duplicate_fields != True"/>
+                <field name="part_main_category" optional="Hide" invisible="context.show_duplicate_fields != True"/>
+                <field name="sub_category" optional="Hide" invisible="context.show_duplicate_fields != True"/>
+                <field name="part_element" optional="Hide" invisible="context.show_duplicate_fields != True"/>
+                <field name="catalog_name" optional="Hide" invisible="context.show_duplicate_fields != True"/>
+                <field name="part_image" widget="image" options="{'size': [40, 40]}" string="Image" invisible="context.show_duplicate_fields != True"/> 
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+

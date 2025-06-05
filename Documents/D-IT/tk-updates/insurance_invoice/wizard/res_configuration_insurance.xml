@@ -1,0 +1,16 @@
+<odoo>
+    <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sale</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='invoicing_setting_container']" position="inside">
+                 <setting id="insurance_journal" string="Insurance Journal" help="Product used for insurance payments"
+                         company_dependent="1">
+                     <field name="insurance_journal_id"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

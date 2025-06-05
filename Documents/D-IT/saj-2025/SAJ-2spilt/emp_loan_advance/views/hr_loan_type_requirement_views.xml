@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Loan Type Requirements -->
+    <record id="view_hr_loan_type_requirement_form" model="ir.ui.view">
+        <field name="name">hr.loan.type.requirement.form</field>
+        <field name="model">hr.loan.type.requirement</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="loan_type_id"/>
+                            <field name="required"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="document_format" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="max_file_size"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Loan Type Requirements -->
+    <record id="view_hr_loan_type_requirement_tree" model="ir.ui.view">
+        <field name="name">hr.loan.type.requirement.tree</field>
+        <field name="model">hr.loan.type.requirement</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="loan_type_id" optional="show"/>
+                <field name="required"/>
+                <field name="document_format" widget="many2many_tags" optional="show"/>
+                <field name="max_file_size" optional="show"/>
+                <field name="description" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View for Loan Type Requirements -->
+    <record id="view_hr_loan_type_requirement_search" model="ir.ui.view">
+        <field name="name">hr.loan.type.requirement.search</field>
+        <field name="model">hr.loan.type.requirement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="loan_type_id"/>
+                <separator/>
+                <filter string="Mandatory" name="mandatory" domain="[('required', '=', True)]"/>
+                <filter string="Optional" name="optional" domain="[('required', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Loan Type" name="group_by_loan_type" context="{'group_by': 'loan_type_id'}"/>
+                    <filter string="Required" name="group_by_required" context="{'group_by': 'required'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action Window for Loan Type Requirements -->
+    <record id="action_hr_loan_type_requirement" model="ir.actions.act_window">
+        <field name="name">Loan Requirements</field>
+        <field name="res_model">hr.loan.type.requirement</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_loan_type_requirement_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first loan requirement!
+            </p>
+            <p>
+                Define the required documents for each loan type.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item for Loan Type Requirements -->
+    <menuitem id="menu_hr_loan_type_requirement"
+              name="Loan Requirements"
+              parent="menu_hr_loan_configuration"
+              action="action_hr_loan_type_requirement"
+              sequence="2"/>
+</odoo>

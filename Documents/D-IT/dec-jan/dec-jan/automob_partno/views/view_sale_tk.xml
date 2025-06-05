@@ -1,0 +1,25 @@
+<odoo>
+   
+        <record model="ir.ui.view" id="sale_order_view_tk_management_form_ext">
+                <field name="name">sale.order.form.tk.ext</field>
+                <field name="model">sale.order</field>
+                <field name="inherit_id" ref="tk_vehicle_management.vehicle_sale_order_inherit_view_form"/>
+                <field name="arch" type="xml">
+                <xpath expr="//field[@name='job_card_id']" position="after">
+                      <separator string="Customer Vehicle Details"/>
+                        <group>
+                        <field name="register_vehicle_id" readonly="0"/>
+                        <field name="brand_id" readonly="0"/>
+                        <field name="vehicle_model_id" readonly="0"/>   
+                        </group>
+                        <group>                    
+                        <field name="vin_no" readonly="0"/>
+                        <field name="registration_no" readonly="0"/>
+                        <field name="year" readonly="0"/>
+                        <field name="color" readonly="0"/>  
+                        </group> 
+                </xpath>
+                </field>
+            </record>
+  
+</odoo>

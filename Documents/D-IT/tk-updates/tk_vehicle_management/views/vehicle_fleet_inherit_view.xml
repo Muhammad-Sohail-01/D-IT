@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="vehicle_fleet_form_inherit" model="ir.ui.view">
+            <field name="name">vehicle.fleet.form.inherit</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button"
+                            type="object"
+                            name="action_view_bookings"
+                            icon="fa-list-ul">
+                        <field name="booking_count"
+                               string='Check ins'
+                               widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button"
+                            type="object"
+                            name="action_view_inspection"
+                            icon="fa-list-ul">
+                        <field name="inspection_count"
+                               string='Inspections'
+                               widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button"
+                            type="object"
+                            name="action_view_job_card"
+                            icon="fa-list-ul">
+                        <field name="job_card_count"
+                               string='Job Cards'
+                               widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

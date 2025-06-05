@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Confirmation Email - Next 2 Week -->
+        <record id="service_appointment_reminder_week_mail_template" model="mail.template">
+            <field name="name">Vehicle Appointment Reminder : 2 Weeks Before
+            </field>
+            <field name="model_id" ref="calendar.model_calendar_attendee"/>
+            <field name="subject">{{ object.event_id.name }} - Reminder</field>
+            <field name="email_from">{{ (object.event_id.user_id.email_formatted or user.email_formatted or '') }}
+            </field>
+            <field name="email_to">
+                {{ ('' if object.partner_id.email and object.partner_id.email == object.email else object.email) }}
+            </field>
+            <field name="partner_to">
+                {{ object.partner_id.id if object.partner_id.email and object.partner_id.email == object.email else
+                False }}
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="description">Sent to all attendees if a reminder is set</field>
+            <field name="body_html" type="html">
+                <p>
+                    Hello<t t-out="object.common_name"/>,
+                    <br/>
+                    <br/>
+                    This is a reminder of your upcoming appointment with us on
+                    <t t-out="object.event_id.get_display_time_tz(tz=object.partner_id.tz) or ''"/>
+                    for your
+                    <span t-out="object.event_id.vehicle_model_id.display_name"/>
+                    <br/>
+                    <br/>
+                    If you need to reschedule or update the details of your appointment, please click
+                    <br/>
+                    <br/>
+                    <a t-attf-href="/calendar/meeting/view?token={{object.access_token}}&amp;id={{object.event_id.id}}"
+                       style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px">
+                        Reschedule Appointment</a>.
+                    <br/>
+                    <br/>
+                    Thanks for choosing us to service your vehicle. We look forward to your visit.
+                </p>
+                <p>
+                    Sincerely,
+                    <br/>
+                    <t t-out="object.event_id.user_id.company_id.name"/>
+                    Service Team
+                </p>
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+        <!-- Confirmation Email - Day Before -->
+        <record id="service_appointment_reminder_day_mail_template" model="mail.template">
+            <field name="name">Vehicle Appointment Reminder : For Tomorrow
+            </field>
+            <field name="model_id" ref="calendar.model_calendar_attendee"/>
+            <field name="subject">{{ object.event_id.name }} - Reminder</field>
+            <field name="email_from">{{ (object.event_id.user_id.email_formatted or user.email_formatted or '') }}
+            </field>
+            <field name="email_to">
+                {{ ('' if object.partner_id.email and object.partner_id.email == object.email else object.email) }}
+            </field>
+            <field name="partner_to">
+                {{ object.partner_id.id if object.partner_id.email and object.partner_id.email == object.email else
+                False }}
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="description">Sent to all attendees if a reminder is set</field>
+            <field name="body_html" type="html">
+                <p>
+                    Dear<t t-out="object.common_name"/>,
+                    <br/>
+                    <br/>
+                    This is to remind you of your scheduled appointment for your
+                    <span t-out="object.event_id.vehicle_model_id.display_name"/>
+                    on
+                    <t t-out="object.event_id.get_display_time_tz(tz=object.partner_id.tz) or ''"/>.
+                    Your advisor is<span t-out="object.event_id.service_adviser_id.name"/>. To make any changes to your
+                    appointment click here.
+                    <br/>
+                    <br/>
+                    <a t-attf-href="/calendar/meeting/view?token={{object.access_token}}&amp;id={{object.event_id.id}}"
+                       style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px">
+                        Reschedule Appointment
+                    </a>
+                    <br/>
+                    <br/>
+                    We look forward to seeing you.
+                </p>
+                <p>
+                    Sincerely,
+                    <br/>
+                    <t t-out="object.event_id.user_id.company_id.name"/>
+                    Service Team
+                    <br/>
+                    Phone :
+                    <t t-out="object.event_id.user_id.company_id.phone"/>
+                </p>
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+        <!-- Missed Appointment E-Mail-->
+        <record id="service_appointment_miss_mail_template" model="mail.template">
+            <field name="name">Missed Appointment Reminder</field>
+            <field name="model_id" ref="calendar.model_calendar_event"/>
+            <field name="subject">Appointment Missed : {{ object.name }}</field>
+            <field name="email_from">{{ (object.user_id.email_formatted or '') }}</field>
+            <field name="email_to">{{ object.appointment_booker_id.email }}</field>
+            <field name="partner_to">{{ object.appointment_booker_id.id if object.appointment_booker_id.email else False
+                }}
+            </field>
+            <field name="lang">{{ object.appointment_booker_id.lang }}</field>
+            <field name="description">Sent to all attendees if a reminder is set</field>
+            <field name="body_html" type="html">
+                <p>
+                    Dear
+                    <t t-out="object.appointment_booker_id.name"/>,
+                    <br/>
+                    <br/>
+                    We are sorry that you were not able to make your service appointment that was scheduled on
+                    <t t-out="object.get_display_time_tz(tz=object.partner_id.tz) or ''"/>.*
+                    <br/>
+                    <br/>
+                    The proper care and maintenance of your vehicle is very important to us. We would like to encourage
+                    you to reschedule your appointment at your earliest convenience.
+                    <br/>
+                    <br/>
+                    We look forward to seeing you soon.
+                </p>
+                <p>
+                    Sincerely,
+                    <br/>
+                    <t t-out="object.user_id.company_id.name"/>
+                    Service Team
+                </p>
+                <p>
+                    VIN:
+                    <span t-out="object.vin_no"/>
+                    <br/>
+                    *If you feel you are receiving this email in error, please disregard.
+                </p>
+            </field>
+            <field name="lang">{{ object.appointment_booker_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

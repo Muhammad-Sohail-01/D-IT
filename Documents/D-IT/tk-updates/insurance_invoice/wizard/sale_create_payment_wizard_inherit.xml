@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_advance_payment_inv_inherit" model="ir.ui.view">
+        <field name="name">Invoice Orders</field>
+        <field name="model">sale.advance.payment.inv</field>
+        <field name="inherit_id" ref="sale.view_sale_advance_payment_inv"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='down_payment_specification']" position="after">
+                <grop>
+                    <label for="insurance_amount" invisible="advance_payment_method not in ('insurance_insurance', 'insurance_customer')"/>
+                    <field name="insurance_amount"
+                       invisible="advance_payment_method not in ('insurance_insurance', 'insurance_customer')"
+                       class="oe_inline"/>
+                </grop>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+

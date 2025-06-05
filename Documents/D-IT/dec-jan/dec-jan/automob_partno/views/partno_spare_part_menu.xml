@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <!-- Form View  part no -->
+    <record id="partno_spare_part_view" model="ir.ui.view">
+        <field name="name">partno.sparepart.form</field>
+        <field name="model">partno.sparepart</field>
+        <field name="arch" type="xml">
+            <form string="Part Number  Parts Details">
+                <sheet>
+                    <group>
+                        <field name="product_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+        
+        <record id="partno_spare_part_action" model="ir.actions.act_window">
+            <field name="name">Parts Details</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partno.sparepart</field>
+            <field name="view_mode">tree,form,search</field>
+        </record>
+
+        <!-- Pantno Spare part menu-->
+        <menuitem id="partno_spare_part_menu"
+                  name="Part No/ Spare part"
+                  parent="sale.product_menu_catalog"
+                  action="partno_spare_part_action"
+                  sequence="21"
+                    />
+
+
+        
+    </data>
+</odoo>

@@ -1,0 +1,164 @@
+<odoo>
+	<data>
+	
+        <record id="sr_view_pdc_payment_invoice_view" model="ir.ui.view">
+            <field name="name">sr.view.pdc.payment.invoice.view</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <form string="PDC Payment">
+                    <sheet>
+                        <group>
+                            <field name="invoice_ids" invisible="1"/>
+                            <field name="state" invisible="1"/>
+                            <group>
+                                <field name="partner_id" readonly="1"/>
+                                <label for="amount"/>
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount" readonly="1"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency" readonly="1"/>
+                                </div>
+                                <field name="cheque_ref"/>
+                                <field name="journal_id" widget="selection"/>
+                            </group>
+                            <group>
+                                <field name="payment_date"/>
+                                <field name="due_date"/>
+                                <field name="communication"/>
+                                <field name="agent"/>
+                                <field name="bank"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string='Register PDC Cheque' name="register" type="object" context="{'pdc':1}" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+		<record id="action_pdc_payment"
+			model="ir.actions.act_window">
+			<field name="name">PDC Payment</field>
+			<field name="res_model">sr.pdc.payment</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="sr_view_pdc_payment_invoice_view" />
+			<field name="context">{'default_invoice_ids': [(4, active_id, None)]}
+			</field>
+			<field name="target">new</field>
+		</record>
+		
+		            <record id="sr_pdc_payment_tree" model="ir.ui.view">
+            <field name="name">sr.pdc.payment.tree</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state=='draft'" decoration-muted="state=='reconciled'" edit="false">
+                    <field name="payment_date"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="partner_id" string="customer"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <record id="sr_pdc_payment_form" model="ir.ui.view">
+            <field name="name">sr.pdc.payment.form</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <form string="PDC Payment">
+                      <header>
+<!--                       <button name="pdc_payment" class="oe_highlight" states="draft" string="Confirm" type="object"/> -->
+<!--                           <button name="collect_cash" class="oe_highlight" states="posted" string="Collect Cash" type="object"/> -->
+<!--                           <button name="refuse" class="oe_highlight" states="posted" string="Refuse" type="object" /> -->
+                        <button name="register" class="oe_highlight" string="Register" type="object" invisible="state not in ['draft']"/><!--state="draft"-->
+                        <button name="return_cheque" class="oe_highlight" string="Return" type="object" invisible="state not in ['register']"/><!--state="register"-->
+                        <button name="deposit" class="oe_highlight" string="Deposit" type="object" invisible="state not in ['register','return','bounce']"/><!-- state="register,return,bounce"-->
+                        <button name="done" class="oe_highlight" string="Done" type="object" invisible="state not in ['deposit']"/><!-- state="deposit"-->
+                        <button name="cancel" class="oe_highlight" string="Cancel" type="object" invisible="state not in ['register','return','bounce']"/><!--state="register,bounce,return"-->
+                        <button name="bounce" class="oe_highlight" string="Bounce" type="object" invisible="state not in ['deposit']"/><!--state="deposit"-->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,register,bounce,return,deposit,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="invoice_ids" invisible="1"/>
+                            <group>
+                                <field name="unedit_payment_type" invisible="1"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="payment_type" widget="radio" readonly="state not in ['return','bounce','draft'] or unedit_payment_type == True"/>
+                                <field name="partner_id" context="{'default_supplier': payment_type == 'outbound', 'default_customer': payment_type == 'inbound'}" readonly="state not in ['return','bounce','draft']"/>
+                                <label for="amount" />
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount" readonly="state not in ['return','bounce','draft']"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency" readonly="state not in ['return','bounce','draft']"/>
+                                </div>
+                                <field name="cheque_ref" readonly="state not in ['return','bounce','draft']"/>
+                                <field name="journal_id" widget="selection" readonly="state not in ['return','bounce','draft']"/>
+                            </group>
+                            <group>
+                                <field name="payment_date" readonly="state not in ['return','bounce','draft']"/>
+                                <field name="due_date" readonly="state not in ['return','bounce','draft']"/>
+                                <field name="communication" readonly="state not in ['return','bounce','draft']"/>
+                                <field name="agent" readonly="state not in ['return','bounce','draft']"/>
+                                <field name="bank" readonly="state not in ['return','bounce','draft']"/>
+                                <field name="company_id" groups="base.group_multi_company" readonly="state not in ['return','bounce','draft']"/>
+                            </group>
+                        </group>  
+                                              
+                        <notebook>
+                            <page name="pdc_account_payment" string="PDC Payments">
+                                <field name="pdc_account_payment_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="payment_id"/>
+                                        <field name="ref"/>
+                                        <field name="journal_id"/>
+                                        <field name="amount"/>
+                                        <field name="select_payment"/>
+                                        <field name="pdc_payment_id"  column_invisible="True"/>
+                                        <field name="payment_type" column_invisible="True"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+		<record id="action_pdc_payment_main" model="ir.actions.act_window">
+            <field name="name">PDC Payments</field>
+            <field name="res_model">sr.pdc.payment</field>
+            <field name="view_id" ref="sr_pdc_payment_tree"/>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_payment_type':'outbound'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  Register a Post Dated Check
+                </p>
+            </field>
+        </record>
+
+        <record id="action_pdc_recipts_main" model="ir.actions.act_window">
+            <field name="name">PDC Receipts</field>
+            <field name="res_model">sr.pdc.payment</field>
+            <field name="view_id" ref="sr_pdc_payment_tree"/>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_payment_type':'inbound'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  Register a Post Dated Check
+                </p>
+            </field>
+        </record>
+		
+		<menuitem id="menu_finance_pdc" name="Post Dated Cheques" parent="account_accountant.menu_accounting" sequence="5"/>
+		<menuitem action="action_pdc_payment_main" id="menu_pdc_payment" parent="menu_finance_pdc"/>
+        <menuitem action="action_pdc_recipts_main" id="menu_pdc_receipt" parent="menu_finance_pdc"/>
+	</data>
+</odoo>

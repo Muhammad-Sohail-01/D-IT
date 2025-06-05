@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!--Multi Company-->
+        <!-- Booking -->
+        <record id="vehicle_company_restricted_bookings" model="ir.rule">
+            <field name="name">Vehicle Management : Company Check ins Only</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_booking"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <!-- Job Card -->
+        <record id="vehicle_company_restricted_inspections" model="ir.rule">
+            <field name="name">Vehicle Management : Company Job Card Only</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        <!--Teams-->
+        <record id="vehicle_company_restricted_teams" model="ir.rule">
+            <field name="name">Vehicle Management : Company Teams Only</field>
+            <field name="model_id" ref="tk_vehicle_management.model_inspection_team"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

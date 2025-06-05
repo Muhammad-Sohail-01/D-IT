@@ -1,0 +1,1198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  Inspection Tyre extra field template -->
+        <template id="vehicle_tyre_inspection_template">
+            <div class="mt-3">
+                <p class="mb-1 evs-section-title evs-green-border pt-1 pb-1 text-dark border border-top border-bottom border-0">
+                    <i class="fa fa-cog me-1 ms-1"
+                       aria-hidden="true"/>
+                    Tyre Details
+                </p>
+                <div class="row">
+                    <div class="col-sm-12 col-md-3 d-flex align-items-center pe-md-0 mb-1">
+                        <span class="input-group-text evs-green-border evs-border-radius border-end-0">Incoming</span>
+                        <input type="text"
+                               t-attf-id="{{var}}-{{record.access_token}}-incoming-submit"
+                               name="incoming"
+                               t-att-value="record.incoming"
+                               class="form-control evs-green-border evs-border-radius"
+                               placeholder="Incoming"
+                               aria-label="Incoming"/>
+                    </div>
+                    <div class="col-sm-12 col-md-3 d-flex align-items-center pe-md-0 ps-md-0 mb-1">
+                        <span class="input-group-text evs-green-border evs-border-radius border-end-0">Adjust To</span>
+                        <input type="text"
+                               t-attf-id="{{var}}-{{record.access_token}}-adjust-submit"
+                               name="adjust_to"
+                               t-att-value="record.adjust_to"
+                               class="form-control evs-green-border evs-border-radius"
+                               placeholder="Adjust To"
+                               aria-label="Adjust To"/>
+                    </div>
+                    <div class="d-flex align-items-center col-sm-12 col-md-4 pe-md-0 ps-md-0 mb-1">
+                        <span class="input-group-text evs-green-border evs-border-radius border-end-0">Tread Depth
+                        </span>
+                        <input type="text"
+                               t-attf-id="{{var}}-{{record.access_token}}-tread-submit"
+                               name="tread_depth"
+                               t-att-value="record.tread_depth"
+                               class="form-control evs-green-border evs-border-radius"
+                               placeholder="Tread Depth"
+                               aria-label="Tread Depth"/>
+                    </div>
+                    <div class="d-flex align-items-center col-sm-12 col-md-2 ps-md-0 mb-1">
+                        <button class="btn btn-outline-success tyre-detail-submit w-100 evs-border-radius"
+                                type="button"
+                                t-attf-id="{{var}}-{{record.access_token}}-detail-form">
+                            <i class="fa fa-pencil-square me-1 evs-green-border evs-border-radius border-start-0"
+                               aria-hidden="true"/>
+                            Update
+                        </button>
+                    </div>
+                </div>
+                <div class="row d-none" t-attf-id="{{var}}-{{record.access_token}}-detail-form-notification">
+                    <div class="col-12">
+                        <span class="text-success">
+                            Tyre Details Submitted.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <!-- Inspection view template -->
+        <template id="vehicle_repair_technician_task_portal_template">
+            <div class="row">
+                <div class="col-12">
+                    <h6 class="fw-bold mb-0 evs-background text-white p-1 ps-2 rounded">
+                        <i class="fa fa-angle-double-right me-1" aria-hidden="true"/>
+                        <span t-esc="title"/>
+                    </h6>
+                </div>
+                <div class="accordion accordion-flush col-12" t-attf-id="{{var}}Flush">
+                    <t t-foreach="record_ids" t-as="record">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed p-2" type="button"
+                                        data-bs-toggle="collapse"
+                                        t-attf-data-bs-target="##{var}-flush-{{record.access_token}}"
+                                        aria-expanded="false"
+                                        t-attf-aria-controls="{{var}}-flush-{{record.access_token}}">
+                                    <t t-set="service_count"
+                                       t-value="len(record.service_ids.ids)"/>
+                                    <t t-set="part_count" t-value="len(record.part_ids.ids)"/>
+                                    <div class="row w-100">
+                                        <div class="col-8 col-md-9">
+                                            <span t-field="record.part_id.name"/>
+                                        </div>
+                                        <div class="col-4 text-end col-md-3">
+                                            <div class="row">
+                                                <div class="col-ms-6"/>
+                                                <div class="col-sm-4 col-md-2 col-2">
+                                                    <div class="bg-danger text-center text-white evs-inspection-button"
+                                                         t-if="record.required_attention">
+                                                        <i class="fa fa-check" aria-hidden="true"/>
+                                                    </div>
+                                                    <div class="border border-danger text-center text-white evs-inspection-button evs-ins-portal"
+                                                         t-else="">
+                                                        <i class="fa fa-blank" aria-hidden="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 col-md-2 col-2">
+                                                    <div class="bg-warning text-center text-dark evs-inspection-button"
+                                                         t-if="record.further_attention">
+                                                        <i class="fa fa-check" aria-hidden="true"/>
+                                                    </div>
+                                                    <div class="border border-warning text-center text-white evs-inspection-button evs-ins-portal"
+                                                         t-else="">
+                                                        <i class="fa fa-blank" aria-hidden="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 col-md-2 col-2">
+                                                    <div class="bg-success text-center text-white evs-inspection-button"
+                                                         t-if="record.okay_for_now">
+                                                        <i class="fa fa-check" aria-hidden="true"/>
+                                                    </div>
+                                                    <div class="border border-success text-center text-white evs-inspection-button evs-ins-portal"
+                                                         t-else="">
+                                                        <i class="fa fa-blank" aria-hidden="true"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-12 pt-1" t-if="service_count > 0 or part_count > 0">
+                                            <span t-if="record.required_attention or record.further_attention">
+                                                <span class="me-2" t-if="service_count > 0">
+                                                    <span class="badge evs-badge">
+                                                        <i class="fa fa-cogs" aria-hidden="true"/>
+                                                        <span t-esc="service_count" class="fw-bold"/>
+                                                        <span class="fw-medium">Services</span>
+                                                    </span>
+                                                </span>
+                                                <span t-if="part_count > 0">
+                                                    <span class="badge evs-badge">
+                                                        <i class="fa fa-wrench" aria-hidden="true"/>
+                                                        <span t-esc="part_count" class="fw-bold"/>
+                                                        <span class="fw-medium">Parts</span>
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div t-attf-id="{{var}}-flush-{{record.access_token}}"
+                                 class="accordion-collapse collapse"
+                                 t-attf-data-bs-parent="##{var}Flush">
+                                <div class="accordion-body ps-1 pe-1">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-5 col-5">
+                                            <button class="btn btn-danger me-2 evs-ins-button text-center btn-sm p-0"
+                                                    t-if="record.required_attention">
+                                                <i class="fa fa-check" aria-hidden="true"/>
+                                            </button>
+                                            <button t-attf-class="btn btn-outline-danger me-2 evs-ins-button text-center btn-sm p-0 {{'evs-ins-portal' if ins_progress else 'evs-ins-complete'}}"
+                                                    t-attf-id="#{record.access_token}-required_attention-{{var}}"
+                                                    t-else="">
+                                                <i class="fa fa-blank" aria-hidden="true"/>
+                                            </button>
+                                            <button class="btn btn-warning me-2 evs-ins-button text-center btn-sm p-0"
+                                                    t-if="record.further_attention">
+                                                <i class="fa fa-check" aria-hidden="true"/>
+                                            </button>
+                                            <button t-attf-class="btn btn-outline-warning me-2 evs-ins-button text-center btn-sm p-0 {{'evs-ins-portal' if ins_progress else 'evs-ins-complete'}}"
+                                                    t-attf-id="#{record.access_token}-further_attention-{{var}}"
+                                                    t-else="">
+                                                <i class="fa fa-blank" aria-hidden="true"/>
+                                            </button>
+                                            <button class="btn btn-success me-2 evs-ins-button text-center btn-sm p-0"
+                                                    t-if="record.okay_for_now">
+                                                <i class="fa fa-check" aria-hidden="true"/>
+                                            </button>
+                                            <button t-attf-class="btn btn-outline-success me-2 evs-ins-button text-center btn-sm p-0 {{'evs-ins-portal' if ins_progress else 'evs-ins-complete'}}"
+                                                    t-else=""
+                                                    t-attf-id="#{record.access_token}-okay_for_now-{{var}}">
+                                                <i class="fa fa-blank" aria-hidden="true"/>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-7 col-sm-7 col-7">
+                                            <div t-if="record.required_attention or record.further_attention or record.okay_for_now">
+                                                <a class="btn btn-outline-success px-2 py-1 evs-border-radius btn-sm me-2 alert_message_reset mb-2 mb-md-0"
+                                                   data-bs-toggle="modal"
+                                                   t-attf-data-bs-target="##{var}-{{record.access_token}}-servicePart"
+                                                   t-if="record.required_attention or record.further_attention">
+                                                    <i class="fa fa-wrench me-1" aria-hidden="true"/>
+                                                    <t t-if="ins_progress">
+                                                        Add Service &amp; Parts
+                                                    </t>
+                                                    <t t-else="">
+                                                        View Service &amp; Parts
+                                                    </t>
+                                                </a>
+                                                <div class="modal fade"
+                                                     t-attf-id="{{var}}-{{record.access_token}}-servicePart"
+                                                     data-bs-backdrop="static"
+                                                     data-bs-keyboard="false" tabindex="-1"
+                                                     t-if="record.required_attention or record.further_attention"
+                                                     aria-labelledby="{{var}}ServiceSpareParts"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5"
+                                                                    id="staticBackdropLabel">
+                                                                    <span t-field="record.part_id.name"/>
+                                                                </h1>
+                                                                <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"/>
+                                                            </div>
+                                                            <div class="modal-body table-responsive">
+                                                                <div class="alert_message"/>
+                                                                <div class="row mb-2">
+                                                                    <div class="col-12"
+                                                                         t-if="record.service_ids">
+                                                                        <p class="mb-1 evs-section-title evs-green-border pt-1 pb-1 text-dark border border-top border-bottom border-0">
+                                                                            <i class="fa fa-cubes ms-1 me-1"
+                                                                               aria-hidden="true"/>
+                                                                            Added Services &amp; Parts
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-12"
+                                                                         t-attf-id="{{var}}-{{record.access_token}}-sp-service">
+                                                                        <t t-foreach="record.service_ids"
+                                                                           t-as="sd">
+                                                                            <span class="badge evs-badge"
+                                                                                  t-attf-id="{{var}}-{{record.access_token}}-{{sd.id}}-service-unlink-span">
+                                                                                <span t-esc="sd.name"/>
+                                                                                <a href="#" t-if="ins_progress"
+                                                                                   class="unlink-service"
+                                                                                   t-attf-id="{{var}}-{{record.access_token}}-{{sd.id}}-service-unlink">
+                                                                                    <i class="fa fa-trash ms-1 text-white"
+                                                                                       aria-hidden="true"/>
+                                                                                </a>
+                                                                            </span>
+                                                                        </t>
+                                                                    </div>
+                                                                </div>
+                                                                <table class="table table-sm"
+                                                                       t-attf-id="{{var}}-{{record.access_token}}-sp-table">
+                                                                    <tr>
+                                                                        <td class="fw-bold col-3">
+                                                                            Service
+                                                                        </td>
+                                                                        <td class="fw-bold col-3">
+                                                                            Part
+                                                                        </td>
+                                                                        <td class="text-end fw-bold col-2">
+                                                                            Qty
+                                                                        </td>
+                                                                        <td class="fw-bold col-2">
+                                                                            Unit
+                                                                        </td>
+                                                                        <td class="col-2"></td>
+                                                                    </tr>
+                                                                    <t t-foreach="record.part_ids"
+                                                                       t-as="p">
+                                                                        <tr t-attf-id="unlink_{{var}}-{{p.id}}-part-unlink-line">
+                                                                            <td class="col-3">
+                                                                                <span t-field="p.service_id.name"/>
+                                                                            </td>
+                                                                            <td class="col-3">
+                                                                                <span t-field="p.product_id.name"/>
+                                                                            </td>
+                                                                            <td class="text-end col-2">
+                                                                                <span t-field="p.qty"/>
+                                                                            </td>
+                                                                            <td class="col-2">
+                                                                                <span t-field="p.uom_id"/>
+                                                                            </td>
+                                                                            <td class="col-2">
+                                                                                <a href="#" t-if="ins_progress"
+                                                                                   t-attf-id="unlink_{{var}}-{{p.id}}-part-unlink"
+                                                                                   class="btn btn-outline-danger border-0 btn-sm unlink-service-part-line">
+                                                                                    <i class="fa fa-trash"
+                                                                                       aria-hidden="true"/>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </t>
+                                                                </table>
+                                                                <div class="add-line-th d-none">
+                                                                    <form t-attf-id="{{var}}-{{record.access_token}}-sp-form"
+                                                                          class="row"
+                                                                          method="POST"
+                                                                          action="#">
+                                                                        <input type="hidden"
+                                                                               name="csrf_token"
+                                                                               t-att-value="request.csrf_token()"/>
+                                                                        <div class="col-md-3 col-sm-12 mb-1 col-12 custom-select">
+                                                                            <select class="w-100 form-control selectpicker show-tick"
+                                                                                    data-live-search="true"
+                                                                                    data-width="100%"
+                                                                                    name="service_id"
+                                                                                    data-size="5"
+                                                                                    required="required"
+                                                                                    placeholder="Service">
+                                                                                <t t-foreach="services_list"
+                                                                                   t-as="s">
+                                                                                    <option t-esc="s.name"
+                                                                                            t-att-value="s.id"/>
+                                                                                </t>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col-md-3 col-sm-12 mb-1 col-12 custom-select">
+                                                                            <select class="w-100 form-control option-select selectpicker"
+                                                                                    id="part_id"
+                                                                                    data-live-search="true"
+                                                                                    data-width="100%"
+                                                                                    name="part_id"
+                                                                                    data-size="5"
+                                                                                    required="required"
+                                                                                    placeholder="Parts">
+                                                                                <t t-foreach="part_list"
+                                                                                   t-as="p">
+                                                                                    <option t-esc="p.name"
+                                                                                            t-attf-data-id="{{var}}-{{record.access_token}}-product_unit_name"
+                                                                                            t-att-data-unit-value="p.uom_id.name"
+                                                                                            t-att-value="p.id"/>
+                                                                                </t>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col-md-2 col-sm-8 mb-1 col-8 text-end">
+                                                                            <input class="w-100 form-control text-end"
+                                                                                   id="product_qty"
+                                                                                   name="product_qty"
+                                                                                   type="number"
+                                                                                   min="1"
+                                                                                   requied="required"
+                                                                                   placeholder="Qty"/>
+                                                                        </div>
+                                                                        <div class="col-md-2 col-sm-4 col-4 mb-1 ps-0 align-middle">
+                                                                            <span t-attf-id="{{var}}-{{record.access_token}}-product_unit_name"/>
+                                                                        </div>
+                                                                        <div class="col-md-2 col-sm-12">
+                                                                            <a href="#" type="submit"
+                                                                               t-attf-id="{{var}}-{{record.access_token}}-sp-submit"
+                                                                               class="btn btn-outline-success evs-border-radius line-submit btn-sm add_part_line px-2 py-1">
+                                                                                <i class="fa fa-plus me-1"
+                                                                                   aria-hidden="true"/>
+                                                                                Add
+                                                                            </a>
+                                                                            <a href="#" type="submit"
+                                                                               t-attf-id="{{var}}-{{record.access_token}}-sp-unlink"
+                                                                               class="btn btn-outline-danger evs-border-radius btn-sm unlink-service-part px-2 py-1">
+                                                                                <i class="fa fa-trash"
+                                                                                   aria-hidden="true"/>
+                                                                            </a>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        <button type="button" t-if="ins_progress"
+                                                                                class="btn btn-sm btn-outline-success evs-border-radius add-service-part px-2 py-1 w-md-auto w-100">
+                                                                            <i class="fa fa-plus-square-o me-1"
+                                                                               aria-hidden="true"/>
+                                                                            Add Services &amp; Parts
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <t t-if="ins_progress or record.notes or record.image_ids or record.inspection_video or var=='tyre'">
+                                                    <a class="btn btn-outline-primary px-2 py-1 evs-border-radius btn-sm me-2 add-details"
+                                                       data-bs-toggle="modal"
+                                                       t-attf-data-bs-target="##{var}-{{record.access_token}}-inspectionDetails">
+                                                        <i class="fa fa-picture-o me-1" aria-hidden="true"/>
+                                                        <t t-if="ins_progress">
+                                                            Add Details
+                                                        </t>
+                                                        <t t-else="">
+                                                            View Details
+                                                        </t>
+                                                    </a>
+                                                    <div class="modal fade"
+                                                         t-attf-id="{{var}}-{{record.access_token}}-inspectionDetails"
+                                                         data-bs-backdrop="static"
+                                                         data-bs-keyboard="false" tabindex="-1"
+                                                         aria-labelledby="{{var}}InspectionDetails"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5"
+                                                                        id="staticBackdropLabel">
+                                                                        <span t-field="record.part_id.name"/>
+                                                                    </h1>
+                                                                    <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"/>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Note -->
+                                                                    <p class="mb-1 evs-section-title evs-green-border pt-1 pb-1 text-dark border border-top border-bottom border-0"
+                                                                       t-if="ins_progress or record.notes">
+                                                                        <i class="fa fa-pencil me-1 ms-1"
+                                                                           aria-hidden="true"/>
+                                                                        Notes
+                                                                    </p>
+                                                                    <form method="POST" t-if="ins_progress" class="mb-3"
+                                                                          action="#">
+                                                                        <input type="hidden"
+                                                                               name="csrf_token"
+                                                                               t-att-value="request.csrf_token()"/>
+                                                                        <div class="input-group">
+                                                                            <textarea type="text"
+                                                                                      t-if="record.notes"
+                                                                                      t-attf-id="{{var}}-{{record.access_token}}-note-form-submit"
+                                                                                      name="inspection_note"
+                                                                                      class="form-control evs-green-border evs-border-radius"
+                                                                                      placeholder="Add a note...."
+                                                                                      aria-label="Add a note..."
+                                                                                      t-esc="record.notes"/>
+                                                                            <textarea type="text"
+                                                                                      t-else=""
+                                                                                      t-attf-id="{{var}}-{{record.access_token}}-note-form-submit"
+                                                                                      name="inspection_note"
+                                                                                      class="form-control evs-green-border evs-border-radius"
+                                                                                      placeholder="Add a note...."
+                                                                                      aria-label="Add a note..."/>
+                                                                            <button class="btn btn-outline-success evs-border-radius note-form-submit"
+                                                                                    type="button"
+                                                                                    t-attf-id="{{var}}-{{record.access_token}}-note-form">
+                                                                                <i class="fa fa-pencil-square me-1"
+                                                                                   aria-hidden="true"/>
+                                                                                Update
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="form-text text-success d-none"
+                                                                             t-attf-id="{{var}}-{{record.access_token}}-note-form-notification">
+                                                                            Note Updated.
+                                                                        </div>
+                                                                        <t t-if="var == 'tyre' and (record.required_attention or record.further_attention)">
+                                                                            <t t-call="tk_vehicle_management.vehicle_tyre_inspection_template">
+                                                                                <t t-set="record" t-value="record"/>
+                                                                                <t t-set="var" t-value="var"/>
+                                                                            </t>
+                                                                        </t>
+                                                                    </form>
+                                                                    <t t-else="">
+                                                                        <div class="mb-3"
+                                                                             t-if="record.notes or var=='tyre'">
+                                                                            <p t-field="record.notes" class="mb-3"
+                                                                               t-if="record.notes"/>
+                                                                            <t t-if="var == 'tyre'">
+                                                                                <p class="mb-1 evs-section-title evs-green-border pt-1 pb-1 text-dark border border-top border-bottom border-0">
+                                                                                    <i class="fa fa-cog me-1 ms-1"
+                                                                                       aria-hidden="true"/>
+                                                                                    Tyre Details
+                                                                                </p>
+                                                                                Incoming :
+                                                                                <span t-field="record.incoming"
+                                                                                      class="fw-bold"/>
+                                                                                <br/>
+                                                                                Adjust To :
+                                                                                <span t-field="record.adjust_to"
+                                                                                      class="fw-bold"/>
+                                                                                <br/>
+                                                                                Tread Depth :
+                                                                                <span t-field="record.tread_depth"
+                                                                                      class="fw-bold"/>
+                                                                            </t>
+                                                                        </div>
+                                                                    </t>
+                                                                    <!-- Inspection Video -->
+                                                                    <div class="mb-3" t-if="ins_progress">
+                                                                        <p class="mb-1 evs-section-title evs-green-border pt-1 pb-1 text-dark border border-top border-bottom border-0"
+                                                                           t-if="record.required_attention or record.further_attention">
+                                                                            <i class="fa fa-file-video-o me-1 ms-1"
+                                                                               aria-hidden="true"/>
+                                                                            Inspection Video
+                                                                            <a t-attf-href="/web/content?model={{modal}}&amp;id=#{record.id}&amp;field=inspection_video&amp;filename_field=file_name"
+                                                                               t-if="record.inspection_video"
+                                                                               class="ms-1 btn btn-link btn-sm">
+                                                                                <i class="fa fa-cloud-download me-1"
+                                                                                   aria-hidden="true"/>
+                                                                                Uploaded Video
+                                                                            </a>
+                                                                        </p>
+                                                                        <form t-if="record.required_attention or record.further_attention"
+                                                                              method="POST"
+                                                                              role="form"
+                                                                              enctype="multipart/form-data"
+                                                                              t-attf-action="/upload-inspection-video/{{var}}/{{record.access_token}}/i_video">
+                                                                            <div class="input-group">
+                                                                                <input type="hidden"
+                                                                                       name="csrf_token"
+                                                                                       t-att-value="request.csrf_token()"/>
+                                                                                <input type="file"
+                                                                                       accept="video/*"
+                                                                                       capture="capture"
+                                                                                       class="form-control evs-green-border"
+                                                                                       name="inspection_video"
+                                                                                       aria-describedby="inspectionVideo"
+                                                                                       aria-label="Upload"/>
+                                                                                <button class="btn btn-outline-success"
+                                                                                        type="submit">
+                                                                                    <i class="fa fa-plus me-1"
+                                                                                       aria-hidden="true"/>
+                                                                                    Add
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div t-elif="record.inspection_video" class="mb-3">
+                                                                        <p class="mb-1 evs-section-title evs-green-border pt-1 pb-1 text-dark border border-top border-bottom border-0"
+                                                                           t-if="record.required_attention or record.further_attention">
+                                                                            <i class="fa fa-file-video-o me-1 ms-1"
+                                                                               aria-hidden="true"/>
+                                                                            Inspection Video
+                                                                        </p>
+                                                                        <a t-attf-href="/web/content?model={{modal}}&amp;id=#{record.id}&amp;field=inspection_video&amp;filename_field=file_name"
+                                                                           t-if="record.inspection_video"
+                                                                           class="ms-1 btn btn-link btn-sm">
+                                                                            <i class="fa fa-cloud-download me-1"
+                                                                               aria-hidden="true"/>
+                                                                            Uploaded Video
+                                                                        </a>
+                                                                    </div>
+                                                                    <!-- Images -->
+                                                                    <p class="mb-1 evs-section-title evs-green-border pt-1 pb-1 text-dark border border-top border-bottom border-0"
+                                                                       t-if="ins_progress or record.image_ids">
+                                                                        <i class="fa fa-file-image-o me-1 ms-1"
+                                                                           aria-hidden="true"/>
+                                                                        Images
+                                                                    </p>
+                                                                    <div class="row mb-2" t-if="ins_progress">
+                                                                        <div class="col-12 col-sm-12 col-md-12 mb-2">
+                                                                            <div class="form-group">
+                                                                                <div class="input-group">
+                                                                                    <div class="input-group-btn">
+                                                                                        <div class="ins-image-file-upload inspection-image-shadow btn btn-outline-success btn-sm evs-border-radius px-2 py-1">
+                                                                                            <span class="image-upload-label">
+                                                                                                <i class="fa fa-cloud-upload me-1"
+                                                                                                   aria-hidden="true"/>
+                                                                                                Add Image
+                                                                                            </span>
+                                                                                            <input t-attf-id="{{var}}-{{record.access_token}}-image-upload"
+                                                                                                   name="ins_image"
+                                                                                                   type="file"
+                                                                                                   capture="camara"
+                                                                                                   accept="image/*"
+                                                                                                   class="attachment-upload ins-image-upload"/>
+                                                                                        </div>
+                                                                                        <a href="#" t-if="ins_progress"
+                                                                                           t-attf-id="{{var}}-{{record.access_token}}-image-submit"
+                                                                                           class="btn btn-success btn-sm d-none ins-image-submit evs-border-radius px-2 py-1">
+                                                                                            <i class="fa fa-check-square-o me-1"
+                                                                                               aria-hidden="true"/>
+                                                                                            Submit
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 col-sm-12 col-md-4 d-none"
+                                                                             t-attf-id="{{var}}-{{record.access_token}}-image-upload-preview">
+                                                                            <input t-attf-id="{{var}}-{{record.access_token}}-image-upload-title"
+                                                                                   class="form-control inspection-image-shadow d-none mb-1"
+                                                                                   placeholder="Image Title"/>
+                                                                            <img class="thumbnail img-preview"/>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr class="mb-1 mt-1 text-dark"
+                                                                        t-if="record.image_ids"/>
+                                                                    <div class="row"
+                                                                         t-attf-id="{{var}}-{{record.access_token}}-image-div">
+                                                                        <t t-foreach="record.image_ids.sorted('id', reverse=True)"
+                                                                           t-as="image">
+                                                                            <div class="col-md-4 col-sm-12 col-12 mb-3"
+                                                                                 t-attf-id="{{var}}-{{image.id}}-image-unlink-div">
+                                                                                <p class="mb-1 text-start">
+                                                                                    <span t-field="image.name"/>
+                                                                                    <a href="#" t-if="ins_progress"
+                                                                                       class="unlink-image btn btn-outline-danger border-0 btn-sm"
+                                                                                       t-attf-id="{{var}}-{{image.id}}-image-unlink">
+                                                                                        <i class="fa fa-trash-o"
+                                                                                           aria-hidden="true"/>
+                                                                                    </a>
+                                                                                </p>
+                                                                                <img t-att-src="image_data_uri(image.avtar)"
+                                                                                     alt="Inspection Image"
+                                                                                     class="img-thumbnail inspection-portal-image"/>
+                                                                            </div>
+                                                                        </t>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </template>
+
+        <!-- Task Template Inherits -->
+        <template id="vehicle_repair_technician_task_inherit_view" inherit_id="project.portal_my_task">
+            <!-- Timer Button -->
+            <xpath expr="//div[@id='task-links']" position="after">
+                <div class="d-flex flex-column gap-4">
+                    <div class="col-12" t-if="task.inspection_id and task.task_state == 'draft'">
+                        <h6 class="flex-basis-100">
+                            <small class="text-muted">
+                                <i class="fa fa-hourglass-half me-1" aria-hidden="true"></i>
+                                Timesheets
+                            </small>
+                            <t t-set="user_timer"
+                               t-value="request.env['timer.timer'].sudo().search([('res_id','=',task.id),('res_model','=','project.task'),('user_id','=',request.env.user.id)])"/>
+                            <input type="hidden" id="timer_start_date" t-att-value="user_timer.timer_start"/>
+                            <input type="hidden" id="timer_pause_date" t-att-value="user_timer.timer_pause"/>
+                            <input type="hidden" id="is_timer_running" t-att-value="user_timer.is_timer_running"/>
+                        </h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <!-- Start Timer -->
+                                <a class="btn btn-success evs-border-radius" t-if="not user_timer.timer_start"
+                                   t-attf-href="/my/tasks/#{'start-timer'}/#{task.id}">
+                                    <i class="fa fa-play me-1" aria-hidden="true"/>
+                                    Start
+                                </a>
+                                
+                                <a class="btn btn-danger me-1 evs-border-radius" data-bs-toggle="modal"
+                                   data-bs-target="#taskStopTimer"
+                                   t-if="user_timer.is_timer_running or user_timer.timer_pause">
+                                    <i class="fa fa-stop me-1" aria-hidden="true"/>
+                                    Stop
+                                </a>
+                                <!-- End Timer -->
+                                <div class="modal fade" id="taskStopTimer" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1"
+                                     t-if="user_timer.is_timer_running or user_timer.timer_pause"
+                                     aria-labelledby="taskStopTimerLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                    Confirm Time Spent
+                                                </h1>
+                                                <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </div>
+                                            <form class="row g-3"
+                                                  t-attf-action="/my/tasks/#{'stop-timer'}/#{task.id}"
+                                                  method="POST"
+                                                  enctype="multipart/form-data">
+                                                <div class="modal-body text-start">
+                                                    <input type="hidden" name="csrf_token"
+                                                           t-att-value="request.csrf_token()"/>
+                                                    <h5 class="ps-1">
+                                                        <span class="fw-bold">Time Spent :</span>
+                                                        <span t-esc="task._get_rounded_hours(user_timer._get_minutes_spent())"
+                                                              t-options="{'widget':'float_time'}"/>
+                                                    </h5>
+                                                    <div class="input-group mb-3" t-if="not task.is_inspection_task">
+                                                        <span class="input-group-text">Service</span>
+                                                        <select class="form-control"
+                                                                t-if="not country_id" name="service_id"
+                                                                placeholder="Service">
+                                                            <t t-foreach="task.task_service_ids" t-as="s">
+                                                                <option t-esc="s.name" t-att-value="s.id"/>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                    <textarea class="form-control"
+                                                              placeholder="Describe your activity"
+                                                              name="activity"
+                                                              id="activity"
+                                                              required="required"/>
+                                                </div>
+                                                <div class="modal-footer text-start">
+                                                    <button class="btn btn-danger" type="submit">
+                                                        Submit
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="btn btn-warning evs-border-radius me-1" id="pause-timer"
+                                   t-if="not user_timer.timer_pause and user_timer.is_timer_running"
+                                   t-attf-href="/my/tasks/#{'pause-timer'}/#{task.id}">
+                                    <i class="fa fa-pause me-1" aria-hidden="true"/>
+                                    Pause
+                                </a>
+                                <a class="btn btn-success evs-border-radius me-1" id="resume-timer"
+                                   t-if="user_timer.timer_pause"
+                                   t-attf-href="/my/tasks/#{'resume-timer'}/#{task.id}">
+                                    <i class="fa fa-play me-1" aria-hidden="true"/>
+                                    Resume
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12"
+                         t-if="task.task_state and task.status_ref not in ['not_started','in_progress']">
+                        <h6 class="flex-basis-100">
+                            <small class="text-muted">
+                                <i class="fa fa-cogs me-1" aria-hidden="true"></i>
+                                Complete Task
+                            </small>
+                        </h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item" t-if="task.task_state == 'draft'">
+                                <a href="#" data-bs-toggle="modal"
+                                   class="btn btn-outline-success evs-border-radius p-1 px-2"
+                                   data-bs-target="#portalQcConfirmation">
+                                    Complete
+                                    <i class="fa fa-long-arrow-right ms-1" aria-hidden="true"></i>
+                                </a>
+                                <div class="modal fade" id="portalQcConfirmation" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1"
+                                     aria-labelledby="portalQcConfirmationLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5">Quality Checks Confirmation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </div>
+                                            <hr class="mb-1 mt-1 text-dark"/>
+                                            <div class="modal-body text-start">
+                                                <p class="mb-0">
+                                                    Are you Sure to Complete this task?
+                                                </p>
+                                                <div id="qc_check_notification" class="mt-3">
+                                                </div>
+                                            </div>
+                                            <hr class="mb-1 mt-1 text-dark"/>
+                                            <div class="modal-footer">
+                                                <a href="#" t-attf-id="{{task.id}}-task=qc-check"
+                                                   class="btn btn-success evs-border-radius task-qc-check">
+                                                    Complete
+                                                </a>
+                                                <button type="button" class="btn btn-outline-danger evs-border-radius"
+                                                        data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item" t-if="task.task_state == 'qc_check'">
+                                <div class="alert alert-warning mb-0 fs-6 py-2 text-center fw-bold" role="alert">
+                                    QC Requested
+                                </div>
+                            </li>
+                            <t t-if="task.task_state == 'reject'">
+                                <li class="nav-item">
+                                    <div class="alert alert-danger mb-0 text-center fw-bold fs-6 py-2" role="alert">
+                                        <i class="fa fa-info-circle me-1" aria-hidden="true"></i>
+                                        QC Rejected
+                                    </div>
+                                </li>
+                                <li class="nav-item mt-1">
+                                    <a t-attf-href="/task/reset-qc-check/{{task.id}}"
+                                       class="btn btn-outline-info evs-border-radius w-100 p-1">
+                                        <i class="fa fa-retweet me-1" aria-hidden="true"></i>
+                                        Reset Task
+                                    </a>
+                                </li>
+                            </t>
+                            <li class="nav-item" t-if="task.task_state == 'complete'">
+                                <div class="alert alert-success mb-0 fs-6 py-2 text-center fw-bold" role="alert">
+                                    <i class="fa fa-check-square me-1" aria-hidden="true"></i>
+                                    Complete
+                                </div>
+                            </li>
+                            <li class="nav-item" t-if="task.is_quailty_check_task == True and task.task_state == 'complete' or task.inspection_id.is_qc_done == True">
+                                <div class="alert alert-info mb-0 fs-6 py-2 text-center fw-bold" role="alert">
+                                    <i class="fa fa-check-square me-1" aria-hidden="true"></i>
+                                    QC Approved
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </xpath>
+            <!-- Timer Alert -->
+            <xpath expr="//div[@id='card_body']/div[2]" position="after">
+                <t t-set="user_timer"
+                   t-value="request.env['timer.timer'].sudo().search([('res_id','=',task.id),('res_model','=','project.task'),('user_id','=',request.env.user.id)])"/>
+                <t t-set="alert_class"
+                   t-value="'success' if user_timer.is_timer_running and not user_timer.timer_pause else 'warning'"/>
+                <div class="row mb-4" t-if="user_timer">
+                    <div class="col-12 col-md-12 flex-grow-1">
+                        <div t-attf-class="alert alert-{{alert_class}} m-1 p-2 text-center evs-task-confirm"
+                             role="alert"
+                             t-if="user_timer.timer_start">
+                            <div id="timer-container" class="task-stop-watch fw-bold">
+                                <t t-if="alert_class == 'success'">
+                                    <i class="fa fa-hourglass-half me-1" aria-hidden="true"/>
+                                </t>
+                                <t t-else="">
+                                    <i class="fa fa-pause-circle me-1" aria-hidden="true"/>
+                                </t>
+                                <span id="timer-display"></span>
+                                <t t-set="user_timer"
+                                   t-value="request.env['timer.timer'].sudo().search([('res_id','=',task.id),('res_model','=','project.task'),('user_id','=',request.env.user.id)])"/>
+                                <t t-if="user_timer.timer_pause">
+                                    <t t-set="pause_timer_val" t-value="user_timer._get_float_time()"/>
+                                    <span t-esc="pause_timer_val"/>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+            <!-- Vehicle Inspection -->
+            <xpath expr="//div[@id='card_body']" position="inside">
+                <div class="row" t-if="task.inspection_id">
+                    <div t-if="task.task_service_ids and not task.is_inspection_task">
+                        <hr class="mb-1" t-if="task.task_service_ids"/>
+                        <div class="d-flex my-2" t-if="task.task_service_ids">
+                            <h5 class="mb-0"><i class="fa fa-cog me-1" aria-hidden="true"></i>Required Services &amp;
+                                Parts
+                            </h5>
+                        </div>
+                        <div class="small table-responsive"
+                             t-if="task.task_service_ids and not task.is_inspection_task">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold w-50">Service</td>
+                                        <td class="fw-bold"></td>
+                                    </tr>
+                                    <t t-foreach="task.task_service_ids" t-as="s">
+                                        <tr>
+                                            <td class="w-50">
+                                                <span t-field="s.name"/>
+                                                <br/>
+                                                <span class="fw-bold">
+                                                    Time :
+                                                </span>
+                                                <span t-field="s.estimate_time"
+                                                      t-options='{"widget": "float_time"}'/>
+                                                <span t-field="s.uom_id"/>
+                                            </td>
+                                            <td>
+                                                <t t-set="filtered_parts"
+                                                   t-value="task.task_parts_ids.filtered(lambda line : line.service_id.id == s.id)"/>
+                                                <table class="table table-borderless mb-0 table-sm"
+                                                       t-if="filtered_parts">
+                                                    <tr>
+                                                        <td class="fw-bold border-bottom w-75">Parts</td>
+                                                        <td class="fw-bold text-end border-bottom">Qty</td>
+                                                        <td class="fw-bold border-bottom">Unit</td>
+                                                    </tr>
+                                                    <t t-foreach="filtered_parts" t-as="p">
+                                                        <tr>
+                                                            <td class="w-75">
+                                                                <span t-field="p.name"/>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <span t-field="p.qty"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="p.uom_id"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </table>
+
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex my-2">
+                            <h5 class="mb-0"><i class="fa fa-wrench me-1" aria-hidden="true"></i>Additional Parts
+                            </h5>
+                        </div>
+                        <div class="small table-responsive"
+                             t-if="not task.additional_parts_ids">
+                            <table class="table table-sm" id="additional-part-table">
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="small table-responsive"
+                             t-if="task.additional_parts_ids">
+                            <table class="table table-sm" id="additional-part-table">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bold">Part</td>
+                                        <td class="fw-bold text-end">Qty</td>
+                                        <td class="fw-bold">UOM</td>
+                                        <td class="fw-bold">Service</td>
+                                        <td class="fw-bold text-center text-truncate">Additional Time</td>
+                                        <td class="fw-bold text-center">Status</td>
+                                        <td class="text-center"></td>
+                                    </tr>
+                                    <t t-foreach="task.additional_parts_ids" t-as="a">
+                                        <tr t-attf-id="{{task.access_token}}-{{a.id}}-tr-additional">
+                                            <td t-attf-class="{{'text-success' if a.status == 'arrived' else ''}}">
+                                                <span t-field="a.product_id"/>
+                                            </td>
+                                            <td t-attf-class="text-end {{'text-success' if a.status == 'arrived' else ''}}">
+                                                <span t-field="a.qty"/>
+                                            </td>
+                                            <td t-attf-class="{{'text-success' if a.status == 'arrived' else ''}}">
+                                                <span t-field="a.uom_id"/>
+                                            </td>
+                                            <td t-attf-class="{{'text-success' if a.status == 'arrived' else ''}}">
+                                                <span t-field="a.service_id"/>
+                                            </td>
+                                            <td t-attf-class="text-center {{'text-success' if a.status == 'arrived' else ''}}">
+                                                <span t-field="a.required_time" t-options="{'widget':'float_time'}"/>
+                                            </td>
+                                            <td t-attf-class="text-center {{'text-success' if a.status == 'arrived' else ''}}">
+                                                <span t-field="a.status" class="badge text-bg-warning"
+                                                      t-if="a.status=='pending_request'"/>
+                                                <span t-field="a.status" class="badge text-bg-info"
+                                                      t-if="a.status=='requested'"/>
+                                                <span t-field="a.status" class="badge text-bg-success"
+                                                      t-if="a.status=='arrived'"/>
+                                                <span t-field="a.status" class="badge text-bg-danger"
+                                                      t-if="a.status=='reject'"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="#" t-if="a.status == 'pending_request'"
+                                                   t-attf-id="{{a.id}}-additional-part-unlink"
+                                                   class="btn btn-outline-danger border-0 btn-sm unlink-additional-part-line">
+                                                    <i class="fa fa-trash"
+                                                       aria-hidden="true"/>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row mt-1" t-if="task.status_ref in ['pending','in_progress','waiting_parts']">
+                            <div class="col-12 mb-2">
+                                <button type="button"
+                                        t-if="task.status_ref in ['pending','in_progress','waiting_parts']"
+                                        class="btn btn-outline-primary evs-border-radius btn-sm px-3 fs-6 add-additional-part-line">
+                                    <i class="fa fa-plus-square-o me-1" aria-hidden="true"/>
+                                    Add Parts
+                                </button>
+                                <button type="button"
+                                        t-if="task.status_ref in ['pending','in_progress','waiting_parts']"
+                                        t-attf-id="task{{task.access_token}}"
+                                        class="btn btn-outline-primary evs-border-radius btn-sm px-3 fs-6 request-additional-part">
+                                    <i class="fa fa-exchange me-1" aria-hidden="true"/>
+                                    Request Parts
+                                </button>
+                            </div>
+                            <div class="col-12" id="additional_part_error">
+                            </div>
+                            <div class="col-12" id="additional_part_request_error">
+                            </div>
+                            <div class="row add-additional-line d-none pe-0">
+                                <t t-set="part_list"
+                                   t-value="request.env['product.product'].sudo().search([('detailed_type','=','product')])"/>
+                                <div class="col-md-4 col-sm-8 mb-1 col-8 additional-custom-select">
+                                    <div class="evs-muted-text text-start">
+                                        <span class="text-muted">Part</span>
+                                    </div>
+                                    <select class="w-100 form-control option-select selectpicker"
+                                            id="additional_part_id"
+                                            data-live-search="true"
+                                            data-width="100%"
+                                            name="additional_part_id"
+                                            data-size="5"
+                                            required="required"
+                                            placeholder="Parts">
+                                        <t t-foreach="part_list"
+                                           t-as="p">
+                                            <option t-esc="p.name" t-att-value="p.id"
+                                                    t-att-data-unit-value="p.uom_id.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 col-sm-4 mb-1 col-4 text-end pe-1">
+                                    <div class="evs-muted-text text-start">
+                                        <span class="text-muted">Qty
+                                            <span id="add_product_unit"/>
+                                        </span>
+                                    </div>
+                                    <input class="w-100 form-control text-end"
+                                           id="additional_product_qty"
+                                           name="additional_product_qty"
+                                           type="number"
+                                           min="1"
+                                           requied="required"
+                                           placeholder="Qty"/>
+                                </div>
+                                <div class="col-md-4 col-sm-8 mb-1 col-8 additional-custom-select">
+                                    <t t-set="service_list"
+                                       t-value="task.task_service_ids.mapped('inspection_service_line_id')"/>
+                                    <div class="evs-muted-text text-start">
+                                        <span class="text-muted">Service</span>
+                                    </div>
+                                    <select class="w-100 form-control option-select selectpicker"
+                                            id="additional_service_id"
+                                            data-live-search="true"
+                                            data-width="100%"
+                                            name="additional_service_id"
+                                            data-size="5"
+                                            required="required"
+                                            placeholder="Service">
+                                        <t t-foreach="service_list"
+                                           t-as="s">
+                                            <option t-esc="s.name" t-att-value="s.id"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 col-sm-4 mb-1 col-4">
+                                    <div class="evs-muted-text text-start">
+                                        <span class="text-muted">Additional Time</span>
+                                    </div>
+                                    <input class="w-100 form-control text-end"
+                                           id="additional_service_hours"
+                                           name="additional_service_hours"
+                                           type="time"
+                                           min="1"
+                                           requied="required"
+                                           placeholder="Hours"/>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <a href="#" type="submit" t-attf-id="{{task.access_token}}"
+                                       class="btn btn-outline-success evs-border-radius line-submit btn-sm px-2 py-1 add_additional_part_line">
+                                        <i class="fa fa-plus me-1"
+                                           aria-hidden="true"/>
+                                        Add
+                                    </a>
+                                    <a href="#" type="submit"
+                                       class="btn btn-outline-danger evs-border-radius btn-sm unlink-additional-part px-2 py-1">
+                                        <i class="fa fa-trash"
+                                           aria-hidden="true"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div t-if="task.is_inspection_task and task.health_report_id.status in ['in_progress','complete']">
+                        <t t-set="health_report" t-value="task.health_report_id"/>
+                        <div class="my-2 border-bottom row">
+                            <div class="col-md-8 col-sm-12">
+                                <h5>
+                                    <i class="fa fa-pencil-square-o me-1" aria-hidden="true"/>
+                                    Inspection Details
+                                </h5>
+                            </div>
+                            <div class="alert alert-success evs-section-title text-center" role="alert"
+                                 t-if="health_report.status == 'complete'">
+                                <i class="fa fa-check-square me-1 evs-section-title" aria-hidden="true"/>
+                                Inspection Completed.
+                            </div>
+                            <div class="col-md-4 col-sm-12 text-md-end">
+                                <a href="#
+                                    
+                                    " data-bs-toggle="modal"
+                                   t-if="health_report.status == 'in_progress' and health_report.task_id.status_ref=='pending'"
+                                   data-bs-target="#portalInspectionConfirmation"
+                                   class="m-0 mb-2 click-evs-btn evs-submit-inspection-btn float-md-end py-3 px-3 evs-border-radius">
+                                    <i class="fa fa-check-circle me-1" aria-hidden="true"/>
+                                    Complete Inspection
+                                </a>
+                                <div class="modal fade" id="portalInspectionConfirmation" tabindex="-1"
+                                     aria-labelledby="portalInspectionConfirmationLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5">Inspection Confirmation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </div>
+                                            <hr class="mb-1 mt-1 text-dark"/>
+                                            <div class="modal-body text-start">
+                                                Are you sure you want complete Inspection ?
+                                            </div>
+                                            <div class="active-timer-users">
+
+                                            </div>
+                                            <hr class="mb-1 mt-1 text-dark"/>
+                                            <div class="modal-footer">
+                                                <a href="#"
+                                                   class="btn btn-success check-active-user"
+                                                   t-attf-id="{{health_report.id}}-check-active-user">
+                                                    Complete Inspection
+                                                </a>
+                                                <button type="button" class="btn btn-outline-danger"
+                                                        data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <t t-set="services_list"
+                           t-value="request.env['product.product'].sudo().search([('detailed_type','=','service')])"/>
+                        <t t-set="part_list"
+                           t-value="request.env['product.product'].sudo().search([('detailed_type','=','product')])"/>
+                        <t t-if="health_report.inner_body_inspection and health_report.vehicle_inner_inspection_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.vehicle_inner_inspection_ids"/>
+                                <t t-set="var" t-value="'interior'"/>
+                                <t t-set="title" t-value="'Interior'"/>
+                                <t t-set="modal" t-value="'vehicle.interior.condition'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                        <t t-if="health_report.outer_body_inspection and health_report.vehicle_outer_inspection_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.vehicle_outer_inspection_ids"/>
+                                <t t-set="var" t-value="'exterior'"/>
+                                <t t-set="title" t-value="'Exterior'"/>
+                                <t t-set="modal" t-value="'vehicle.outer.condition'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                        <t t-if="health_report.mechanical_condition and health_report.vehicle_mechanical_inspection_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.vehicle_mechanical_inspection_ids"/>
+                                <t t-set="var" t-value="'under_hood'"/>
+                                <t t-set="title" t-value="'Under Hood'"/>
+                                <t t-set="modal" t-value="'mechanical.condition.line'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                        <t t-if="health_report.vehicle_fluid and health_report.vehicle_fluid_inspection_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.vehicle_fluid_inspection_ids"/>
+                                <t t-set="var" t-value="'fluid'"/>
+                                <t t-set="title" t-value="'Fluid Inspection'"/>
+                                <t t-set="modal" t-value="'vehicle.fluids.line'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                        <t t-if="health_report.tyre_inspection and health_report.vehicle_tyre_inspection_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.vehicle_tyre_inspection_ids"/>
+                                <t t-set="var" t-value="'tyre'"/>
+                                <t t-set="title" t-value="'Tyre Inspection'"/>
+                                <t t-set="modal" t-value="'tyre.inspection.line'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                        <t t-if="health_report.under_vehicle and health_report.under_vehicle_inspection_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.under_vehicle_inspection_ids"/>
+                                <t t-set="var" t-value="'u_vehicle'"/>
+                                <t t-set="title" t-value="'Under Vehicle'"/>
+                                <t t-set="modal" t-value="'under.vehicle.inspection.line'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                        <t t-if="health_report.brake_condition and health_report.brake_condition_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.brake_condition_ids"/>
+                                <t t-set="var" t-value="'brake'"/>
+                                <t t-set="title" t-value="'Brake Conditions'"/>
+                                <t t-set="modal" t-value="'brake.condition.line'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                        <t t-if="health_report.vehicle_component and health_report.vehicle_components_inspection_ids">
+                            <t t-call="tk_vehicle_management.vehicle_repair_technician_task_portal_template">
+                                <t t-set="record_ids" t-value="health_report.vehicle_components_inspection_ids"/>
+                                <t t-set="var" t-value="'multi_point'"/>
+                                <t t-set="title" t-value="'Multi Point'"/>
+                                <t t-set="modal" t-value="'vehicle.components.line'"/>
+                                <t t-set="ins_progress"
+                                   t-value="True if health_report.status != 'complete' else False"/>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

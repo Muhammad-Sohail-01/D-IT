@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="quality_check_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="check">
+                    <t t-call="web.basic_layout">
+                        <div class="page">
+                            <table style="font-size: 15px; padding: 0px; border: 1px solid #7eb5d8;"
+                                   class="table table-borderless">
+                                <tr>
+                                    <td style="width: 100%;">
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <td style="padding: 2px;width: 33%; text-align: left;vertical-align: middle;"
+                                                    rowspan="2">
+                                                    <span t-field="check.company_id.name"/>
+                                                </td>
+                                                <td style="padding: 2px;width: 33%; text-align: center;vertical-align: middle; font-size: 20px;"
+                                                    rowspan="2">
+                                                    <strong>EVS Quality Check</strong>
+                                                </td>
+                                                <td style="padding: 2px;width: 33%; text-align: right;">
+                                                    #
+                                                    <span t-field="check.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr style="border-bottom: 2px solid #7eb5d8;">
+                                                <td style="padding: 2px; width: 33%; text-align: right;">
+                                                    <span t-field="check.inspection_date"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 2px;width: 33%; text-align: left;">
+                                                    <span t-field="check.customer_id"/>
+                                                </td>
+                                                <td style="padding: 2px;width: 33%; text-align: center;">
+                                                    <span t-field="check.customer_id.phone"/>
+                                                </td>
+                                                <td style="padding: 2px;width: 33%; text-align: right;">
+                                                    <span t-field="check.customer_id.email"/>
+                                                </td>
+                                            </tr>
+                                            <tr style="border-bottom: 2px solid #7eb5d8;">
+                                                <td style="padding: 2px;width: 33%; text-align: left;">
+                                                    <span t-field="check.vehicle_model_id"/>
+                                                </td>
+                                                <td style="padding: 2px;width: 33%; text-align: center;">
+                                                    202484/QTR
+                                                </td>
+                                                <td style="padding: 2px;width: 33%; text-align: right;">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 100%;">
+                                        <table class="table table-borderless" t-if="check.vehicle_qc_check_ids">
+                                            <tr>
+                                                <td style="padding: 2px; width: 45%">
+                                                    <strong>CHECK POINT</strong>
+                                                </td>
+                                                <td style="padding: 2px;text-align: center;width: 15%" colspan="3">
+                                                    <strong>VALUE</strong>
+                                                </td>
+                                                <td style="padding: 2px;width: 40%;text-align:right;">
+                                                    <strong>REMARK</strong>
+                                                </td>
+                                            </tr>
+                                            <tr t-foreach="check.vehicle_qc_check_ids.sorted(key=lambda l: l.sequence)"
+                                                t-as="qc">
+                                                <t t-if="qc.display_type == 'line_section'">
+                                                    <tr>
+                                                        <td colspan="5"
+                                                            style="background-color: #7eb5d8; color: white; padding: 2px; border: aliceblue; text-align: center; width: 100%;">
+                                                            <span t-field="qc.name"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                                <t t-else="">
+                                                    <tr>
+                                                        <td style="padding: 2px; width: 45%">
+                                                            <span t-field="qc.name"/>
+                                                        </td>
+                                                        <td style="padding: 2px;padding-right: 5px;vertical-align: middle; width: 3%">
+                                                            <t t-if="qc.okay_for_now">
+                                                                <div style="height: 20px; width: 20px; background-color: green; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;border-radius: 100%;">
+                                                                </div>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <div style="height: 20px; width: 20px; border: 2.5px solid green; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;border-radius: 100%;"/>
+                                                            </t>
+                                                        </td>
+                                                        <td style="padding: 2px;padding-right: 5px;vertical-align: middle; width: 3%">
+                                                            <t t-if="qc.required_attention">
+                                                                <div style="height: 20px; width: 20px; background-color: red; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;border-radius: 100%;">
+                                                                </div>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <div style="height: 20px; width: 20px; border: 2.5px solid red; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;border-radius: 100%;"/>
+                                                            </t>
+                                                        </td>
+                                                        <td style="padding: 2px;padding-right: 5px;vertical-align: middle; width: 3%">
+                                                            <t t-if="qc.further_attention">
+                                                                <div style="height: 20px; width: 20px; background-color: #ff8d00; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;border-radius: 100%;">
+                                                                </div>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <div style="height: 20px; width: 20px; border: 2.5px solid #ff8d00; text-align: center; vertical-align: middle; padding: 3px;color:white;padding-top: 4px;border-radius: 100%;"/>
+                                                            </t>
+                                                        </td>
+                                                        <td style="padding: 2px; width: 44%;text-align:right;">
+                                                            <span t-field="qc.remark"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <record id="action_quality_check_report" model="ir.actions.report">
+            <field name="name">Vehicle Quality Check</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tk_vehicle_management.quality_check_report_template</field>
+            <field name="report_file">tk_vehicle_management.quality_check_report_template</field>
+            <field name="binding_model_id" ref="model_vehicle_inspection"/>
+            <field name="paperformat_id" ref="inspection_report_paper_format"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

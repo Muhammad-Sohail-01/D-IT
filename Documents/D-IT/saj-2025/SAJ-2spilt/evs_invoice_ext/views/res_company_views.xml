@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_form_defaults_inherit" model="ir.ui.view">
+        <field name="name">res.company.form.defaults.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Adding fields after VAT -->
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="is_vat_registered"/>
+                <field name="is_direct_quote"/>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Print Defaults" name="print_defaults">
+                    <group>
+                        <group string="Bank Account Details">
+                            <field name="bank_name"/>
+                            <field name="account_name"/>
+                            <field name="account_number"/>
+                            <field name="iban"/>
+                            <field name="swift_code"/>
+                        </group>
+                        <group string="Terms and Conditions">
+                            <field name="invoice_terms" nolabel="1" colspan="2"
+                                   placeholder="Enter the terms and conditions to be printed on invoices..."/>
+                        </group>
+                        <group string="Template Settings">
+                            <field name="print_template" widget="image" class="oe_avatar" />
+                            <field name="invoice_template_regular"/>
+                            <field name="invoice_template_insurance"/>
+                            <field name="sale_order_template"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

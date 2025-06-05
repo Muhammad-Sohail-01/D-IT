@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Loan Type Views -->
+    <record id="view_hr_loan_type_tree" model="ir.ui.view">
+        <field name="name">hr.loan.type.tree</field>
+        <field name="model">hr.loan.type</field>
+        <field name="arch" type="xml">
+            <tree string="Loan Types">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="max_amount"/>
+                <field name="currency_id"/>
+                <field name="max_installments"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hr_loan_type_form" model="ir.ui.view">
+        <field name="name">hr.loan.type.form</field>
+        <field name="model">hr.loan.type</field>
+        <field name="arch" type="xml">
+            <form string="Loan Type">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Loan Type Name"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page string="General Information" name="general_info">
+                            <group>
+                                <group>
+                                    <field name="currency_id" options="{'no_create': True}"/>
+                                    <field name="max_amount"/>
+                                    <field name="max_installments"/>
+                                    <field name="max_installment_count"/>
+                                    <field name="min_employment_months"/>
+                                </group>
+                                <group>
+                                    <field name="max_active_loans"/>
+                                    <field name="minimum_salary"/>
+                                    <field name="salary_deduction_limit"/>
+                                    <field name="sequence"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Approval Configuration" name="approval_config">
+                            <group>
+                                <group string="Accountant Approval">
+                                    <field name="requires_accountant"/>
+                                    <field name="min_accountant_approval"/>
+                                    <field name="accountant_approvers_ids" widget="many2many_tags"/>
+                                </group>
+                                <group string="Finance Approval">
+                                    <field name="requires_finance"/>
+                                    <field name="min_finance_approval"/>
+                                    <field name="finance_approvers_ids" widget="many2many_tags"/>
+                                </group>
+                                <group string="Management Approval">
+                                    <field name="requires_management"/>
+                                    <field name="min_management_approval"/>
+                                    <field name="management_approvers_ids" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_hr_loan_type" model="ir.actions.act_window">
+        <field name="name">Loan Types</field>
+        <field name="res_model">hr.loan.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem id="menu_hr_loan_type"
+        name="Loan Types"
+        parent="menu_hr_loan_root"
+        action="action_hr_loan_type"
+        sequence="20"/>
+</odoo>

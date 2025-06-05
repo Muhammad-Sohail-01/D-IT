@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <template id="report_servicenote_document">
+        <t t-call="web.basic_layout">
+            <style>
+                .page {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                .header, .footer {
+                    display: none !important;
+                }
+                .container {
+                    width: 100% !important;
+                    max-width: none !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                .service-header {
+                    background-color: #73b957;
+                    color: white;
+                    padding: 8px;
+                }
+                .parts-header {
+                    background-color: #73b957;
+                    color: white;
+                    padding: 8px;
+                }
+                .table-header {
+                    background-color: #17a2b8;
+                    color: white;
+                }
+                .total-section {
+                    background-color: #73b957;
+                    color: white;
+                    padding: 15px;
+                }
+
+			    @media print {
+			        .service-header, .parts-header, .table-header, .total-section {
+			            -webkit-print-color-adjust: exact !important;
+			            print-color-adjust: exact !important;
+			        }
+	            }
+			</style>
+
+
+            <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" style="margin: 0; padding: 0;">
+	        <!-- <div style="position: absolute; top: 0; left: 0; width: 210mm; height: 297mm;">
+		        <img t-if="o.company_id.print_template"
+		             t-att-src=""
+		             style="width: 210mm; height: 297mm; position: absolute; top: 0; left: 0; object-fit: fill;"/>
+	        </div> -->
+
+
+                    <!-- Content -->
+                    <div class="page" style="position: relative; z-index: 1;"
+                         t-att-style="'background: url({}); background-size:1200px 1700px; width:1200px; height:1700px;'.format(image_data_uri(o.company_id.print_template))">
+
+
+
+                        <!-- Invoice Title Section -->
+                        <div class="row" style="margin-top: 60mm; padding-top: 30px;">
+	                        <div class="col-4">
+	                        </div>
+	                        <div class="col-4 text-center">
+							    <t t-if="o.move_type == 'out_refund'">
+							        <h1 t-if="o.company_id.is_vat_registered">TAX CREDIT NOTE</h1>
+							        <h1 t-if="not o.company_id.is_vat_registered">CREDIT NOTE</h1>
+							    </t>
+							    <t t-else="">
+							        <h1 t-if="o.company_id.is_vat_registered">SERVICE NOTE</h1>
+							        <h1 t-if="not o.company_id.is_vat_registered">SERVICE NOTE</h1>
+							    </t>
+							</div>
+	                        <div class="col-4 text-end" style="margin-top: 150px; padding-right: 20px; font-size: 22px;">
+		                        <div>Invoice No: <span t-field="o.name"/></div>
+	                        </div>
+                        </div>
+
+                        <!-- Customer and Vehicle Details -->
+                        <div class="row mb-4" style="padding-left:35px; padding-right: 20px; font-size: 22px;">
+                            <div class="col-4">
+                                <strong class="d-block mb-2">Customer Details</strong>
+                                <div>Name: <span t-field="o.partner_id.name"/></div>
+                                <div>Address: <span t-field="o.partner_id.street"/></div>
+                                <div>Mobile: <span t-field="o.partner_id.phone"/></div>
+                                <div>TRN: <span t-field="o.partner_id.vat"/></div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div t-field="o.brand_id.name" style="font-weight: bold;"/>
+                                <div>Model: <span t-field="o.vehicle_model_id.name"/></div>
+                                <div>Year: <span t-field="o.year"/></div>
+                                <div>Registration No: <span t-field="o.registration_no"/></div>
+                                <div>VIN: <span t-field="o.vin_no"/></div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div>Date: <span t-field="o.invoice_date"/></div>
+	                            <div>Service Note: <span t-field="o.name"/></div>
+                                <div>Service advisor: <span t-field="o.invoice_user_id.name"/></div>
+                                <div>Job Card #: <span t-field="o.job_card_idd.name"/></div>
+                            </div>
+                        </div>
+
+                        <!-- Services Section -->
+                        <div t-if="o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'service')" class="mt-5" style="margin-left: 3mm; margin-right: 3mm; padding-left:32px; padding-right: 10px;">
+                            <h4 class="service-header">Services</h4>
+                            <table class="table table-bordered">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th>Service</th>
+                                        <th class="text-center">Qty</th>
+<!--                                        <th class="text-end">Price</th>-->
+<!--                                        <th class="text-end">Dis %</th>-->
+<!--                                        <th t-if="o.company_id.is_vat_registered" class="text-end">VAT</th>-->
+<!--                                        <th class="text-end">Total</th>-->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'service')" t-as="line">
+                                        <tr>
+                                            <td><span t-field="line.name"/></td>
+                                            <td class="text-center"><span t-field="line.quantity"/></td>
+<!--                                            <td class="text-end"><span t-field="line.price_unit"/></td>-->
+<!--                                            <td class="text-end"><span t-field="line.discount"/>%</td>-->
+<!--                                            <td t-if="o.company_id.is_vat_registered" class="text-end">-->
+<!--                                                <span t-esc="line.price_total - line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+<!--                                            </td>-->
+<!--                                            <td class="text-end"><span t-field="line.price_total"/></td>-->
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Parts Section -->
+                        <t t-if="o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'product')">
+                            <div class="mt-4" style="margin-left: 3mm; margin-right: 3mm;">
+                                <h4 class="parts-header">Parts</h4>
+                                <table class="table table-bordered">
+                                    <thead class="table-header">
+                                        <tr>
+                                            <th>Part No</th>
+                                            <th>Product Name</th>
+<!--                                            <th class="text-center">Qty</th>-->
+<!--                                            <th class="text-end">Price</th>-->
+<!--                                            <th class="text-end">Dis %</th>-->
+<!--                                            <th t-if="o.company_id.is_vat_registered" class="text-end">VAT</th>-->
+<!--                                            <th class="text-end">Total</th>-->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'product')" t-as="line">
+                                            <tr>
+                                                <td><span t-field="line.product_id.default_code"/></td>
+                                                <td><span t-field="line.name"/></td>
+                                                <td class="text-center"><span t-field="line.quantity"/></td>
+<!--                                                <td class="text-end"><span t-field="line.price_unit"/></td>-->
+<!--                                                <td class="text-end"><span t-field="line.discount"/>%</td>-->
+<!--                                                <td t-if="o.company_id.is_vat_registered" class="text-end">-->
+<!--                                                    <span t-esc="line.price_total - line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+<!--                                                </td>-->
+<!--                                                <td class="text-end"><span t-field="line.price_total"/> AED</td>-->
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+                        <!-- Totals Section -->
+<!--                        <div class="row" style="margin-left: 15mm; margin-right: 3mm;">-->
+<!--                            <div class="col-6 ms-auto">-->
+<!--                                <div class="total-section">-->
+<!--                                    <table class="table table-sm text-white mb-0">-->
+<!--                                        <tr>-->
+<!--                                            <td>Subtotal</td>-->
+<!--                                            <td class="text-end">-->
+<!--                                                <span t-field="o.amount_untaxed"/>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>Parts</td>-->
+<!--                                            <td class="text-end">-->
+<!--                                                <span t-esc="sum(o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'product').mapped('price_total'))"/>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>Labor</td>-->
+<!--                                            <td class="text-end">-->
+<!--                                                <span t-esc="sum(o.invoice_line_ids.filtered(lambda l: l.product_id.type == 'service').mapped('price_total'))"/>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                        <tr t-if="o.company_id.is_vat_registered">-->
+<!--                                            <td>VAT</td>-->
+<!--                                            <td class="text-end">-->
+<!--                                                <span t-field="o.amount_tax"/>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                        <tr class="border-top">-->
+<!--                                            <td><strong>Invoice Total</strong></td>-->
+<!--                                            <td class="text-end">-->
+<!--                                                <strong><span t-field="o.amount_total"/></strong>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        <!-- Signature Section -->
+                        <div class="row mt-5" style="margin-left: 15mm; margin-right: 15mm;">
+                            <div class="col-6 ms-auto">
+                                <div class="border-top pt-2">
+                                    <p class="text-center">Customer Signature</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+<!--                        <div t-if="o.company_id.invoice_terms" class="mt-4" style="margin-left: 15mm; margin-right: 15mm;">-->
+<!--                            <div t-field="o.company_id.invoice_terms"/>-->
+<!--                        </div>-->
+
+                       <!-- Bank Details -->
+<!--	                    <t t-if="o.company_id.bank_name or o.company_id.account_number or o.company_id.iban">-->
+<!--		                    <div class="p-3 mt-4" style="margin-left: 15mm; margin-right: 15mm;">-->
+<!--			                    <style>-->
+<!--				                    .bank-details {-->
+<!--				                    display: flex;-->
+<!--				                    flex-direction: column;-->
+<!--				                    width: 100%;-->
+<!--				                    max-width: 400px; /* Adjust width as needed */-->
+<!--				                    }-->
+<!--				                    .bank-details div {-->
+<!--				                    display: flex;-->
+<!--				                    justify-content: space-between;-->
+<!--				                    padding: 4px 0;-->
+<!--				                    }-->
+<!--				                    .bank-details strong {-->
+<!--				                    min-width: 150px; /* Adjust for consistent alignment */-->
+<!--				                    text-align: left;-->
+<!--				                    }-->
+<!--				                    .bank-details span {-->
+<!--				                    text-align: right;-->
+<!--				                    flex-grow: 1;-->
+<!--				                    }-->
+<!--			                    </style>-->
+
+<!--			                    <div class="bank-details">-->
+<!--				                    <div t-if="o.company_id.bank_name">-->
+<!--					                    <strong>BANK NAME:</strong> <span t-field="o.company_id.bank_name"></span>-->
+<!--				                    </div>-->
+<!--				                    <div t-if="o.company_id.account_name">-->
+<!--					                    <strong>COMPANY NAME:</strong> <span t-field="o.company_id.account_name"></span>-->
+<!--				                    </div>-->
+<!--				                    <div t-if="o.company_id.account_number">-->
+<!--					                    <strong>ACCOUNT:</strong> <span t-field="o.company_id.account_number"></span>-->
+<!--				                    </div>-->
+<!--				                    <div t-if="o.company_id.iban">-->
+<!--					                    <strong>IBAN:</strong> <span t-field="o.company_id.iban"></span>-->
+<!--				                    </div>-->
+<!--				                    <div t-if="o.company_id.swift_code">-->
+<!--					                    <strong>SWIFT CODE:</strong> <span t-field="o.company_id.swift_code"></span>-->
+<!--				                    </div>-->
+<!--			                    </div>-->
+<!--		                    </div>-->
+<!--	                    </t>-->
+                    </div>
+                </div>
+        </t>
+    </template>
+
+	<template id="report_servicenote">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-if="o.state == 'posted' and o.move_type in ('out_invoice', 'out_refund')">
+                <t t-call="evs_invoice_ext.report_servicenote_document"/>
+            </t>
+        </t>
+    </t>
+	</template>
+	<!-- Service Note Report Action -->
+	<record id="action_report_servicenote" model="ir.actions.report">
+	    <field name="name">Service Note</field>
+	    <field name="model">account.move</field>
+	    <field name="report_type">qweb-pdf</field>
+	    <field name="report_name">evs_invoice_ext.report_servicenote</field>
+	    <field name="report_file">evs_invoice_ext.report_servicenote</field>
+	    <field name="print_report_name">'Service Note - %s' % (object.name)</field>
+	    <field name="binding_model_id" ref="account.model_account_move"/>
+	    <field name="binding_type">report</field>
+	    <field name="paperformat_id" ref="paperformat_evs_invoice"/>
+	</record>
+</odoo>

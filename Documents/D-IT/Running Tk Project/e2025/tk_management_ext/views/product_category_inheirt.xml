@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record id="view_category_property_form_inherit" model="ir.ui.view">
+		    <field name="name">product.category.property.form.inherit</field>
+		    <field name="model">product.category</field>
+		    <field name="inherit_id" ref="account.view_category_property_form"/>
+		    <field name="arch" type="xml">
+		        <xpath expr="//sheet" position="before">
+		            <div class="alert alert-warning" role="alert" style="margin-bottom: 0;">
+		                <h3 class="alert-heading"><i class="fa fa-exclamation-triangle"/> Warranty Configuration Guide</h3>
+		                <p><strong>Always ensure for warranty categories:</strong></p>
+		                <ul>
+		                    <li>Set Income Account to: <strong>'Deferred Warranty Liability Account'</strong></li>
+		                    <li>Set Deferred Revenue Account to: <strong>'Warranty-related Income/Revenue Account'</strong></li>
+		                </ul>
+		                <p class="mb-0"><i>Proper account configuration is crucial for warranty-related transactions.</i></p>
+		            </div>
+		        </xpath>
+		        <xpath expr="//field[@name='property_account_expense_categ_id']" position="after">
+		            <field name="deferred_revenue_account_id"/>
+		            <field name="deferred_expense_account_id"/>
+		            <field name="deferred_journal_id"/>
+		        </xpath>
+		    </field>
+		</record>
+    </data>
+</odoo>

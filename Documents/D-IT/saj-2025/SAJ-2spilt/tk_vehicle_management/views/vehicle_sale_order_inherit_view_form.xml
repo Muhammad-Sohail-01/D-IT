@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vehicle_sale_order_inherit_view_form" model="ir.ui.view">
+            <field name="name">vehicle.sale.order.inherit.view.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_unlock']" position="before">
+                    <!-- <button name="%(sale_warranty_action)d" type="action" string="Create Warranty Contract"
+                            invisible="not is_any_warranty_product or state != 'sale' or warranty_count != 0"
+                            class="btn btn-primary"/> -->
+                    
+                    <field name="is_any_warranty_product" invisible="1"/>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_warranty" type="object" class="oe_stat_button" icon="fa-envelope-square"
+                            invisible="warranty_count == 0">
+                        <field name="warranty_count" widget="statinfo" string="Warranties"/>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                    
+                    <field name="job_card_id" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

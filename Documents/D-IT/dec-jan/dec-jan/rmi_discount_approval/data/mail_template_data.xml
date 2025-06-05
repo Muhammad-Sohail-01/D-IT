@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="email_template_discount_approval" model="mail.template">
+        <field name="name">Discount Approval Request</field>
+        <field name="model_id" ref="sale.model_sale_order_line"/>
+        <field name="subject">Discount Approval Needed</field>
+        <field name="email_from">${(user.email or '')|safe}</field>
+        <field name="email_to">${object.approver_id.email|safe}</field>
+        <field name="body_html">
+            <![CDATA[
+            <p>Dear ${object.approver_id.name},</p>
+            <p>A discount approval is required for the following:</p>
+            <ul>
+                <li><strong>Product:</strong> ${object.product_id.name}</li>
+                <li><strong>Requested Discount:</strong> ${object.discount}%</li>
+                <li><strong>Maximum Allowed Discount:</strong> ${object.product_id.desc_limit or object.product_id.categ_id.desc_limit}%</li>
+            </ul>
+            <p>Thank you!</p>
+            ]]>
+        </field>
+    </record>
+</odoo>

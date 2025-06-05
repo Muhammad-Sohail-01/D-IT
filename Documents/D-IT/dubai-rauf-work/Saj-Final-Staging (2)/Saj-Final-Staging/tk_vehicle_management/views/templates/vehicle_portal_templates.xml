@@ -1,0 +1,1411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Portal Details-->
+        <template id="portal_my_tender_bid" inherit_id="portal.portal_my_home" name="My Portal">
+            <xpath expr="//div[@id='portal_common_category']" position="after">
+                <div class="o_portal_category row g-2 mt-3" id="portal_vehicle_category">
+                    <h3 class="my-3">Vehicle Details</h3>
+                    <hr class="mb-1 mt-1"/>
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="icon" t-value="'/tk_vehicle_management/static/src/img/jc.svg'"/>
+                        <t t-set="title">Job Cards</t>
+                        <t t-set="url" t-value="'/my/vehicle/job-cards'"/>
+                        <t t-set="text">View your job cards</t>
+                        <t t-set="placeholder_count" t-value="'job_card_count'"/>
+                        <t t-set="config_card" t-value="True"/>
+                    </t>
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="icon" t-value="'/tk_vehicle_management/static/src/img/car.svg'"/>
+                        <t t-set="title">Registered Vehicles</t>
+                        <t t-set="url" t-value="'/my/vehicle/registered-vehicle'"/>
+                        <t t-set="text">View your registered Vehicles</t>
+                        <t t-set="placeholder_count" t-value="'vehicle_count'"/>
+                        <t t-set="config_card" t-value="True"/>
+                    </t>
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="icon" t-value="'/tk_vehicle_management/static/src/img/car-warranty.svg'"/>
+                        <t t-set="title">Vehicle Warranties</t>
+                        <t t-set="url" t-value="'/my/vehicle/vehicle-warranty'"/>
+                        <t t-set="text">View your Vehicle warranties</t>
+                        <t t-set="placeholder_count" t-value="'warrant_count'"/>
+                        <t t-set="config_card" t-value="True"/>
+                    </t>
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="icon" t-value="'/tk_vehicle_management/static/src/img/vqot.svg'"/>
+                        <t t-set="title">Job Card Quotations</t>
+                        <t t-set="url" t-value="'/my/vehicle/job-card-quot'"/>
+                        <t t-set="text">View your Job card quotations</t>
+                        <t t-set="placeholder_count" t-value="'quot_count'"/>
+                        <t t-set="config_card" t-value="True"/>
+                    </t>
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="icon" t-value="'/tk_vehicle_management/static/src/img/uquot.svg'"/>
+                        <t t-set="title">Updated Job Card Quotations</t>
+                        <t t-set="url" t-value="'/my/vehicle/jc-updated-quot'"/>
+                        <t t-set="text">View your additional part quotations</t>
+                        <t t-set="placeholder_count" t-value="'additional_part_quot_count'"/>
+                        <t t-set="config_card" t-value="True"/>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+        <!-- BredCrumbs-->
+        <template id="portal_vehicle_breadcrumbs" inherit_id="portal.portal_breadcrumbs"
+                  name="Portal Vehicle Breadcrumbs">
+            <xpath position="inside" expr="//ol[hasclass('o_portal_submenu')]">
+                <!-- Job Card -->
+                <li t-if="page_name == 'portal_job_card_view_tree'" class="breadcrumb-item">
+                    Job Cards
+                </li>
+                <li t-if="page_name == 'portal_job_card_view_form'" class="breadcrumb-item">
+                    <a t-att-href="'/my/vehicle/job-cards'">
+                        Job Cards
+                    </a>
+                </li>
+                <li t-if="page_name == 'portal_job_card_view_form' and job_card_id" class="breadcrumb-item">
+                    <span t-field="job_card_id.name"/>
+                </li>
+                <li t-if="page_name == 'portal_job_card_view_form' and not job_card_id" class="breadcrumb-item">
+                    Invalid URL
+                </li>
+                <!-- Register Vehicle-->
+                <li t-if="page_name == 'portal_register_vehicle_view_tree'" class="breadcrumb-item">
+                    Register Vehicles
+                </li>
+                <li t-if="page_name == 'portal_register_vehicle_view_form'" class="breadcrumb-item">
+                    <a t-att-href="'/my/vehicle/registered-vehicle'">
+                        Register Vehicles
+                    </a>
+                </li>
+                <li t-if="page_name == 'portal_register_vehicle_view_form' and register_vehicle_id"
+                    class="breadcrumb-item">
+                    <span t-field="register_vehicle_id.vehicle_model_id"/>
+                </li>
+                <li t-if="page_name == 'portal_register_vehicle_view_form' and not register_vehicle_id"
+                    class="breadcrumb-item">
+                    Invalid URL
+                </li>
+                <!-- Vehicle Warranty-->
+                <li t-if="page_name == 'portal_vehicle_warranty_view_tree'" class="breadcrumb-item">
+                    Vehicle Warranties
+                </li>
+                <li t-if="page_name == 'portal_vehicle_warranty_view_form'" class="breadcrumb-item">
+                    <a t-att-href="'/my/vehicle/vehicle-warranty'">
+                        Vehicle Warranties
+                    </a>
+                </li>
+                <li t-if="page_name == 'portal_vehicle_warranty_view_form' and warranty_id"
+                    class="breadcrumb-item">
+                    <span t-field="warranty_id.name"/>
+                </li>
+                <li t-if="page_name == 'portal_vehicle_warranty_view_form' and not warranty_id"
+                    class="breadcrumb-item">
+                    Invalid URL
+                </li>
+                <!-- Quotation-->
+                <li t-if="page_name == 'portal_job_card_quot_view_tree'" class="breadcrumb-item">
+                    Job Card Quotations
+                </li>
+                <li t-if="page_name == 'portal_job_card_quot_view_form'" class="breadcrumb-item">
+                    <a t-att-href="'/my/vehicle/job-card-quot'">
+                        Job Card Quotations
+                    </a>
+                </li>
+                <li t-if="page_name == 'portal_job_card_quot_view_form' and job_card_id"
+                    class="breadcrumb-item">
+                    <span t-field="job_card_id.name"/>
+                </li>
+                <li t-if="page_name == 'portal_job_card_quot_view_form' and not job_card_id"
+                    class="breadcrumb-item">
+                    Invalid URL
+                </li>
+                <!-- Updated Quotation-->
+                <li t-if="page_name == 'portal_jc_update_quot_view_tree'" class="breadcrumb-item">
+                    Job Card Updated Quotations
+                </li>
+                <li t-if="page_name == 'portal_jc_updated_quot_view_form'" class="breadcrumb-item">
+                    <a t-att-href="'/my/vehicle/jc-updated-quot'">
+                        Job Card Updated Quotations
+                    </a>
+                </li>
+                <li t-if="page_name == 'portal_jc_updated_quot_view_form' and revised_quot_id"
+                    class="breadcrumb-item">
+                    <span t-field="revised_quot_id.inspection_id.name"/>
+                </li>
+                <li t-if="page_name == 'portal_jc_updated_quot_view_form' and not revised_quot_id"
+                    class="breadcrumb-item">
+                    Invalid URL
+                </li>
+            </xpath>
+        </template>
+        <!-- View My Job Card Template-->
+        <template id="portal_my_job_card" name="My Job Cards">
+            <t t-call="portal.portal_layout">
+                <div t-if="not job_cards" class="alert alert-warning" role="alert">
+                    There are currently no job card for your account.
+                </div>
+                <t t-if="job_cards" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Job Card #</th>
+                            <th>Date</th>
+                            <th>Vehicle</th>
+                            <th>Registration No</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="job_cards" t-as="j">
+                        <tr>
+                            <td>
+                                <a t-att-href="j.get_portal_url('job-cards')">
+                                    <t t-out="j.name"/>
+                                </a>
+                            </td>
+                            <td>
+                                <span t-field="j.inspection_date"/>
+                            </td>
+                            <td>
+                                <span t-field="j.vehicle_model_id"/>
+                            </td>
+                            <td>
+                                <span t-field="j.registration_no"/>
+                            </td>
+                            <td class="text-center">
+                                <span t-if="j.status in ['cancel','reject','concern_reject']"
+                                      class="badge rounded-pill text-bg-danger">
+                                    <i class="fa fa-fw fa-remove"/>
+                                    <span t-if="j.status == 'cancel'">Cancelled</span>
+                                    <span t-if="j.status == 'reject'">Rejected</span>
+                                    <span t-if="j.status == 'concern_reject'">Approval Rejected</span>
+                                </span>
+                                <span t-if="j.status in ['draft','inspection_walkthrough','concern']"
+                                      class="badge rounded-pill text-bg-primary">
+                                    <span t-if="j.status == 'draft'">Draft</span>
+                                    <span t-if="j.status == 'inspection_walkthrough'">Inspection In Progress</span>
+                                    <span t-if="j.status == 'concern'">Concern</span>
+                                </span>
+                                <t t-if="j.status == 'quotation'">
+                                    <t t-if="quote_state in ['sent','signed','reject','cancel','expire']">
+                                        <span t-if="j.quote_state in ['sent']"
+                                              class="badge rounded-pill text-bg-primary">
+                                            Quotation Sent
+                                        </span>
+                                        <span t-if="j.quote_state in ['signed']"
+                                              class="badge rounded-pill text-bg-success">
+                                            Quotation Accepted
+                                        </span>
+                                        <span t-if="j.quote_state in ['reject']"
+                                              class="badge rounded-pill text-bg-danger">
+                                            Quotation Rejected
+                                        </span>
+                                        <span t-if="j.quote_state in ['cancel']"
+                                              class="badge rounded-pill text-bg-danger">
+                                            Quotation Cancelled
+                                        </span>
+                                        <span t-if="j.quote_state in ['expire']"
+                                              class="badge rounded-pill text-bg-warning">
+                                            Quotation Expire
+                                        </span>
+                                    </t>
+                                    <t else="">
+                                        <span class="badge rounded-pill text-bg-warning">
+                                            Quotation
+                                        </span>
+                                    </t>
+                                </t>
+                                <span t-if="j.status in ['concern_approve','approve','complete']"
+                                      class="badge rounded-pill text-bg-success">
+                                    <span t-if="j.status == 'concern_approve'">Customer Approval</span>
+                                    <span t-if="j.status == 'approve'">Quotation Approved</span>
+                                    <span t-if="j.status == 'complete'">Completed</span>
+                                </span>
+                                <span t-if="j.status in ['parts_request','parts_available','in_repair','ready_delivery']"
+                                      class="badge rounded-pill text-bg-info">
+                                    In Repair
+                                </span>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <template id="portal_my_job_card_form" name="Job Card">
+            <t t-call="website.layout">
+                <div class="container py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <t t-call="portal.portal_breadcrumbs"/>
+                        <t t-if="prev_record or next_record" t-call='portal.record_pager'/>
+                    </div>
+                    <t t-if="error">
+                        <div t-attf-class="alert alert-{{error['type']}} mt-4" role="alert">
+                            <h4 class="alert-heading">
+                                <span t-esc="error['title']"/>
+                            </h4>
+                            <p>
+                                <span t-esc="error['message']"/>
+                            </p>
+                        </div>
+                    </t>
+                    <t t-if="not error">
+                        <!-- Title-->
+                        <div class="row mb-4 mt-3 align-items-center">
+                            <div class="col-md-6 col-sm-12 text-start">
+                                <h4 class="display-6 mb-0">
+                                    <span t-field="job_card_id.name" class="text-primary"/>
+                                </h4>
+                            </div>
+                            <div class="col-md-6 col-sm-12 text-end">
+                                <h5>
+                                    <span t-if="job_card_id.status in ['cancel','reject','concern_reject']"
+                                          class="badge rounded-pill text-bg-danger">
+                                        <i class="fa fa-fw fa-remove"/>
+                                        <span t-if="job_card_id.status == 'cancel'">Cancelled</span>
+                                        <span t-if="job_card_id.status == 'reject'">Rejected</span>
+                                        <span t-if="job_card_id.status == 'concern_reject'">Approval Rejected</span>
+                                    </span>
+                                    <span t-if="job_card_id.status in ['draft','inspection_walkthrough','concern']"
+                                          class="badge rounded-pill text-bg-primary">
+                                        <span t-if="job_card_id.status == 'draft'">Draft</span>
+                                        <span t-if="job_card_id.status == 'inspection_walkthrough'">Inspection In
+                                            Progress
+                                        </span>
+                                        <span t-if="job_card_id.status == 'concern'">Concern</span>
+                                    </span>
+                                    <t t-if="job_card_id.status == 'quotation'">
+                                        <t t-if="quote_state in ['sent','signed','reject','cancel','expire']">
+                                            <span t-if="job_card_id.quote_state in ['sent']"
+                                                  class="badge rounded-pill text-bg-primary">
+                                                Quotation Sent
+                                            </span>
+                                            <span t-if="job_card_id.quote_state in ['signed']"
+                                                  class="badge rounded-pill text-bg-success">
+                                                Quotation Accepted
+                                            </span>
+                                            <span t-if="job_card_id.quote_state in ['reject']"
+                                                  class="badge rounded-pill text-bg-danger">
+                                                Quotation Rejected
+                                            </span>
+                                            <span t-if="job_card_id.quote_state in ['cancel']"
+                                                  class="badge rounded-pill text-bg-danger">
+                                                Quotation Cancelled
+                                            </span>
+                                            <span t-if="job_card_id.quote_state in ['expire']"
+                                                  class="badge rounded-pill text-bg-warning">
+                                                Quotation Expire
+                                            </span>
+                                        </t>
+                                        <t else="">
+                                            <span class="badge rounded-pill text-bg-warning">
+                                                Quotation
+                                            </span>
+                                        </t>
+                                    </t>
+                                    <span t-if="job_card_id.status in ['concern_approve','approve','complete']"
+                                          class="badge rounded-pill text-bg-success">
+                                        <span t-if="job_card_id.status == 'concern_approve'">Customer Approval</span>
+                                        <span t-if="job_card_id.status == 'approve'">Quotation Approved</span>
+                                        <span t-if="job_card_id.status == 'complete'">Completed</span>
+                                    </span>
+                                    <span t-if="job_card_id.status in ['parts_request','parts_available','in_repair','ready_delivery']"
+                                          class="badge rounded-pill text-bg-info">
+                                        In Repair
+                                    </span>
+                                </h5>
+                            </div>
+                        </div>
+                        <!--Buttons-->
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="btn-toolbar" role="toolbar">
+                                    <div class="btn-group me-2 mb-2" role="group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-download me-1"/>
+                                            PDF Reports
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/vehicle-service/job-card-report/#{job_card_id.access_token}/Job-Card-PDF"
+                                                   id="print_job_card_report" title="Print Job Card Report"
+                                                   target="new">
+                                                    <i class="fa fa-download me-1"/>
+                                                    Job Card
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider"/>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/vehicle-service/scratch-report/#{job_card_id.access_token}/Scratch-Report-PDF"
+                                                   id="print_scratch_card_report" title="Print Scratch Report"
+                                                   target="new">
+                                                    <i class="fa fa-download me-1"/>
+                                                    Scratch Report
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider"/>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/vehicle-service/quot-report/#{job_card_id.access_token}/Quotation-Report-PDF"
+                                                   id="print_job_card_quot_report"
+                                                   title="Print Job Card Quotation Report"
+                                                   target="new">
+                                                    <i class="fa fa-download me-1"/>
+                                                    Quotation
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider"/>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                   t-attf-href="/vehicle-service/concern-report/#{job_card_id.access_token}/Concern-Report-PDF"
+                                                   id="print_concern_report" title="Print Consent Report" target="new">
+                                                    <i class="fa fa-download me-1"/>
+                                                    Customer Approval
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="btn-group me-2 mb-2">
+                                        <a t-att-href="'/vehicle-service/job-card/' + job_card_id.access_token"
+                                           class="btn btn-primary">
+                                            <i class="fa fa-envelope me-1"/>
+                                            View Quotations
+                                        </a>
+                                    </div>
+                                    <div class="btn-group me-2 mb-2">
+                                        <a class="btn btn-primary"
+                                           t-att-href="'/my/vehicle/filter-revised/' + job_card_id.access_token">
+                                            <i class="fa fa-envelope-o me-1"/>
+                                            View Revised Quotations
+                                        </a>
+                                    </div>
+                                    <div class="btn-group me-2 mb-2">
+                                        <t t-if="job_card_id.invoice_id">
+                                            <a class="btn btn-primary"
+                                               t-att-href="job_card_id.invoice_id.get_portal_url()">
+                                                <i class="fa fa-money me-1"/>
+                                                View Invoices
+                                            </a>
+                                        </t>
+                                        <t t-else="">
+                                            <a class="btn btn-primary"
+                                               href="/my/invoices">
+                                                <i class="fa fa-money me-1"/>
+                                                View Invoices
+                                            </a>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2">
+                                            <i class="fa fa-file-text-o me-1"/>
+                                            Job Card Details
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    Check in Ref :
+                                                    <span t-field="job_card_id.booking_id" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Inspection Type :
+                                                    <span t-field="job_card_id.inspection_type" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    Date :
+                                                    <span t-field="job_card_id.inspection_date" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Service Advisor :
+                                                    <span t-field="job_card_id.service_adviser_id" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2">
+                                            <i class="fa fa-car me-1" aria-hidden="true"/>
+                                            Vehicle Details
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    Brand :
+                                                    <span t-field="job_card_id.brand_id" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Model :
+                                                    <span t-field="job_card_id.vehicle_model_id" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Year :
+                                                    <span t-field="job_card_id.year" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Color :
+                                                    <span t-field="job_card_id.color" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Fuel Type :
+                                                    <span t-field="job_card_id.fuel_type" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Transmission :
+                                                    <span t-field="job_card_id.transmission" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    VIN No :
+                                                    <span t-field="job_card_id.vin_no" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Registration No :
+                                                    <span t-field="job_card_id.registration_no" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Kilometers :
+                                                    <span t-field="job_card_id.miles" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Insurance Provider :
+                                                    <span t-field="job_card_id.insurance_provider" class="fw-bold"/>
+                                                </li>
+                                                <t t-if="job_card_id.is_warranty">
+                                                    <li>
+                                                        Warranty :
+                                                        <span t-field="job_card_id.warranty_type" class="fw-bold"/>
+                                                    </li>
+                                                </t>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2">
+                                            <i class="fa fa-cogs me-1"/>
+                                            Required Services
+                                        </p>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="card border-0 table-responsive">
+                                            <div class="table-responsive mt-0 pt-0">
+                                                <table class="table table-hover table-sm mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fw-bold">Service</td>
+                                                            <td class="fw-bold">Requirement Status</td>
+                                                            <td class="fw-bold">Time</td>
+                                                            <td class="text-end fw-bold">Qty.</td>
+                                                            <td class="fw-bold">UOM</td>
+                                                            <td class="text-end fw-bold">Unit Price</td>
+                                                            <td class="fw-bold">Tax</td>
+                                                            <td class="text-end fw-bold">Tax Amount</td>
+                                                            <td class="text-end fw-bold">Total Amount</td>
+                                                        </tr>
+                                                        <t t-foreach="job_card_id.inspection_required_service_ids"
+                                                           t-as="s">
+                                                            <tr>
+                                                                <t t-if="s.display_type == 'line_section'">
+                                                                    <td colspan="9"
+                                                                        class="bg-primary text-dark bg-opacity-25 rounded">
+                                                                        <span t-field="s.name"/>
+                                                                    </td>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <td>
+                                                                        <span t-field="s.name"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="s.required_status"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="s.estimate_time"
+                                                                              t-options='{"widget": "float_time"}'/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="s.qty"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="s.uom_id"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="s.price"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-out="', '.join(map(lambda x: (x.description or x.name), s.tax_ids))"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="s.tax_amount"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="s.total_amount"/>
+                                                                    </td>
+                                                                </t>
+                                                            </tr>
+                                                        </t>
+                                                        <tr class="border bg-primary text-white">
+                                                            <td class="fw-bold text-end rounded-start" colspan="2">Total
+                                                                Service
+                                                                Time
+                                                            </td>
+                                                            <td class="fw-bold">
+                                                                <span t-field="job_card_id.selected_services_time_total"
+                                                                      t-options='{"widget": "float_time"}'/>
+                                                            </td>
+                                                            <td colspan="5" class="text-end fw-bold">
+                                                                Total Amount
+                                                            </td>
+                                                            <td class="text-end fw-bold rounded-end">
+                                                                <span t-field="job_card_id.selected_services_total"/>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2">
+                                            <i class="fa fa-wrench me-1"/>
+                                            Required Parts
+                                        </p>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="card table-responsive border-0">
+                                            <div class="table-responsive mt-0 pt-0">
+                                                <table class="table table-hover table-sm mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fw-bold">Part</td>
+                                                            <td class="fw-bold">Service</td>
+                                                            <td class="fw-bold">Requirement Status</td>
+                                                            <td class="text-end fw-bold">Qty.</td>
+                                                            <td class="fw-bold">UOM</td>
+                                                            <td class="text-end fw-bold">Unit Price</td>
+                                                            <td class="fw-bold">Tax</td>
+                                                            <td class="text-end fw-bold">Tax Amount</td>
+                                                            <td class="text-end fw-bold">Total Amount</td>
+                                                        </tr>
+                                                        <t t-foreach="job_card_id.inspection_required_parts_ids"
+                                                           t-as="p">
+                                                            <tr t-if="not p.is_additional_part">
+                                                                <t t-if="p.display_type == 'line_section'">
+                                                                    <td colspan="9"
+                                                                        class="bg-primary text-dark bg-opacity-25 rounded">
+                                                                        <span t-field="p.name"/>
+                                                                    </td>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <td>
+                                                                        <span t-field="p.name"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="p.service_id"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="p.required_status"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.qty"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="p.uom_id"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.price"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-out="', '.join(map(lambda x: (x.description or x.name), p.tax_ids))"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.tax_amount"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.total_amount"/>
+                                                                    </td>
+                                                                </t>
+                                                            </tr>
+                                                        </t>
+                                                        <tr class="border bg-primary text-white">
+                                                            <td colspan="8" class="text-end fw-bold rounded-start">
+                                                                Total Amount
+                                                            </td>
+                                                            <td class="text-end fw-bold rounded-end">
+                                                                <span t-field="job_card_id.selected_parts_total"/>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-0">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2">
+                                            <i class="fa fa-wrench me-1"/>Required
+                                            Additional Parts
+                                        </p>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="card border-0 table-responsive">
+                                            <div class="table-responsive mt-0 pt-0">
+                                                <table class="table table-hover table-sm mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fw-bold">Part</td>
+                                                            <td class="fw-bold">Service</td>
+                                                            <td class="fw-bold">Requirement Status</td>
+                                                            <td class="text-end fw-bold">Qty.</td>
+                                                            <td class="fw-bold">UOM</td>
+                                                            <td class="text-end fw-bold">Unit Price</td>
+                                                            <td class="fw-bold">Tax</td>
+                                                            <td class="text-end fw-bold">Tax Amount</td>
+                                                            <td class="text-end fw-bold">Total Amount</td>
+                                                        </tr>
+                                                        <t t-foreach="job_card_id.inspection_required_parts_ids"
+                                                           t-as="p">
+                                                            <tr t-if="p.is_additional_part and p.additional_part_status == 'part_received'">
+                                                                <t t-if="p.display_type == 'line_section'">
+                                                                    <td colspan="9"
+                                                                        class="bg-primary text-dark bg-opacity-25 rounded">
+                                                                        <span t-field="p.name"/>
+                                                                    </td>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <td>
+                                                                        <span t-field="p.name"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="p.service_id"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="p.required_status"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.qty"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="p.uom_id"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.price"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-out="', '.join(map(lambda x: (x.description or x.name), p.tax_ids))"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.tax_amount"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="p.total_amount"/>
+                                                                    </td>
+                                                                </t>
+                                                            </tr>
+                                                        </t>
+                                                        <tr class="border bg-primary text-white">
+                                                            <td colspan="8" class="text-end fw-bold rounded-start">
+                                                                Total Additional Part Amount
+                                                            </td>
+                                                            <td class="text-end fw-bold rounded-end">
+                                                                <span t-field="job_card_id.approved_part_amount"/>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-8 col-sm-12"/>
+                                    <div class="col-md-4 col-sm-12">
+                                        <p class="h5 mb-0 me-3 text-primary text-end">Total</p>
+                                        <div class="card p-2 m-2 table-responsive text-end border-0">
+                                            <table class="table table-hover table-sm table-borderless mb-0">
+                                                <tr>
+                                                    <td>Service Total</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <span t-field="job_card_id.selected_services_total"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Parts Total</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <span t-field="job_card_id.selected_parts_total"/>
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-bottom">
+                                                    <td>Additional Part Total</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <span t-field="job_card_id.approved_part_amount"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="fw-bold">Inspection Total</td>
+                                                    <td>:</td>
+                                                    <td class="fw-bold">
+                                                        <span t-field="job_card_id.inspection_total"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="job_card_content" class="col-12 col-lg">
+                            <div id="bid_card_communication" class="mt-4">
+                                <h2>History</h2>
+                                <t t-call="portal.message_thread">
+                                    <t t-set="object" t-value="job_card_id"/>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+        <!--View My Register Vehicle-->
+        <template id="portal_my_register_vehicle" name="My Vehicles">
+            <t t-call="portal.portal_layout">
+                <div t-if="not vehicles" class="alert alert-warning" role="alert">
+                    There are currently no vehicle for your account.
+                </div>
+                <t t-if="vehicles" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Model</th>
+                            <th>Vehicle</th>
+                            <th>Registration No</th>
+                            <th>Fuel Type</th>
+                            <th>VIN No.</th>
+                            <th>Transmission</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="vehicles" t-as="v">
+                        <tr>
+                            <td>
+                                <a t-att-href="v.get_portal_url()">
+                                    <span t-field="v.vehicle_model_id"/>
+                                </a>
+                            </td>
+                            <td>
+                                <span t-field="v.brand_id"/>
+                            </td>
+                            <td>
+                                <span t-field="v.registration_no"/>
+                            </td>
+                            <td>
+                                <span t-field="v.fuel_type"/>
+                            </td>
+                            <td>
+                                <span t-field="v.vin_no"/>
+                            </td>
+                            <td>
+                                <span t-field="v.transmission"/>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <template id="portal_my_register_vehicle_form" name="Register Vehicle">
+            <t t-call="website.layout">
+                <div class="container py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <t t-call="portal.portal_breadcrumbs"/>
+                        <t t-if="prev_record or next_record" t-call='portal.record_pager'/>
+                    </div>
+                    <t t-if="error">
+                        <div t-attf-class="alert alert-{{error['type']}}" role="alert">
+                            <h4 class="alert-heading">
+                                <span t-esc="error['title']"/>
+                            </h4>
+                            <p>
+                                <span t-esc="error['message']"/>
+                            </p>
+                        </div>
+                    </t>
+                    <t t-if="not error">
+                        <div class="row mb-4 mt-3 align-items-center">
+                            <div class="col-md-12 col-sm-12 text-start">
+                                <h4 class="display-6 mb-0">
+                                    <span t-field="register_vehicle_id.vehicle_model_id" class="text-primary"/>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="btn-toolbar" role="toolbar">
+                                    <div class="btn-group me-2 mb-2">
+                                        <a class="btn btn-primary"
+                                           t-att-href="'/my/vehicle/filter-warranty/' + register_vehicle_id.access_token">
+                                            <i class="fa fa-folder-open-o me-1"/>
+                                            View Warranties
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2"><i
+                                                class="fa fa-car me-1"/>Vehicle Details
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    Brand :
+                                                    <span t-field="register_vehicle_id.brand_id" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Model :
+                                                    <span t-field="register_vehicle_id.vehicle_model_id.name"
+                                                          class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Year :
+                                                    <span t-field="register_vehicle_id.year" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Fuel Type :
+                                                    <span t-field="register_vehicle_id.fuel_type" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Transmission :
+                                                    <span t-field="register_vehicle_id.transmission" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    VIN No :
+                                                    <span t-field="register_vehicle_id.vin_no" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Registration No :
+                                                    <span t-field="register_vehicle_id.registration_no"
+                                                          class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Color :
+                                                    <span t-field="register_vehicle_id.color" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Insurance Provider :
+                                                    <span t-field="register_vehicle_id.insurance_provider"
+                                                          class="fw-bold"/>
+                                                </li>
+                                                <t t-if="register_vehicle_id.is_warranty">
+                                                    <li>
+                                                        Warranty :
+                                                        <span t-field="register_vehicle_id.warranty_type"
+                                                              class="fw-bold"/>
+                                                    </li>
+                                                </t>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="register_vehicle_content" class="col-12 col-lg">
+                            <div id="register_vehicle_communication" class="mt-4">
+                                <h2>History</h2>
+                                <t t-call="portal.message_thread">
+                                    <t t-set="object" t-value="register_vehicle_id"/>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+        <!--View My Vehicle Warranty-->
+        <template id="portal_my_vehicles_warranty" name="Vehicles Warranties">
+            <t t-call="portal.portal_layout">
+                <div t-if="not warranties" class="alert alert-warning" role="alert">
+                    There are currently no vehicle warranty for your account.
+                </div>
+                <t t-if="warranties" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Warranty No</th>
+                            <th>Vehicle</th>
+                            <th>Registration No</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-end">Price</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="warranties" t-as="w">
+                        <tr>
+                            <td>
+                                <a t-att-href="w.get_portal_url()">
+                                    <span t-field="w.name"/>
+                                </a>
+                            </td>
+                            <td>
+                                <span t-field="w.vehicle_model_id"/>
+                            </td>
+                            <td>
+                                <span t-field="w.registration_no"/>
+                            </td>
+                            <td>
+                                <span t-field="w.start_date"/>
+                            </td>
+                            <td>
+                                <span t-field="w.end_date"/>
+                            </td>
+                            <td class="text-center">
+                                <span t-if="w.status=='draft'"
+                                      class="badge rounded-pill text-bg-primary">
+                                    Draft
+                                </span>
+                                <span t-if="w.status=='expire'"
+                                      class="badge rounded-pill text-bg-warning">
+                                    Expired
+                                </span>
+                                <span t-if="w.status=='running'"
+                                      class="badge rounded-pill text-bg-success">
+                                    Running
+                                </span>
+                                <span t-if="w.status=='cancel'"
+                                      class="badge rounded-pill text-bg-cancel">
+                                    Cancelled
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <span t-field="w.price"/>
+
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <template id="portal_my_vehicles_warranty_form" name="Vehicle Warranty">
+            <t t-call="website.layout">
+                <div class="container py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <t t-call="portal.portal_breadcrumbs"/>
+                        <t t-if="prev_record or next_record" t-call='portal.record_pager'/>
+                    </div>
+                    <t t-if="error">
+                        <div t-attf-class="alert alert-{{error['type']}}" role="alert">
+                            <h4 class="alert-heading">
+                                <span t-esc="error['title']"/>
+                            </h4>
+                            <p>
+                                <span t-esc="error['message']"/>
+                            </p>
+                        </div>
+                    </t>
+                    <t t-if="not error">
+                        <div class="row mb-4 mt-3 align-items-center">
+                            <div class="col-md-6 col-sm-12 text-start">
+                                <h4 class="display-6 mb-0">
+                                    <span t-field="warranty_id.name" class="text-primary"/>
+                                </h4>
+                            </div>
+                            <div class="col-md-6 col-sm-12 text-end">
+                                <h5>
+                                    <span t-if="warranty_id.status=='draft'"
+                                          class="badge rounded-pill text-bg-primary">
+                                        Draft
+                                    </span>
+                                    <span t-if="warranty_id.status=='expire'"
+                                          class="badge rounded-pill text-bg-warning">
+                                        Expired
+                                    </span>
+                                    <span t-if="warranty_id.status=='running'"
+                                          class="badge rounded-pill text-bg-success">
+                                        Running
+                                    </span>
+                                    <span t-if="warranty_id.status=='cancel'"
+                                          class="badge rounded-pill text-bg-cancel">
+                                        Cancelled
+                                    </span>
+                                </h5>
+                            </div>
+                        </div>
+                        <t t-if="warranty_id.invoice_id">
+                            <div class="row mb-4">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="btn-toolbar" role="toolbar">
+                                        <div class="btn-group me-2 mb-2">
+                                            <a t-att-href="warranty_id.invoice_id.get_portal_url()"
+                                               class="btn btn-primary">
+                                                <i class="fa fa-money me-1"/>
+                                                Warranty Invoice
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <hr class="row mb-4 mt-0 border-primary"/>
+                        </t>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2"><i
+                                                class="fa fa-tasks me-1"/>Warranty
+                                            Details
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    Start Date :
+                                                    <span t-field="warranty_id.start_date" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    End Date :
+                                                    <span t-field="warranty_id.end_date" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    Price :
+                                                    <span t-field="warranty_id.price" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 mb-2">
+                                        <p class="h5 mb-0 text-primary border-bottom border-primary pb-2"><i
+                                                class="fa fa-car me-1"/>Vehicle Details
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    Model :
+                                                    <a t-att-href="'/my/vehicle/registered-vehicle/form/' + warranty_id.register_vehicle_id.access_token">
+                                                        <span t-field="warranty_id.vehicle_model_id" class="fw-bold"/>
+                                                    </a>
+
+                                                </li>
+                                                <li>
+                                                    Brand :
+                                                    <span t-field="warranty_id.brand_id" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Color :
+                                                    <span t-field="warranty_id.color" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Fuel Type :
+                                                    <span t-field="warranty_id.fuel_type" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Transmission :
+                                                    <span t-field="warranty_id.transmission" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border-0">
+                                            <ul class="mb-0 vehicle-list">
+                                                <li>
+                                                    VIN No :
+                                                    <span t-field="warranty_id.vin_no" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Registration No :
+                                                    <span t-field="warranty_id.registration_no" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Year :
+                                                    <span t-field="warranty_id.year" class="fw-bold"/>
+                                                </li>
+                                                <li>
+                                                    Insurance Provider :
+                                                    <span t-field="warranty_id.insurance_provider" class="fw-bold"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row mb-1">
+                                    <div class="col-md-6 col-sm-12 mb-4">
+                                        <p class="h5 mb-2 text-primary border-bottom border-primary pb-2">
+                                            <i class="fa fa-check me-1 text-success"/>
+                                            Warranty Coverages
+                                        </p>
+                                        <div class="card border-0">
+                                            <span t-out="', '.join(map(lambda x: (x.name), warranty_id.warranty_coverage_ids))"
+                                                  class="fw-bold"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 mb-4">
+                                        <p class="h5 mb-2 text-primary border-bottom border-primary pb-2">
+                                            <i class="fa fa-times me-1 text-danger"/>
+                                            Warranty Limitations
+                                        </p>
+                                        <div class="card border-0">
+                                            <span t-out="', '.join(map(lambda x: (x.name), warranty_id.warranty_limitation_ids))"
+                                                  class="fw-bold"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <t t-if="warranty_id.warranty_description">
+                            <div class="row mb-4">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 mb-2">
+                                            <p class="h5 mb-0 text-primary border-bottom border-primary pb-2"><i
+                                                    class="fa fa-gavel me-1"/>Warranty
+                                                Description
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="card border-0">
+                                                <span t-field="warranty_id.warranty_description"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="warranty_id.terms_condition">
+                            <div class="row mb-4">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 mb-2">
+                                            <p class="h5 mb-0 text-primary border-bottom border-primary pb-2"><i
+                                                    class="fa fa-bars me-1"/>Terms
+                                                &amp; Conditions
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="card border-0">
+                                                <span t-field="warranty_id.terms_condition"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <div id="vehicle_warranty_content" class="col-12 col-lg">
+                            <div id="vehicle_warranty_communication" class="mt-4">
+                                <h2>History</h2>
+                                <t t-call="portal.message_thread">
+                                    <t t-set="object" t-value="warranty_id"/>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+        <!--View My Quotation-->
+        <template id="portal_my_vehicle_quotation" name="My Quotation">
+            <t t-call="portal.portal_layout">
+                <div t-if="not vehicle_quot" class="alert alert-warning" role="alert">
+                    There are currently no vehicle job card quotation for your account.
+                </div>
+                <t t-if="vehicle_quot" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Job Card #</th>
+                            <th>Date</th>
+                            <th>Sent Datetime</th>
+                            <th>Expire Datetime</th>
+                            <th>Vehicle</th>
+                            <th>Registration No</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="vehicle_quot" t-as="q">
+                        <tr>
+                            <td>
+                                <a t-att-href="'/vehicle-service/job-card/' + q.access_token">
+                                    <span t-field="q.name"/>
+                                </a>
+                            </td>
+                            <td>
+                                <span t-field="q.inspection_date"/>
+                            </td>
+                            <td>
+                                <span t-field="q.quotation_sent_date_time"/>
+                            </td>
+                            <td>
+                                <span t-field="q.quote_expire_date"/>
+                            </td>
+                            <td>
+                                <span t-field="q.vehicle_model_id"/>
+                            </td>
+                            <td>
+                                <span t-field="q.registration_no"/>
+                            </td>
+                            <td class="text-center">
+                                <span t-if="q.quote_state in ['draft','sent']"
+                                      class="badge rounded-pill text-bg-primary">
+                                    Quotation Sent
+                                </span>
+                                <span t-if="q.quote_state in ['signed']"
+                                      class="badge rounded-pill text-bg-success">
+                                    Quotation Accepted
+                                </span>
+                                <span t-if="q.quote_state in ['reject']"
+                                      class="badge rounded-pill text-bg-danger">
+                                    Quotation Rejected
+                                </span>
+                                <span t-if="q.quote_state in ['cancel']"
+                                      class="badge rounded-pill text-bg-danger">
+                                    Quotation Cancelled
+                                </span>
+                                <span t-if="q.quote_state in ['expire']"
+                                      class="badge rounded-pill text-bg-warning">
+                                    Quotation Expire
+                                </span>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <!--View My Updates Quotation-->
+        <template id="portal_my_vehicle_update_quotation" name="My Revised Quotation">
+            <t t-call="portal.portal_layout">
+                <div t-if="not jc_update_quot" class="alert alert-warning" role="alert">
+                    There are currently no vehicle job card revised (additional part) quotation for your account.
+                </div>
+                <t t-if="jc_update_quot" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Job Card #</th>
+                            <th>Sent Datetime</th>
+                            <th>Expire Date</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="jc_update_quot" t-as="quot">
+                        <tr>
+                            <td>
+                                <a t-att-href="'/vehicle-service/job-card/additional-part/'+quot.access_token">
+                                    <span t-field="quot.inspection_id.name"/>
+                                </a>
+                            </td>
+                            <td>
+                                <span t-field="quot.quotation_sent_date_time"/>
+                            </td>
+                            <td>
+                                <span t-field="quot.quote_expire_date"/>
+                            </td>
+                            <td class="text-center">
+                                <span t-if="quot.quote_state in ['draft','sent']"
+                                      class="badge rounded-pill text-bg-primary">
+                                    Quotation Sent
+                                </span>
+                                <span t-if="quot.quote_state in ['signed']"
+                                      class="badge rounded-pill text-bg-success">
+                                    Quotation Accepted
+                                </span>
+                                <span t-if="quot.quote_state in ['reject']"
+                                      class="badge rounded-pill text-bg-danger">
+                                    Quotation Rejected
+                                </span>
+                                <span t-if="quot.quote_state in ['cancel']"
+                                      class="badge rounded-pill text-bg-danger">
+                                    Quotation Cancelled
+                                </span>
+                                <span t-if="quot.quote_state in ['expire']"
+                                      class="badge rounded-pill text-bg-warning">
+                                    Quotation Expire
+                                </span>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='car_color_view_form' model='ir.ui.view'>
+        <field name="name">car.color.form</field>
+        <field name="model">car.color</field>
+        <field name="arch" type="xml">
+            <form string="Car color">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="white..."/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='car_color_view_tree' model='ir.ui.view'>
+        <field name="name">car.color.tree</field>
+        <field name="model">car.color</field>
+        <field name="arch" type="xml">
+            <tree string="Car Color">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id='car_color_view_action' model='ir.actions.act_window'>
+        <field name="name">Car Color</field>
+        <field name="res_model">car.color</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new car color.
+          </p><p>
+            You can define several Car Color (e.g. White, Red).
+          </p>
+        </field>
+    </record>
+    
+    <menuitem action="car_color_view_action" parent="car_configuration" name="Car Color" id="car_color_menu" sequence="6"/>
+    
+</odoo>

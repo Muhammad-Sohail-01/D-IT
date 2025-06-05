@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for car.history -->
+        <record id="seq_car_estimation" model="ir.sequence">
+            <field name="name">Car History</field>
+            <field name="code">car.history</field>
+            <field name="prefix">CR</field>
+            <field name="padding">7</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

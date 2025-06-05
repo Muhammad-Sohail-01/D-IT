@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='car_gear_type_view_form' model='ir.ui.view'>
+        <field name="name">car.gear.type.form</field>
+        <field name="model">car.gear.type</field>
+        <field name="arch" type="xml">
+            <form string="Gear Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="2X2..."/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='car_gear_type_view_tree' model='ir.ui.view'>
+        <field name="name">car.gear.type.tree</field>
+        <field name="model">car.gear.type</field>
+        <field name="arch" type="xml">
+            <tree string="Gear Type">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id='car_gear_type_view_action' model='ir.actions.act_window'>
+        <field name="name">Gear Type</field>
+        <field name="res_model">car.gear.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new car gear type.
+          </p><p>
+            You can define several Car gear type (e.g. 2X2, 4X4).
+          </p>
+        </field>
+    </record>
+    
+    <menuitem action="car_gear_type_view_action" parent="car_configuration" name="Car Gear Type" id="car_gear_type_menu" sequence="6"/>
+    
+</odoo>

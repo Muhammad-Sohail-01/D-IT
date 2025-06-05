@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="custom_inspection_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="header" style="font-family: sans-serif; border: none;">
+                        <style>
+                            .report_heading {
+                            border-top: 60px solid #960505;
+                            border-left: 0px solid transparent;
+                            border-right: 25px solid transparent;
+                            height: 0;
+                            width: 350px;
+                            }
+                            .report_heading_text {
+                            position: absolute;
+                            margin-top: -55px;
+                            margin-left: 35px;
+                            font-size: 40px;
+                            color: white;
+                            font-weight: 900;
+                            }
+                        </style>
+                        <div style="width: 400px; float:left; height:120px;" align="left">
+                            <div class="report_heading">
+                                <p class="report_heading_text">INSPECTION</p>
+                            </div>
+                        </div>
+                        <div style="width: 450px; float:left; height:175px;" align="right">
+                            <img t-if="doc.company_id.logo"
+                                 t-att-src="image_data_uri(doc.company_id.logo)"
+                                 id="company_logo" alt="Logo" height="175" width="330"/>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <style>
+                            .hr{
+                            margin-top: 2%;
+                            }
+                            .foot{
+                            margin-top: 0.5%;
+                            }
+                            .customer_heading {
+                            border-top: 40px solid;
+                            border-right: 18px solid transparent;
+                            height: 0;
+                            width: 325px;
+                            }
+                            .customer_heading_text {
+                            position: absolute;
+                            margin-top: -32px;
+                            margin-left: 35px;
+                            font-size: 25px;
+                            color: white;
+                            font-weight: 900;
+                            }
+                            .vehicle_heading {
+                            border-top: 40px solid;
+                            border-left: 18px solid transparent;
+                            height: 0;
+                            width: 325px;
+                            }
+                            .vehicle_heading_text {
+                            position: absolute;
+                            margin-top: -32px;
+                            margin-left: 35px;
+                            font-size: 25px;
+                            color: white;
+                            font-weight: 900;
+                            }
+                        </style>
+                        <div style="width: 40%; float:left; height:150px;">
+                            <table width="100%" style="margin-top: 10px;">
+                                <tr width="100%">
+                                    <td width="30%" style="font-size: 20px;">Date:</td>
+                                    <td width="70%" style="font-size: 20px;"><span t-esc="doc.inspection_date.strftime('%d/%m/%Y')"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="40%" style="font-size: 20px;">Inspection No:</td>
+                                    <td width="60%" style="font-size: 20px;"><span t-field="doc.ins_name"/></td>
+                                </tr>
+                            </table>
+                            <div class="customer_heading">
+                                <p class="customer_heading_text">Customer Details</p>
+                            </div>
+                            <table width="100%" style="margin-top: 10px; padding-right: 10px;">
+                                <tr width="100%">
+                                    <td width="20%" >Name</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.partner_id.name"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">Mobile</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.partner_id.mobile"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">TRN</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.partner_id.vat"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">Advisor</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.other_salesperson_id"/></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div style="width: 20%; float:left; height:150px;" align="center">
+                            <img t-if="doc.car_make.image_128" t-att-src="image_data_uri(doc.car_make.image_128)" style="max-height: 150px; max-width: 450px;" alt="Logo"/>
+                        </div>
+                        <div style="width: 40%; float:right; height:150px;" align="left">
+
+                            <table width="100%" style="margin-top: 10px;">
+                                <tr width="100%">
+                                    <td width="30%" style="font-size: 20px;"><br/></td>
+                                    <td width="70%" style="font-size: 20px;"><br/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="30%" style="font-size: 20px;">Model :</td>
+                                    <td width="70%" style="font-size: 20px;"><span t-field="doc.car_model.name"/></td>
+                                </tr>
+                            </table>
+                            <div class="vehicle_heading">
+                                <p class="vehicle_heading_text">Vehicle Details</p>
+                            </div>
+                            <table width="100%" style="margin-top: 10px; padding-right: 25px; margin-left: 20px;">
+                                <tr width="100%">
+                                    <td width="20%">Plate</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.car_history_id.plate_number"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">Year</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.year"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">ODO</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.current_mileage"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">VIN</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.car_history_id.vin_number"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <table width="100%">
+                            <tbody>
+                                <hr style="height:2px;color:red;background-color:red"/>
+                                <tr>
+                                    <th style="background-color:grey;" width="80%">ITEM</th>
+                                    <th style="background-color:grey;" width="20%">QTY</th>
+                                </tr>
+                                <t t-foreach="doc.order_line" t-as="line">
+                                    <tr>
+                                        <t t-if="line.display_type == false">
+                                            <td style="line-height: 1.5;" width="80%">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td align="right" width="20%">
+                                                <span t-field="line.product_uom_qty"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_section'">
+                                            <td name="td_section_line" style="background-color:#C0C0C0; line-height: 1.5;" colspan="5">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_note'" style="background-color:#CCCCCC;">
+                                            <td name="td_note_line" style="background-color:#C0C0C0; line-height: 1.5;" colspan="5">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <table width="100%" class="foot">
+                            <tbody>
+                                <hr class='hr' style="height:2px;color:red;background-color:red"/>
+                                <tr>
+                                    <th>SUPERVISOR</th>
+                                    <th>QUALITY CONTROL</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="font-size: 20px; margin-top: 10px;">Terms and Conditions: </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 11px;">1. Estimate charges of minimum Dhs.300/- or more will be charged if job estimated and not repaired.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 11px;">2. Free Pick Up and Delivery is also subject to approval.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 11px;">3. If the car is not collected within 7 days after inspection or repair, a parking fee of AED 50/- per day will be charged</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer">
+                        <div>
+                            <img src="/carlab_report/static/img/Footer.jpg" style="margin-bottom:100px; max-height: 130px; max-width: 920px;"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_custom_inspection_report" model="ir.actions.report">
+            <field name="name">Inspection</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_reports.custom_inspection_report</field>
+            <field name="report_file">custom_reports.custom_inspection_report</field>
+            <field name="print_report_name">(object.ins_name)</field>
+            <field name="paperformat_id" ref="custom_reports.custom_paperformat_quotation"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

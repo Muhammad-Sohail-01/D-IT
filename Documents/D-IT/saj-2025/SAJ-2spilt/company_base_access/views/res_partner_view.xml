@@ -1,0 +1,16 @@
+<odoo>
+<!--  <data>-->
+<!--   &lt;!&ndash; Partner View &ndash;&gt;-->
+<!--        <record id="view_partner_form_inherit_ext" model="ir.ui.view">-->
+<!--            <field name="name">res.partner.form.inherit</field>-->
+<!--            <field name="model">res.partner</field>-->
+<!--            <field name="inherit_id" ref="base.view_partner_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="company_group_ids" widget="many2many_tags"/>-->
+<!--                    <field name="allowed_company_ids" widget="many2many_tags"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--  </data>-->
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_time_off_portal_time_off_portal,time_off_portal.time_off_portal,model_time_off_portal_time_off_portal,base.group_user,1,1,1,1
+access_time_off_portal_time_off_portal_portal,time_off_portal.time_off_portal,model_time_off_portal_time_off_portal,base.group_portal,1,0,1,0

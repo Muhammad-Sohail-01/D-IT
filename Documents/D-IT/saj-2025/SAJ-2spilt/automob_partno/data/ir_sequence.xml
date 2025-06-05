@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record id="seq_part_internal_no" model="ir.sequence">
+            <field name="name">Part Internal Number</field>
+            <field name="code">part.internal.no.sequence</field>
+<!--            <field name="prefix">PN</field>  &lt;!&ndash; Optional prefix &ndash;&gt;-->
+            <field name="padding">4</field>   <!-- Adjust padding as needed -->
+        </record>
+    </data>
+</odoo>

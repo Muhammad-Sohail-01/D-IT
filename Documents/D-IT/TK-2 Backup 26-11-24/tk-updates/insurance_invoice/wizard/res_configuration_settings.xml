@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sale</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='invoicing_setting_container']" position="inside">
+                <setting id="insurance_payments"
+                            string="Insurance Payments"
+                            help="Product used for insurance payments"
+                            company_dependent="1">
+                            <field name="deposit_default_product_id_insurance" context="{'default_detailed_type': 'service'}"/>
+                        </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

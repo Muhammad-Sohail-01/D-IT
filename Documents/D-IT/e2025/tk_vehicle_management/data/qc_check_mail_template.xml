@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="task_qc_check_mail_template" model="mail.template">
+            <field name="name">Task Quality Check Mail Template</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="subject">Quality Check Request for Completed Task</field>
+            <field name="body_html" type="html">
+                <p>
+                    Dear
+                    <strong>
+                        Team Leaders
+                    </strong>
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <p>
+                    The task assigned to you has been completed.
+                </p>
+                <p>
+                    To proceed further, we kindly request a Quality Check (QC) to be conducted on the task. Your
+                    thorough review and feedback will be crucial in ensuring the final quality of work.
+                    <br/>
+                    <br/>
+                    Once you have completed the QC, kindly provide your approval or feedback for any necessary
+                    revisions.
+                </p>
+                <strong>
+                    Task Details
+                </strong>
+                <ul>
+                    <li>
+                        Task :
+                        <t t-out="object.env.context.get('task_name')"/>
+                    </li>
+                    <li>
+                        Inspection Ref :
+                        <t t-out="object.env.context.get('jc_ref')"/>
+                    </li>
+                </ul>
+                <p>
+                    <strong>Best regards</strong>
+                    <br/>
+                    <strong>
+                        <t t-out="object.company_id.name"/>
+                    </strong>
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <span>
+                    <t t-out="object.company_id.name"/>
+                    <br/>
+                    <t t-out="object.company_id.phone"/>
+                    <br/>
+                    <t t-out="object.company_id.email"/>
+                    <br/>
+                    <t t-out="object.company_id.website"/>
+                </span>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_company_evs_user,company EVS user,base.model_res_company,base.group_user,1,0,0,0
+access_company_evs_manager,company EVS manager,base.model_res_company,base.group_system,1,1,1,1
+access_company_evs_asset_user,company EVS asset user,account_asset.model_account_asset,base.group_user,1,0,0,0
+access_company_evs_asset_manager,company EVS asset manager,account_asset.model_account_asset,account.group_account_manager,1,1,1,1
+access_company_evs_journal_user,company EVS journal user,account.model_account_journal,base.group_user,1,0,0,0
+access_company_evs_journal_manager,company EVS journal manager,account.model_account_journal,account.group_account_manager,1,1,1,1

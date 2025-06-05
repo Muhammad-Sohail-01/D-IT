@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+    <record id="vehicle_product_template_form_inherit_view" model="ir.ui.view">
+        <field name="name">vehicle.product.template.form.inherit.view</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='detailed_type']" position="after">
+        <field name="estimate_time" widget="float_time" invisible="detailed_type != 'service'"    required="detailed_type == 'service' or is_warranty"/>
+        </xpath>
+        <xpath expr="//div[@name='options']" position="inside">
+            <span class="d-inline-block">
+                <field name="is_warranty" invisible="is_service_contract"/>
+                <label for="is_warranty" invisible="is_service_contract"/>
+            </span>
+            <span class="d-inline-block">
+                <field name="is_service_contract" invisible="is_warranty"/>
+                <label for="is_service_contract" invisible="is_warranty"/>
+            </span>
+        </xpath>
+        <xpath expr="//field[@name='uom_po_id']" position="after">
+            <separator string="Warranty Details" invisible="not is_warranty"/>
+            
+                            <label for="duration" string="Duration" invisible="not is_warranty"/>
+                            <div class="o_row">
+                                <field name="duration" invisible="not is_warranty" required="is_warranty"/>
+                                <field name="period" invisible="not is_warranty" required="is_warranty"/>
+                            </div>
+                        
+
+                <!-- <div class="row">
+                    <div class="col-5">
+                        Duration
+                    </div>
+                    <div class="col-7 text-end">
+                    <field name="duration" invisible="not is_warranty" required="is_warranty"/> 
+                    <field name="period" invisible="not is_warranty" required="is_warranty"/>
+                    </div>
+                     </div> -->
+                <!-- <field name="duration_id" invisible="not is_warranty" required="is_warranty"/> -->
+            <separator string="TermS &amp; Conditions" invisible="not is_warranty"/>
+                <field name="warranty_coverage_ids" widget="many2many_tags" invisible="not is_warranty" required="is_warranty"/>
+                <field name="warranty_limitation_ids" invisible="not is_warranty" widget="many2many_tags" required="is_warranty"/>
+        </xpath>
+        <xpath expr="//page[@name='general_information']/group[1]" position="after">
+            <group string="Warranty Description" invisible="not is_warranty">
+                <field colspan="2" name="warranty_desc" nolabel="1" placeholder="Warranty Description."/>
+            </group>
+        </xpath>
+        </field>
+    </record>
+    <record id="warranty_product_action" model="ir.actions.act_window">
+        <field name="name">Warranty Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="domain">[('is_warranty','=',True)]</field>
+        <field name="context">{'default_is_warranty':True}</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+    </data>
+</odoo>

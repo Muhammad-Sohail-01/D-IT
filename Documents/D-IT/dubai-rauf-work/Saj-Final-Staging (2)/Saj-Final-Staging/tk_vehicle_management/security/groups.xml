@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="module_tk_vehicle_management" model="ir.module.category">
+            <field name="name">Vehicle Management</field>
+            <field name="description">Access rights for vehicle Management</field>
+        </record>
+        <record id="vehicle_workshop_manager" model="res.groups">
+            <field name="name">Workshop Manager</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_tk_vehicle_management"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="vehicle_receptionist" model="res.groups">
+            <field name="name">Receptionist</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_tk_vehicle_management"/>
+        </record>
+        <record id="vehicle_team_leader" model="res.groups">
+            <field name="name">Team Leader</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_tk_vehicle_management"/>
+        </record>
+        <record id="vehicle_technician" model="res.groups">
+            <field name="name">Technician</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_tk_vehicle_management"/>
+        </record>
+        <record id="vehicle_service_adviser" model="res.groups">
+            <field name="name">Service Advisor</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_tk_vehicle_management"/>
+        </record>
+        <record id="base.default_user" model="res.users">
+            <field name="groups_id" eval="[(4,ref('vehicle_workshop_manager'))]"/>
+        </record>
+    </data>
+</odoo>

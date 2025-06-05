@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_vehicle_warehouse" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.vehicle.warehouse</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="25"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Vehicle Repair" string="Vehicle Repair"
+                         name="tk_vehicle_management">
+                        <block title="Quotation">
+                            <setting help="Sent Quotation will be expired in following days">
+                                <field name="quot_expire_days" required="1"/>
+                            </setting>
+                            <setting help="Quotation Terms &amp; Conditions">
+                                <field name="quotation_term" required="0"/>
+                            </setting>
+                            <setting help="Quotation message send using this template">
+                                <field name="wa_quot_template_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                            <setting help="Additional part quotation message send using this template">
+                                <field name="wa_additional_quot_template_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Default General Service">
+                            <setting
+                                    help="When only a part is available in the job card, this service will be used to create tasks.">
+                                <field name="general_service_id" required="1"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Consent">
+                            <setting help="Sent consent will be expired in following days">
+                                <field name="consent_expire_days" required="1"/>
+                            </setting>
+                            <setting help="Consent whatsapp message send using this template">
+                                <field name="wa_consent_template_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Whatsapp Template : Appointment Reminder">
+                            <setting help="Template : 15 Days Before Sent Whatsapp Message">
+                                <field name="wa_template_appointment_reminder_week_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                            <setting help="Template :1 Day Before Sent Whatsapp Message ">
+                                <field name="wa_template_appointment_reminder_day_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                            <setting help="Template : Appointment Miss Sent Whatsapp Message ">
+                                <field name="wa_template_appointment_miss_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Whatsapp Template : Team Leader Quality Checks">
+                            <setting help="Template : technician send quality check message to team leaders">
+                                <field name="wa_team_leader_qc_template_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                            <setting help="Template : upon completion qc check message send to receptionist">
+                                <field name="wa_qc_check_complete_template_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Whatsapp Template : Check-in Notification">
+                            <setting help="Template : Notification to 'Service Advisor' on check in creation">
+                                <field name="wa_check_in_service_advisor_template_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                            <setting help="Template : Notification to 'Customer' on check in creation">
+                                <field name="wa_check_in_customer_template_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Shop Supplies and Environmental Fees">
+                            <setting help="Default Product">
+                                <field name="shop_supply_product_id" required="0"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Advance Payment Configurations">
+                            <setting help="Select Journal to take advance payments from customers">
+                                <field name="advance_payment_journal_id"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                                <field name="available_journal_ids" invisible="1"/>
+                            </setting>
+                            <setting help="Select Advance payment status">
+                                <field name="advance_payment_status" widget="radio" options="{'horizontal': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Invoice Configurations">
+                            <setting
+                                    help="Choose whether you want to automatically create a posted invoice or a draft invoice.">
+                                <field name="invoice_status" widget="radio" options="{'horizontal': True}"/>
+                            </setting>
+                        </block>
+                        <block title="Warranty Applicable Invoice Journal">
+                            <setting
+                                    help="Choose whether you want to automatically create a  invoice for warranty applicable">
+                                <field name="service_note_journal_id"/>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+        <record id="action_setting_vehicle_app" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'tk_vehicle_management'}</field>
+        </record>
+    </data>
+</odoo>

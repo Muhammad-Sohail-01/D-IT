@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="discount_product_category_form_view" model="ir.ui.view">
+        <field name="name">discount.product.category.view.form.inherit.product.discount.limit</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <group name="first" position="after">
+                <group>
+                    <group name="discount" string="Discount Limit (%)" help="If it is specified, the user can't give a discount greater than the specified amount">
+                        <field name="desc_limit"/>
+                    </group>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

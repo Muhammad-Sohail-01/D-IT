@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_res_company_form" model="ir.ui.view">
+        <field name="name">res.company.form.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//h1//field[@name='name']" position="after">
+                 <label for="unique_code"/>
+                 
+                        <h5>
+                            <field name="unique_code" placeholder="e.g. "/>
+                        </h5>
+                <label for="unique_code_no"/>
+                        <h6>
+                                <field name="unique_code_no" placeholder="Only numbers "/>
+                        </h6>
+            </xpath>
+        </field>
+    </record>
+</odoo>

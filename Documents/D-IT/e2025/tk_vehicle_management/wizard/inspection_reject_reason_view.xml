@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inspection_reject_reason_view_form" model="ir.ui.view">
+            <field name="name">inspection.reject.reason.view.form</field>
+            <field name="model">inspection.reject.reason</field>
+            <field name="arch" type="xml">
+                <form>
+                    <separator string="Reason"/>
+                    <field name="name" nolable="1"/>
+                    <footer>
+                        <button string="Reject" type="object" class="btn btn-danger"
+                                name="action_reject_inspection" icon="fa-times-circle"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="inspection_reject_action" model="ir.actions.act_window">
+            <field name="name">Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inspection.reject.reason</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

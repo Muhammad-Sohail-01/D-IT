@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="custom_paperformat_quotation" model="report.paperformat">
+        <field name="name">Estimation / Inspection Report Format</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">27</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">55</field>
+        <field name="dpi">90</field>
+        <field name="report_ids" eval="[(4,ref('sale.action_report_saleorder'))]"/>
+    </record>
+
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="name">Technician Copy</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sale.report_saleorder</field>
+        <field name="report_file">sale.report_saleorder</field>
+        <field name="print_report_name">"Techician Copy"</field>
+        <field name="paperformat_id" ref="evs_report.custom_paperformat_quotation"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+
+    <!-- <record id="account.account_invoices" model="ir.actions.report">
+        <field name="name">Tax Invoice</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">evs_report.report_invoice</field>
+        <field name="report_file">evs_report.report_invoice</field>
+        <field name="print_report_name">"Tax Invoice"</field>
+        <field name="attachment"></field>
+        <field name="paperformat_id" ref="evs_report.custom_paperformat_quotation"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice')),
+(4, ref('account.group_account_readonly'))]"/>
+    </record>
+
+    <record id="stock.action_report_delivery" model="ir.actions.report">
+        <field name="name">Job Card</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">stock.report_deliveryslip</field>
+        <field name="report_file">stock.report_deliveryslip</field>
+        <field name="print_report_name">"Job Card"</field>
+        <field name="paperformat_id" ref="evs_report.custom_paperformat_quotation"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_type">report</field>
+    </record>  -->
+</odoo>

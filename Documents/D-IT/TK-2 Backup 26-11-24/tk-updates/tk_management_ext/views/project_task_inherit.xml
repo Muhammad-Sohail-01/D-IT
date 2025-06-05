@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="task_vehicle_ext_form_inherit_view" model="ir.ui.view">
+            <field name="name">task.vehicle.ext.form.inherit.view</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_ids']" position="before">
+                    <field name="team_technician_id" invisible="1"/>
+                    <field name="portal_user_group_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="domain">[('groups_id', 'in', portal_user_group_id)]</attribute>
+                <attribute name="required">status not in ['in_progress']</attribute>
+                
+                </xpath>
+
+                
+                <xpath expr="//field[@name='responsible_id']" position="after">
+                    <field name="car_plate_number"/>
+                    <field name="bay"/>
+                </xpath>
+
+                <xpath expr="//header//button[@name='action_request_qc_check']" position="attributes">
+                    <attribute name='invisible'>task_state == 'draft' and status_ref in ('qc_check')</attribute>
+                     <attribute name="string">Go For QA Check</attribute>
+
+                </xpath>
+
+                <xpath expr="//header//button[@name='action_complete_inspection_task']" position="attributes">
+                    <attribute name='invisible'>status_ref != 'pending'</attribute>
+
+               </xpath>
+            </field>
+        </record>
+
+        
+         <record id="task_vehicle_ext_tree_inherit_view" model="ir.ui.view">
+            <field name="name">task.vehicle.ext.tree.inherit.view</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_ids']" position="after">
+                    <field name="team_id"/>
+                    <field name="car_plate_number"/>
+                    <field name="bay"/>
+                </xpath>
+                
+            </field>
+         </record>
+    </data>
+
+</odoo>
+

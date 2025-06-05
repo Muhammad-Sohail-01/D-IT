@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Default Quotation Mail Template-->
+        <record id="customer_inspection_quotation_mail_template" model="mail.template">
+            <field name="name">Customer Quotation Mail Template</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="subject">Quotation for Vehicle Service</field>
+            <field name="email_from">{{object.company_id.email}}</field>
+            <field name="partner_to">{{ object.customer_id.id }}</field>
+            <field name="body_html" type="html">
+                <table style="width:100%;margin:0px;">
+                    <tr>
+                        <td>
+                            Dear
+                            <br/>
+                            <strong>
+                                <t t-out="object.customer_id.name"/>
+                            </strong>
+                        </td>
+                    </tr>
+                </table>
+                <hr class="mb-1 mt-1"/>
+                <p>
+                    Thank you for choosing our service for your vehicle's maintenance needs. As per your request, we
+                    have prepared a quotation for the service required.
+                </p>
+                <strong>
+                    Below attachment, you will find a breakdown of the costs.
+                </strong>
+                <br/>
+                <p>
+                    Please review the quotation details above. If everything looks satisfactory, kindly confirm your
+                    approval before
+                    <strong>
+                        <span t-field="object.quote_expire_date"/>
+                    </strong>
+                    using below link.
+                    <br/>
+                    <br/>
+                    Should you have any questions or require further clarification, feel free to reach out to
+                    our customer service team.
+                </p>
+                <strong>
+                    <a class="btn btn-success" role="button"
+                       t-att-href="object.quote_url">
+                        Approve Quotation
+                    </a>
+                </strong>
+                <br/>
+                <br/>
+                <strong>
+                    Thank you for choosing
+                    <t t-out="object.company_id.name"/>.
+                </strong>
+                <br/>
+                <p>
+                    <strong>Best regards</strong>
+                    <br/>
+                    <strong>
+                        <t t-out="object.company_id.name"/>
+                    </strong>
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <span>
+                    <h6>
+                        <t t-out="object.company_id.name"/>
+                    </h6>
+                    <t t-out="object.company_id.phone"/>
+                    <br/>
+                    <t t-out="object.company_id.email"/>
+                    <br/>
+                    <t t-out="object.company_id.website"/>
+                </span>
+            </field>
+            <field name="report_template_ids"
+                   eval="[(4, ref('tk_vehicle_management.action_vehicle_quot_inspection_qweb_report'))]"/>
+            <field name="auto_delete" eval="False"/>
+        </record>
+        <!--Update Quotation Mail Template-->
+        <record id="customer_inspection_update_quotation_mail_template" model="mail.template">
+            <field name="name">Customer Updated Quotation Mail Template</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="subject">Updated Quotation for Vehicle Service</field>
+            <field name="email_from">{{object.company_id.email}}</field>
+            <field name="partner_to">{{ object.customer_id.id }}</field>
+            <field name="body_html" type="html">
+                <table style="width:100%;margin:0px;">
+                    <tr>
+                        <td>
+                            Dear
+                            <br/>
+                            <strong>
+                                <t t-out="object.customer_id.name"/>
+                            </strong>
+                        </td>
+                    </tr>
+                </table>
+                <hr class="mb-1 mt-1"/>
+                <p>
+                    I hope this email finds you well. We appreciate your ongoing trust in our services and for choosing
+                    <t t-out="object.company_id.name"/>
+                    for your vehicle's maintenance needs.
+                    <br/>
+                    <br/>
+                    During the servicing of your Vehicle, our technicians discovered additional
+                    requirements that necessitate the inclusion of extra parts. As a result, we have revised the initial
+                    service quotation to reflect these updates. Please find the details of the additional parts and the
+                    updated quotation
+                    <strong>attached with this email.</strong>
+                </p>
+                <p>
+                    We understand that unexpected repairs can be inconvenient, and we have made every effort to keep the
+                    costs reasonable while ensuring the highest quality service for your vehicle. The attached quotation
+                    provides a breakdown of the additional parts required, their costs, and the updated total for your
+                    reference.
+                    <br/>
+                    <br/>
+                    If everything looks satisfactory, kindly confirm your approval before
+                    <strong>
+                        <span t-out="object.env.context.get('expiry_date')"/>
+                    </strong>
+                    using below link.
+                    <br/>
+                    <br/>
+                    <a class="btn btn-primary" role="button"
+                       t-att-href="object.env.context.get('url')">Approve Additional Part
+                    </a>
+                    <br/>
+                    <br/>
+                    Should you have any questions about the updated quotation, the additional parts, or if you would
+                    like to proceed with the service, please feel free to contact our service team
+                </p>
+                <strong>
+                    Thank you for choosing
+                    <t t-out="object.company_id.name"/>.
+                </strong>
+                <br/>
+                <p>
+                    <strong>Best regards</strong>
+                    <br/>
+                    <strong>
+                        <t t-out="object.company_id.name"/>
+                    </strong>
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <span>
+                    <h6>
+                        <t t-out="object.company_id.name"/>
+                    </h6>
+                    <t t-out="object.company_id.phone"/>
+                    <br/>
+                    <t t-out="object.company_id.email"/>
+                    <br/>
+                    <t t-out="object.company_id.website"/>
+                </span>
+            </field>
+            <field name="report_template_ids"
+                   eval="[(4, ref('tk_vehicle_management.action_vehicle_quot_update_inspection_qweb_report'))]"/>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

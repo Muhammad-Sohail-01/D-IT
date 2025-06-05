@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Common Document Formats -->
+        <record id="document_format_pdf" model="hr.loan.document.format">
+            <field name="name">PDF Document</field>
+            <field name="extension">.pdf</field>
+            <field name="mimetype">application/pdf</field>
+        </record>
+
+        <record id="document_format_jpg" model="hr.loan.document.format">
+            <field name="name">JPEG Image</field>
+            <field name="extension">.jpg</field>
+            <field name="mimetype">image/jpeg</field>
+        </record>
+
+        <record id="document_format_png" model="hr.loan.document.format">
+            <field name="name">PNG Image</field>
+            <field name="extension">.png</field>
+            <field name="mimetype">image/png</field>
+        </record>
+
+        <record id="document_format_doc" model="hr.loan.document.format">
+            <field name="name">Word Document</field>
+            <field name="extension">.doc</field>
+            <field name="mimetype">application/msword</field>
+        </record>
+
+        <record id="document_format_docx" model="hr.loan.document.format">
+            <field name="name">Word Document</field>
+            <field name="extension">.docx</field>
+            <field name="mimetype">application/vnd.openxmlformats-officedocument.wordprocessingml.document</field>
+        </record>
+    </data>
+</odoo>

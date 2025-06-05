@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--	<record id="action_print_invoice_credit_service" model="ir.actions.server">-->
+<!--		<field name="name">Print Invoice / Credit Note / Service Note</field>-->
+<!--		<field name="model_id" ref="account.model_account_move"/>-->
+<!--		<field name="state">code</field>-->
+<!--		<field name="code">-->
+<!--	        if record.move_type == 'out_refund':-->
+<!--	            action = env.ref('evs_invoice_ext.action_report_credit_note').id-->
+<!--	        elif record.move_type == 'out_invoice' and record.journal_id.name == 'Service Note':-->
+<!--	            action = env.ref('evs_invoice_ext.action_report_service_note').id-->
+<!--	        else:-->
+<!--	            action = env.ref('evs_invoice_ext.action_report_evs_invoice').id-->
+<!--	            action_result = env['ir.actions.report'].browse(action).report_action(record)-->
+<!--        </field>-->
+<!--	</record>-->
+<!--	<record id="view_move_form_inherit" model="ir.ui.view">-->
+<!--		<field name="name">account.move.form.inherit.print_report</field>-->
+<!--		<field name="model">account.move</field>-->
+<!--        <field name="inherit_id" ref="account.view_move_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--	        <xpath expr="//button[@name='action_post']" position="after">-->
+<!--		        <button name="%(action_print_invoice_credit_service)d"-->
+<!--		                type="action"-->
+<!--		                class="btn-primary"-->
+<!--		                string="Print IN/CN/SN"/>-->
+<!--	        </xpath>-->
+<!--        </field>-->
+<!--	</record>-->
+</odoo>

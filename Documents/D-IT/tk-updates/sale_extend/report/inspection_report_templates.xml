@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+    
+                <!-- <template id="report_inspection_document">-->
+                <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+            
+                <!-- Inspection Report Header start -->
+                <t t-if="doc.state == 'draft' or doc.state == 'sent'">
+                    <div class="header">
+                        <div class="col-auto col-6">
+                            <img src='/sale_extend/static/img/header.png' style="max-height: 170px; max-width: 920px;"/>
+                        </div>
+                     </div>
+                 </t>
+                 <!-- Inspection Report Header Over -->
+                 
+                 <!-- Estimation Report Header start -->
+                 <t t-if="doc.state == 'sale_create' or doc.state == 'sale' or doc.state == 'done'">
+                     <div class="header">
+                        <div class="row">
+                            <div class="col-auto col-6">
+                                <img src='/sale_extend/static/img/header.png' style="max-height: 170px; max-width: 920px;"/>
+                            </div>
+                           </div>
+                     </div>
+                 </t>
+                 <!-- Estimation Report Header Over -->
+             
+                 <!-- Inspection Report page start -->
+                 <t t-if="doc.state == 'draft' or doc.state == 'sent'">
+                    <div class="page">
+                        <table style="width: 920px;">
+                            <tr style="border:solid 1px;height: 40px;">
+                                <td style='border:none;' rowspan="2">
+                                    <h1 style="color:red;text-align:center;"><b>INSPECTION</b></h1>
+                                </td>
+                                <td style="text-align:center;border:solid 1px;">
+                                    <strong><![CDATA[&nbsp;]]>Inspection #</strong>
+                                </td>
+                                <td style="text-align:left;border:solid 1px;">
+                                    <![CDATA[&nbsp;]]><span t-field="doc.ins_name"/>
+                                </td>
+                            </tr>
+                            <tr style="border:solid 1px;height: 40px;">
+                                <td style="text-align:center;border:solid 1px;">
+                                    <strong><![CDATA[&nbsp;]]>Name<![CDATA[&nbsp;]]></strong>
+                                </td>
+                                <td style="text-align:left;border:solid 1px;">
+                                    <![CDATA[&nbsp;]]><span t-field="doc.partner_id.street"/><![CDATA[&nbsp;]]>
+                                </td>
+                            </tr>
+                        </table>
+                        <br></br>
+
+                        <table style="width: 920px;">
+                            <!-- <style>
+                               td, th{border:solid 1px; height: 45px;}
+                            </style>-->
+                            <tbody>
+                                <tr style="border:solid 1px;height: 40px;">
+                                    <th style="text-align:center;border:solid 1px;">Advisor</th>
+                                    <th style="text-align:center;border:solid 1px;">Customer Mobile</th>
+                                    <th style="text-align:center;border:solid 1px;">Service Writer</th>
+                                    <th style="text-align:center;border:solid 1px;">Time Started</th>
+                                    <th style="text-align:center;border:solid 1px;">Date</th>
+                                    <!-- <th>Finished At</th>
+                                    <th>Total Time</th>
+                                    <th>JC Date</th>-->
+                                  </tr>
+                                  <tr style="border:solid 1px;height: 40px;">
+                                    <td style="text-align:center;border:solid 1px;"><span t-field="doc.user_id.name"/></td>
+                                    <td style="text-align:center;border:solid 1px;"><span t-field="doc.partner_id.phone"/></td>
+                                    <td style="text-align:center;border:solid 1px;"><span t-field="doc.service_writer_id.name"/></td>
+                                    <td style="text-align:center;border:solid 1px;"><span t-field="doc.in_time"/></td>
+                                    <td style="text-align:center;border:solid 1px;"><span t-field="doc.inspection_date" t-options='{"format": "dd/MM/yyyy"}'/></td>
+                                    <!-- <td><span t-field="doc.out_time"/></td>
+                                    <td><span t-field="doc.total_time"/></td>
+                                    <td><span t-field="doc.date_order" t-options='{"format": "dd/MM/yyyy"}'/></td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+            
+                        <div style="width: 920px;">
+                            <div class="border-black" style="border-bottom: 10px solid red; margin-top:10px;"></div>
+                        </div>
+            
+                        <table style="width: 920px; margin-top:10px;">
+                            <tr style="border:solid 1px;height: 40px;">
+                                <th style="text-align:center;border:solid 1px;">Reference</th>
+                                <th style="text-align:center;border:solid 1px;">Year</th>
+                                <th style="text-align:center;border:solid 1px;">Make</th>
+                                <th style="text-align:center;border:solid 1px;">Model</th>
+                                <th style="text-align:center;border:solid 1px;">Plate Number</th>
+                                <th style="text-align:center;border:solid 1px;">ODO</th>
+                              </tr>
+                              <tr style="border:solid 1px;height: 40px;">
+                                <td style="width:170px; text-align:center;border:solid 1px;"><span t-field="doc.client_order_ref"/></td>
+                                <td style="width:80px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.year"/></td>
+                                <td style="width:150px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.car_brand_id.name"/></td>
+                                <td style="width:220px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.car_model_id.name"/></td>
+                                <td style="width:150px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.plate_number"/></td>
+                                <td style="width:150px; text-align:center;border:solid 1px;"><span t-field="doc.current_mileage"/></td>
+                            </tr>
+                        </table>
+                
+                        <div style="width: 920px;">
+                            <div style="border-bottom: 10px solid red; margin-top:10px; margin-bottom:10px;"></div>
+                        </div>
+            
+                        <table style="width: 920px;">
+                            <thead style="display: table-row-group">
+                                <tr>
+                                    <th style="width: 650px;">Job Description</th>
+                                    <th style="width: 120px;">Qty</th>
+                                    <th style="width: 150px;">Time</th>
+                                  </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.order_line" t-as="line">
+                                      <tr>
+                                        <td style="text-align:left;"><span t-field="line.name"/></td>
+                                        <td style="text-align:center;"><span t-field="line.product_uom_qty"/></td>
+                                        <td style="text-align:center;"><span t-field="line.working_hours"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <table style="width: 920px;">
+                            <tr>
+                                <td style='border:none;'>TECHNICIAN</td>
+                                <td style='border:none;'>TECHNICIAN</td>
+                                <td style='border:none;'>TECHNICIAN</td>
+                                <td style='border:none;'>SUPERVISOR</td>
+                              </tr>
+                        </table>
+                        <div style="width: 920px;">
+                            <div style="border-bottom: 2px solid black;"></div>
+                        </div>
+                    
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <table style="width: 920px;">
+                            <tr>
+                                <td style='border:none;'>QUALITY CONTROL</td>
+                                <td style='border:none;'>SERVICE ADVISOR</td>
+                                <td style='border:none;'>PARTS SUPERVISOR</td>
+                              </tr>
+                        </table>
+                        <div style="width: 920px;">
+                            <div style="border-bottom: 2px solid black;"></div>
+                        </div>
+                        <br></br>
+                    
+                    </div>
+                 </t>
+                 <!-- Inspection report body page Over -->
+                 
+                 <!-- Estimation Report body page start -->
+                 <t t-if="doc.state == 'sale_create' or doc.state == 'sale' or doc.state == 'done'">
+                     <div class="page">
+                        <table style="width:920px;">
+                            <tr style="border:solid 1px;height: 40px;">
+                                <td style='border:none;text-align:center;'>
+                                       <h1 style="color:red;">ESTIMATION</h1>
+                                   </td>
+                                <td style="width:100px; text-align:center;border:solid 1px;"><strong>Estimate #</strong></td>
+                                <td style="width:100px; text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.name"/></td>
+                                <td style="width:100px; text-align:center;border:solid 1px;"><strong>Inspection #</strong></td>
+                                <td style="width:100px; text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.ins_name"/></td>
+                                <td style="width:80px; text-align:center;border:solid 1px;"><strong><![CDATA[&nbsp;]]>Date<![CDATA[&nbsp;]]></strong></td>
+                                <td style="width:100px; text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.date_order" t-options='{"format": "dd/MM/yyyy"}'/><![CDATA[&nbsp;]]></td>
+                            </tr>
+                        </table>
+                        <br></br>
+                
+                        <table style="width: 920px;">
+                            <!-- <style>
+                               td, th{border:solid 1px; height: 45px;}
+                            </style>-->
+                            <tbody>
+                                <tr style="border:solid 1px;height: 40px;">
+                                    <th style="width:250px; text-align:center;border:solid 1px;">Name</th>
+                                    <th style="width:250px; text-align:center;border:solid 1px;">Customer Phone</th>
+                                    <th style="width:250px; text-align:center;border:solid 1px;">Advisor</th>
+                                    <th style="width:250px; text-align:center;border:solid 1px;">Vin</th>
+                                  </tr>
+                                  <tr style="border:solid 1px;height: 40px;">
+                                    <td style="width:250px; text-align:center;border:solid 1px;"><span t-field="doc.partner_id.street"/></td>
+                                    <td style="width:200px; text-align:center;border:solid 1px;"><span t-field="doc.partner_id.phone"/></td>
+                                    <td style="width:200px; text-align:center;border:solid 1px;"><span t-field="doc.user_id.name"/></td>
+                                    <td style="width:270px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.vin_number"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+            
+                        <div style="width: 920px;">
+                            <div class="border-black" style="border-bottom: 10px solid red; margin-top:10px;"></div>
+                        </div>
+                        
+                        <table style="width: 920px; margin-top:10px;">
+                            <tr style="border:solid 1px;height: 40px;">
+                                <td style="width: 70px;text-align:center;border:solid 1px;"><b>Year</b></td>
+                                <td style="width: 70px;text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.car_history_id.year"/></td>
+                                <td style="width: 70px;text-align:center;border:solid 1px;"><b>Make</b></td>
+                                <td style="width: 110px;text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.car_history_id.car_brand_id.name"/></td>
+                                <td style="width: 70px;text-align:center;border:solid 1px;"><b>Model</b></td>
+                                <td style="width: 150px;text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.car_history_id.car_model_id.name"/></td>
+                                <td style="width: 70px;text-align:center;border:solid 1px;"><b>Plate Number</b></td>
+                                <td style="width: 120px;text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.car_history_id.plate_number"/></td>
+                                <td style="width: 70px;text-align:center;border:solid 1px;"><b>ODO</b></td>
+                                <td style="width: 100px;text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.current_mileage"/></td>
+                            </tr>
+                        </table>
+                        <div style="width: 920px;">
+                            <div style="border-bottom: 10px solid red; margin-top:10px; margin-bottom:10px;"></div>
+                        </div>
+                        
+                        <table style="width: 920px;">
+                            <thead style="display: table-row-group">
+                                <tr>
+                                    <th style="width: 690px;text-align:center;">ITEM</th>
+                                    <th style="width: 100px;text-align:center;">QTY</th>
+                                    <th style="width: 120px;text-align:right;">U. PRICE</th>
+                                    <!-- <th style="width: 120px;" class="text-center">RT. PRICE</th>-->
+                                    <th style="width: 120px;text-align:right;">VAT</th>
+                                    <th style="width: 130px;text-align:right;">TOTAL</th>
+                                  </tr>
+                            </thead>
+                            
+                            <tbody class="sale_tbody">
+                                <t t-set="current_subtotal" t-value="0"/>
+                                <t t-foreach="doc.order_line" t-as="line">
+
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                                <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                    <t t-if="not line.display_type">
+                                        <td name="td_name"><span t-field="line.name"/></td>
+                                        <td name="td_quantity" style="text-align:center;">
+                                            <span t-field="line.product_uom_qty"/>
+                                        </td>
+                                        <td name="td_priceunit" style="text-align:right;">
+                                            <span t-esc="'{:,.2f}'.format(line.price_unit)"/>
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <span t-esc="'{:,.2f}'.format(line.price_tax)"/>
+                                        </td>
+                                        <td name="td_subtotal" class="text-right o_price_total" style="text-align:right;">
+                                            <span t-esc="'{:,.2f}'.format(line.price_total)"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="line.display_type == 'line_section'">
+                                        <td name="td_section_line" colspan="99">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <t t-set="current_section" t-value="line"/>
+                                        <t t-set="current_subtotal" t-value="0"/>
+                                    </t>
+                                    <t t-if="line.display_type == 'line_note'">
+                                        <td name="td_note_line" colspan="99">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                    </t>
+                                </tr>
+
+                                <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section')">
+                                    <tr class="is-subtotal" style="text-align:right;">
+                                        <td name="td_section_subtotal" colspan="99">
+                                            <strong class="mr16">Subtotal: </strong>
+                                            <span t-esc="'{:,.2f}'.format(current_subtotal)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                            
+                            
+                            <!-- <tbody>
+                                <t t-foreach="doc.order_line" t-as="line">
+                                      <tr>
+                                        <td class="text-left"><span t-field="line.name"/></td>
+                                        <td style="text-align:center;"><span t-field="line.product_uom_qty"/></td>
+                                        <td style="text-align:right;"><span t-esc="'{:,.2f}'.format(line.price_unit)"/></td>
+                                        <td style="text-align:right;"><span t-esc="'{:,.2f}'.format(line.price_tax)"/></td>
+                                        <td style="text-align:right;"><span t-esc="'{:,.2f}'.format(line.price_total)"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>-->
+                        </table>
+                        <div style="width: 920px;">
+                            <div style="border-bottom: 10px solid red; margin-top:10px; margin-bottom:10px;"></div>
+                        </div>
+                        
+                        <table style="width:920px;">
+                            <tr>
+                                <td colspan="2" rowspan="3" style='border:none; width:420px; text-align: left;'>
+                                    <strong>Customer Signature:</strong><span t-field="doc.signed_by"/>
+                                </td>
+                                <td><strong>Sub Total</strong></td>
+                                <td style="text-align:right;"><span t-esc="'{:,.2f}'.format(doc.amount_untaxed)"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Value Added Tax (VAT)</strong></td>
+                                <td style="text-align:right;"><span t-esc="'{:,.2f}'.format(doc.amount_tax)"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td style="text-align:right;"><span t-esc="'{:,.2f}'.format(doc.amount_total)"/></td>
+                            </tr>
+                        </table>
+                    
+                        <table style="width: 920px;">
+                            <tr>
+                                <td style='border:none; text-align: left;'>
+                                    <p style='font-size:15px;'>
+                                        <b>Terms and Conditions:</b><br/>
+                                        1. Estimate charges of minimum Dhs.300/- or more (depending on the diagnostic time expenditure) will be charged if job estimated and not repaired / pulled out.<br/> 
+                                        2. Free Pick Up and Delivery is also subject to approval.<br/>
+                                        3. Customer are advised to take all of there personal belongings from the vehicle before handling it over to us.<br/>
+                                        4. Parking fee of 50/-AED per day will be charged if the car is not taken within 7 days after inspection or repair.<br/>
+                                        <br/>
+                                        I hereby authorize the above repair work and agree Powertech Auto Services shall repair or replace any parts on the vehicle which it determines in its reasonable professional judgement, are necessary to repair the vehicle, to be done along with the necessary material, and here by grant you and/or your employees permission to operate the car or truck herein described on street, highways or elsewhere for the purpose of testing and inspection.<br/> 
+                                        Upon approval of estimate 50% of the amount from total estimate value should be paid upfront in order to proceed with the job.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    
+                    </div>
+                </t>
+                <!-- Estimation report body page Over -->
+            
+                <!-- Inspection report footer start -->
+                <t t-if="doc.state == 'draft' or doc.state == 'sent'">
+                    <div class="footer">
+                        <div class="text-center">
+                            <img src='/sale_extend/static/img/footer.png' style="max-height: 130px; max-width: 920px;"/>
+                        </div>
+                    </div>
+                </t>
+                <!-- Inspection report footer Over -->
+                
+                <!-- Estimation report footer start -->
+                <t t-if="doc.state == 'sale_create' or doc.state == 'sale' or doc.state == 'done'">
+                    <div class="footer">
+                        <div class="text-center">
+                            <img src='/sale_extend/static/img/footer.png' style="max-height: 130px; max-width: 920px;"/>
+                        </div>
+                    </div>
+                 </t>
+                <!-- Estimation report footer Over -->
+            </xpath>
+        </template>
+
+        <template id="report_saleorder" inherit_id="sale.report_saleorder">
+            <xpath expr="//t[@t-call='web.html_container']" position="replace">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-call="sale_extend.report_saleorder_document" t-lang="doc.partner_id.lang"/>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+        
+    </data>
+</odoo>

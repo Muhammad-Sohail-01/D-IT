@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_invoice_insurance_document">
+        <t t-call="web.basic_layout">
+            <style>
+                .page {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                .header, .footer {
+                    display: none !important;
+                }
+                .container {
+                    width: 100% !important;
+                    max-width: none !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                .description-header {
+                    background-color: #73b957;
+                    color: white;
+                    padding: 8px;
+                }
+                .table-header {
+                    background-color: #bcbcbc;
+                    color: white;
+                }
+                .total-section {
+                    background-color: #73b957;
+                    color: white;
+                    padding: 15px;
+                }
+
+                @media print {
+                    .description-header, .table-header, .total-section {
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                }
+            </style>
+
+            <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" style="margin: 0; padding: 0;">
+<!--                <div class="page" style="position: relative; z-index: 1;"-->
+<!--                    t-att-style="'background: url({}); background-size:1200px 1700px; width:1200px; height:1700px;'.format(image_data_uri(o.company_id.print_template))">-->
+
+                <!-- Content -->
+                    <div class="page" style="position: relative; z-index: 1;"
+    t-att-style="'background: url({}); background-size:1200px 1700px; width:1200px; height:1700px;'.format(image_data_uri(o.company_id.print_template))">
+	            <!-- Invoice Title Section -->
+                    <div class="row" style="margin-top: 60mm; padding-top: 30px;">
+                        <div class="col-4">
+                        </div>
+                        <div class="col-4 text-center">
+                            <t t-if="o.move_type == 'out_refund'">
+                                <h1 t-if="o.company_id.is_vat_registered">TAX CREDIT NOTE</h1>
+                                <h1 t-if="not o.company_id.is_vat_registered">CREDIT NOTE</h1>
+                            </t>
+                            <t t-else="">
+                                <h1 t-if="o.company_id.is_vat_registered">TAX INVOICE</h1>
+                                <h1 t-if="not o.company_id.is_vat_registered">INVOICE</h1>
+                            </t>
+                        </div>
+<!--                        <div class="col-4 text-end" style="margin-top: 150px; padding-right: 20px; font-size: 22px;">-->
+<!--                            <div>Invoice No: <span t-field="o.name"/></div>-->
+<!--                        </div>-->
+                    </div>
+
+                    <!-- Customer and Vehicle Details -->
+                    <div class="row mb-4" style="padding-left:35px; padding-right: 20px; font-size: 22px;">
+                        <div class="col-4">
+                            <strong class="d-block mb-2">Customer Details</strong>
+                            <div>Name: <span t-field="o.partner_id.name"/></div>
+                            <div>Address: <span t-field="o.partner_id.street"/></div>
+                            <div>Mobile: <span t-field="o.partner_id.phone"/></div>
+                            <div>TRN: <span t-field="o.partner_id.vat"/></div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div t-field="o.brand_id.name" style="font-weight: bold;"/>
+                            <div>Model: <span t-field="o.vehicle_model_id.name"/></div>
+                            <div>Year: <span t-field="o.year"/></div>
+                            <div>Registration No: <span t-field="o.registration_no"/></div>
+                            <div>VIN: <span t-field="o.vin_no"/></div>
+                        </div>
+                        <div class="col-4 text-end">
+	                        <div>Invoice No: <span t-field="o.name"/></div>
+                            <div>Date: <span t-field="o.invoice_date"/></div>
+                            <div>Service advisor: <span t-field="o.invoice_user_id.name"/></div>
+                            <div>Job Card #: <span t-field="o.job_card_idd.name"/></div>
+                        </div>
+                    </div>
+
+                    <!-- Combined Description Section -->
+                    <div class="mt-5" style="margin-left: 3mm; margin-right: 3mm; padding-left:32px; padding-right: 10px;">
+                        <h4 class="description-header">Description</h4>
+                        <table class="table table-bordered">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="text-center">Qty</th>
+                                    <th class="text-end">Price</th>
+                                    <th t-if="o.company_id.is_vat_registered" class="text-end">VAT</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Insurance Services</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-end">
+                                        <span t-field="o.amount_untaxed"/>
+                                    </td>
+                                    <td t-if="o.company_id.is_vat_registered" class="text-end">
+                                        <span t-field="o.amount_tax"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="o.amount_total"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Totals Section -->
+                    <div class="row" style="margin-left: 15mm; margin-right: 3mm;">
+                        <div class="col-6 ms-auto">
+                            <div class="total-section">
+                                <table class="table table-sm text-white mb-0">
+                                    <tr>
+                                        <td>Subtotal</td>
+                                        <td class="text-end">
+                                            <span t-field="o.amount_untaxed"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.company_id.is_vat_registered">
+                                        <td>VAT</td>
+                                        <td class="text-end">
+                                            <span t-field="o.amount_tax"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-top">
+                                        <td><strong>Total</strong></td>
+                                        <td class="text-end">
+                                            <strong><span t-field="o.amount_total"/></strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Signature Section -->
+                    <div class="row mt-5" style="margin-left: 15mm; margin-right: 15mm;">
+                        <div class="col-6 ms-auto">
+                            <div class="border-top pt-2">
+                                <p class="text-center">Customer Signature</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div t-if="o.company_id.invoice_terms" class="mt-4" style="margin-left: 15mm; margin-right: 15mm;">
+                        <div t-field="o.company_id.invoice_terms"/>
+                    </div>
+
+                    <!-- Bank Details -->
+                    <t t-if="o.company_id.bank_name or o.company_id.account_number or o.company_id.iban">
+                        <div class="p-3 mt-4" style="margin-left: 15mm; margin-right: 15mm;">
+                            <style>
+                                .bank-details {
+                                    display: flex;
+                                    flex-direction: column;
+                                    width: 100%;
+                                    max-width: 400px;
+                                }
+                                .bank-details div {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    padding: 4px 0;
+                                }
+                                .bank-details strong {
+                                    min-width: 150px;
+                                    text-align: left;
+                                }
+                                .bank-details span {
+                                    text-align: right;
+                                    flex-grow: 1;
+                                }
+                            </style>
+
+                            <div class="bank-details">
+                                <div t-if="o.company_id.bank_name">
+                                    <strong>BANK NAME:</strong> <span t-field="o.company_id.bank_name"></span>
+                                </div>
+                                <div t-if="o.company_id.account_name">
+                                    <strong>COMPANY NAME:</strong> <span t-field="o.company_id.account_name"></span>
+                                </div>
+                                <div t-if="o.company_id.account_number">
+                                    <strong>ACCOUNT:</strong> <span t-field="o.company_id.account_number"></span>
+                                </div>
+                                <div t-if="o.company_id.iban">
+                                    <strong>IBAN:</strong> <span t-field="o.company_id.iban"></span>
+                                </div>
+                                <div t-if="o.company_id.swift_code">
+                                    <strong>SWIFT CODE:</strong> <span t-field="o.company_id.swift_code"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+	<template id="report_invoice_insurance_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-if="o.state == 'posted' and o.move_type in ('out_invoice', 'out_refund')">
+                    <t t-call="evs_invoice_ext.report_invoice_insurance_document"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_evs_invoice_insurance" model="ir.actions.report">
+        <field name="name">Insurance Invoice</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">evs_invoice_ext.report_invoice_insurance_template</field>
+        <field name="report_file">evs_invoice_ext.report_invoice_insurance_template</field>
+        <field name="print_report_name">'Invoice - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_evs_invoice"/>
+    </record>
+</odoo>

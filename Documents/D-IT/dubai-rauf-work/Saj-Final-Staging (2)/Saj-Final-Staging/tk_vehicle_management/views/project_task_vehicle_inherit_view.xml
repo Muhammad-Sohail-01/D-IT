@@ -1,0 +1,226 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <data>-->
+<!--        <record id="task_vehicle_form_inherit_view" model="ir.ui.view">-->
+<!--            <field name="name">task.vehicle.form.inherit.view</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_task_form2"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//header" position="inside">-->
+<!--                    <field name="task_state" invisible="1"/>-->
+<!--                    <field name="is_inspection_task" invisible="1"/>-->
+<!--                    <button name="action_request_qc_check" type="object" string="Complete &amp; QA Check"-->
+<!--                            class="btn btn-primary" icon="fa-cogs"-->
+<!--                            invisible="task_state != 'draft' or is_inspection_task"-->
+<!--                            confirm="Are you sure you want to complete the task and send it for quality check?"/>-->
+<!--                    <button name="action_reset_draft" type="object" string="Reset"-->
+<!--                            invisible="task_state != 'reject' or is_inspection_task"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//div[@name='button_box']" position="after">-->
+<!--                    <field name="task_state" invisible="1"/>-->
+<!--                    <widget name="web_ribbon" title="completed" bg_color="text-bg-success"-->
+<!--                            invisible="task_state != 'complete'"/>-->
+<!--                    <widget name="web_ribbon" title="QC Check Pending" bg_color="text-bg-warning"-->
+<!--                            invisible="task_state != 'qc_check'"/>-->
+<!--                    <widget name="web_ribbon" title="QC Reject" bg_color="text-bg-danger"-->
+<!--                            invisible="task_state != 'reject'"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//label[@for='repeat_interval']" position="before">-->
+<!--                    <field name="responsible_id" widget="many2one_avatar_user"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//div[@name='button_box']" position="inside">-->
+<!--                    <button class="oe_stat_button" type="object" name="action_view_inspection"-->
+<!--                            icon="fa-cog" invisible="not inspection_id"-->
+<!--                            groups="tk_vehicle_management.vehicle_workshop_manager,tk_vehicle_management.vehicle_receptionist,tk_vehicle_management.vehicle_service_adviser,tk_vehicle_management.vehicle_team_leader">-->
+<!--                        Job Card-->
+<!--                    </button>-->
+<!--                    <button class="oe_stat_button" type="object" name="action_view_health_report"-->
+<!--                            icon="fa-wrench" invisible="not health_report_id">-->
+<!--                        Health Report-->
+<!--                    </button>-->
+<!--                    <field name="inspection_id" readonly="1" force_save="1" invisible="1"/>-->
+<!--                    <field name="health_report_id" invisible="1" readonly="1" force_save="1"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//field[@name='user_ids']" position="before">-->
+<!--                    <field name="service_adviser_id"/>-->
+<!--                    <field name="team_id"/>-->
+<!--                    <field name="team_leaders_ids" invisible="1"/>-->
+<!--                    <field name="leaders_ids" widget="many2many_tags"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//page[@name='description_page']" position="before">-->
+<!--                    <page name="task_services" string="Services" invisible="not inspection_id or health_report_id">-->
+<!--                        <field name="task_service_ids" readonly="1" force_save="1">-->
+<!--                            <tree>-->
+<!--                                <field name="product_id"/>-->
+<!--                                <field name="name"/>-->
+<!--                                <field name="qty"/>-->
+<!--                                <field name="uom_id"/>-->
+<!--                                <field name="estimate_time" widget="float_time"/>-->
+<!--                                <field name="from_inspection" column_invisible="1"/>-->
+<!--                                <field name="inspection_service_line_id" column_invisible="1"/>-->
+<!--                            </tree>-->
+<!--                            <form>-->
+<!--                                <group>-->
+<!--                                    <group>-->
+<!--                                        <field name="product_id"/>-->
+<!--                                        <field name="name"/>-->
+<!--                                        <field name="estimate_time" widget="float_time"/>-->
+<!--                                    </group>-->
+<!--                                    <group>-->
+<!--                                        <field name="qty"/>-->
+<!--                                        <field name="uom_id"/>-->
+<!--                                    </group>-->
+<!--                                </group>-->
+<!--                            </form>-->
+<!--                        </field>-->
+<!--                    </page>-->
+<!--                    <page name="task_parts" string="Parts" invisible="not inspection_id or health_report_id">-->
+<!--                        <field name="task_parts_ids" readonly="1" force_save="1">-->
+<!--                            <tree>-->
+<!--                                <field name="product_id"/>-->
+<!--                                <field name="name"/>-->
+<!--                                <field name="service_ids" column_invisible="1"/>-->
+<!--                                <field name="service_id"/>-->
+<!--                                <field name="qty"/>-->
+<!--                                <field name="uom_id"/>-->
+<!--                                <field name="inspection_service_line_id" column_invisible="1"/>-->
+<!--                                <field name="from_inspection" column_invisible="1"/>-->
+<!--                            </tree>-->
+<!--                            <form>-->
+<!--                                <group>-->
+<!--                                    <group>-->
+<!--                                        <field name="product_id"/>-->
+<!--                                        <field name="name"/>-->
+<!--                                        <field name="service_id"/>-->
+<!--                                    </group>-->
+<!--                                    <group>-->
+<!--                                        <field name="qty"/>-->
+<!--                                        <field name="uom_id"/>-->
+<!--                                    </group>-->
+<!--                                </group>-->
+<!--                            </form>-->
+<!--                        </field>-->
+<!--                    </page>-->
+<!--                    <page name="additional_required_parts" string="Additional Parts" invisible="is_inspection_task">-->
+<!--                        <field name="additional_parts_ids" readonly="task_state != 'draft'" force_save="1">-->
+<!--                            <tree editable="bottom">-->
+<!--                                <field name="product_id" required="1"/>-->
+<!--                                <field name="name" required="1"/>-->
+<!--                                <field name="qty" required="1"/>-->
+<!--                                <field name="uom_id"/>-->
+<!--                                <field name="service_ids" column_invisible="1"/>-->
+<!--                                <field name="service_id" required="1"/>-->
+<!--                                <field name="required_time" widget="float_time"/>-->
+<!--                                <field name="status" widget="badge"-->
+<!--                                       decoration-success="status == 'arrived'"-->
+<!--                                       decoration-info="status == 'requested'"-->
+<!--                                       decoration-warning="status == 'pending_request'"-->
+<!--                                       decoration-danger="status == 'reject'"/>-->
+<!--                            </tree>-->
+<!--                            <form>-->
+<!--                                <group>-->
+<!--                                    <group>-->
+<!--                                        <field name="product_id"/>-->
+<!--                                        <field name="name"/>-->
+<!--                                        <field name="service_ids" invisible="1"/>-->
+<!--                                        <field name="service_id"/>-->
+<!--                                    </group>-->
+<!--                                    <group>-->
+<!--                                        <field name="qty"/>-->
+<!--                                        <field name="uom_id"/>-->
+<!--                                    </group>-->
+<!--                                </group>-->
+<!--                            </form>-->
+<!--                        </field>-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-12 text-end">-->
+<!--                                <button name="action_request_parts" type="object" string="Request Parts"-->
+<!--                                        invisible="not additional_parts_ids or task_state != 'draft'" icon="fa-cubes"-->
+<!--                                        confirm="Once requested, parts requests cannot be deleted. Please ensure this is what you want to proceed with."/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </page>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        &lt;!&ndash;Timesheet Tree View&ndash;&gt;-->
+<!--        <record id="timesheet_service_tree_inherit_view" model="ir.ui.view">-->
+<!--            <field name="name">timesheet.service.tree.inherit.view</field>-->
+<!--            <field name="model">account.analytic.line</field>-->
+<!--            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='task_id']" position="after">-->
+<!--                    <field name="service_ids" column_invisible="1"/>-->
+<!--                    <field name="service_id"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        &lt;!&ndash;Task Time sheet Tree View&ndash;&gt;-->
+<!--        <record id="timesheet_vehicle_service_form_inherit_view" model="ir.ui.view">-->
+<!--            <field name="name">timesheet.vehicle.service.form.inherit.view</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='timesheet_ids']/tree/field[@name='employee_id']" position="after">-->
+<!--                    <field name="service_ids" column_invisible="1"/>-->
+<!--                    <field name="service_id"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        &lt;!&ndash;Timesheet Start Button Hide&ndash;&gt;-->
+<!--        <record id="task_timesheet_vehicle_form_inherit_view" model="ir.ui.view">-->
+<!--            <field name="name">task.timesheet.vehicle.form.inherit.view</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="timesheet_grid.project_task_view_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//button[@name='action_timer_start'][1]" position="attributes">-->
+<!--                    <attribute name="invisible">-->
+<!--                        not display_timer_start_primary or encode_uom_in_days or task_state != 'draft'-->
+<!--                    </attribute>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//button[@name='action_timer_start'][2]" position="attributes">-->
+<!--                    <attribute name="invisible">-->
+<!--                        not display_timer_start_secondary or encode_uom_in_days or task_state != 'draft'-->
+<!--                    </attribute>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        &lt;!&ndash; Task Search View Inherit &ndash;&gt;-->
+<!--        <record id="task_vehicle_search_inherit_view" model="ir.ui.view">-->
+<!--            <field name="name">task.vehicle.search.inherit.view</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_task_search_form_base"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//filter[@name='last_stage_update']" position="after">-->
+<!--                    <separator/>-->
+<!--                    <filter string="Service Adviser" name="group_by_service_adviser"-->
+<!--                            context="{'group_by': 'service_adviser_id'}"/>-->
+<!--                    <filter string="Job Card" name="group_by_job_card"-->
+<!--                            context="{'group_by': 'inspection_id'}"/>-->
+<!--                    <separator/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="project.action_view_my_task" model="ir.actions.act_window">-->
+<!--            <field name="context">{-->
+<!--                'search_default_open_tasks': 1,-->
+<!--                'search_default_group_by_job_card': 1,-->
+<!--                'all_task': 0,-->
+<!--                'default_user_ids': [(4, uid)],-->
+<!--                }-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="project.action_view_all_task" model="ir.actions.act_window">-->
+<!--            <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>-->
+<!--            <field name="context">{-->
+<!--                'search_default_open_tasks': 1,-->
+<!--                'search_default_group_by_job_card': 1,-->
+<!--                'default_user_ids': [(4, uid)]-->
+<!--                }-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--    </data>-->
+<!--</odoo>-->

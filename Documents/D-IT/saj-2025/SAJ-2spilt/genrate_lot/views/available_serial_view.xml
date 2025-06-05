@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree/List View -->
+    <record id="view_available_serial_numbers_tree" model="ir.ui.view">
+        <field name="name">available.serial.numbers.tree</field>
+        <field name="model">available.serial.numbers</field>
+        <field name="arch" type="xml">
+            <tree string="Available Serial Numbers">
+                <field name="product_id"/>
+                <field name="serial_number"/>
+                <field name="source_company_id"/>
+                <field name="is_available"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_available_serial_numbers_form" model="ir.ui.view">
+        <field name="name">available.serial.numbers.form</field>
+        <field name="model">available.serial.numbers</field>
+        <field name="arch" type="xml">
+            <form string="Available Serial Number">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="serial_number"/>
+                        </group>
+                        <group>
+                            <field name="source_company_id" options="{'no_create': True}"/>
+                            <field name="is_available"/>
+                            <field name="lot_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_available_serial_numbers_search" model="ir.ui.view">
+        <field name="name">available.serial.numbers.search</field>
+        <field name="model">available.serial.numbers</field>
+        <field name="arch" type="xml">
+            <search string="Search Available Serial Numbers">
+                <field name="product_id"/>
+                <field name="serial_number"/>
+                <field name="source_company_id"/>
+                <filter string="Available" name="available" domain="[('is_available', '=', True)]"/>
+                <filter string="Used" name="used" domain="[('is_available', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Company" name="group_by_company" context="{'group_by': 'source_company_id'}"/>
+                    <filter string="Availability" name="group_by_availability" context="{'group_by': 'is_available'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_available_serial_numbers" model="ir.actions.act_window">
+        <field name="name">Available Serial Numbers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">available.serial.numbers</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_available': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No available serial numbers found
+            </p>
+            <p>
+                Serial numbers will appear here when products are available for internal transfers between companies.
+            </p>
+        </field>
+    </record>
+
+    <!-- Refresh Button -->
+    <record id="action_refresh_available_serials" model="ir.actions.server">
+        <field name="name">Refresh Available Serial Numbers</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_available_serial_numbers"/>
+        <field name="state">code</field>
+        <field name="code">model.refresh_available_serials()</field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_available_serial_numbers"
+              name="Available Serial Numbers"
+              action="action_available_serial_numbers"
+              parent="stock.menu_stock_inventory_control"
+              sequence="100"/>
+
+    <!-- Add refresh action to the action menu -->
+    <record id="action_available_serial_numbers" model="ir.actions.act_window">
+        <field name="binding_model_id" ref="model_available_serial_numbers"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

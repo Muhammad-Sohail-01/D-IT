@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_serial_number_selection_wizard_user,serial.number.selection.wizard.user,model_serial_number_selection_wizard,stock.group_stock_user,1,1,1,1
+access_available_serial_numbers_user,available.serial.numbers.user,model_available_serial_numbers,stock.group_stock_user,1,1,1,0
+access_available_serial_numbers_manager,available.serial.numbers.manager,model_available_serial_numbers,stock.group_stock_manager,1,1,1,1

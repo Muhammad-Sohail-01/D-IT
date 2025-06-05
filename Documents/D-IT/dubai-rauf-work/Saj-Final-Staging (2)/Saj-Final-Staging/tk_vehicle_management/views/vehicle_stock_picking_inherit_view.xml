@@ -1,0 +1,36 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <data>-->
+<!--        &lt;!&ndash; Stock Picking Form&ndash;&gt;-->
+<!--        <record id="vehicle_stock_picking_form_inherit" model="ir.ui.view">-->
+<!--            <field name="name">vehicle.stock.picking.form.inherit</field>-->
+<!--            <field name="model">stock.picking</field>-->
+<!--            <field name="inherit_id" ref="stock.view_picking_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='backorder_id']" position="after">-->
+<!--                    <field name="job_card_id" invisible="not job_card_id" readonly="1" force_save="1"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//sheet" position="before">-->
+<!--                    <field name="is_additional_part" invisible="1"/>-->
+<!--                    <div class="alert alert-info text-center" role="alert" invisible="not is_additional_part">-->
+<!--                        <strong>Additional Part Order</strong>-->
+<!--                    </div>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        &lt;!&ndash; Stock Picking Tree&ndash;&gt;-->
+<!--        <record id="vehicle_stock_picking_tree_inherit" model="ir.ui.view">-->
+<!--            <field name="name">vehicle.stock.picking.tree.inherit</field>-->
+<!--            <field name="model">stock.picking</field>-->
+<!--            <field name="inherit_id" ref="stock.vpicktree"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='company_id']" position="after">-->
+<!--                    <field name="is_additional_part" column_invisible="True"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//tree" position="attributes">-->
+<!--                    <attribute name="decoration-info">is_additional_part == True</attribute>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--    </data>-->
+<!--</odoo>-->

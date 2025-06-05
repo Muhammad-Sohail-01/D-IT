@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="inspection_concern_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="inspect">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h6 style="font-size: 20px; background-color: #F8F8F8; padding: 10px; text-align: center; border: aliceblue;">
+                                Customer Approval
+                            </h6>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Inspection No:
+                                    <strong>
+                                        <span t-field="inspect.name"/>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    Date:
+                                    <strong>
+                                        <span t-field="inspect.inspection_date"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;" class="m-0">
+                                Customer Details
+                            </h6>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Customer:
+                                    <strong>
+                                        <span t-if="inspect.is_partner">
+                                            <span t-field="inspect.partner_id.name"/>
+                                        </span>
+                                        <span t-else="">
+                                            <span t-field="inspect.customer_id.name"/>
+                                        </span>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    Phone:
+                                    <strong>
+                                        <span t-if="inspect.is_partner">
+                                            <span t-field="inspect.partner_id.phone"/>
+                                        </span>
+                                        <span t-else="">
+                                            <span t-field="inspect.customer_id.phone"/>
+                                        </span>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Email:
+                                    <strong>
+                                        <span t-if="inspect.is_partner">
+                                            <span t-field="inspect.partner_id.email"/>
+                                        </span>
+                                        <span t-else="">
+                                            <span t-field="inspect.customer_id.email"/>
+                                        </span>
+                                    </strong>
+                                </div>
+                                <div class="col-6"/>
+                            </div>
+                            <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;" class="m-0">
+                                Vehicle Details
+                            </h6>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Brand:
+                                    <strong>
+                                        <span t-field="inspect.brand_id"/>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    VIN No:
+                                    <strong>
+                                        <span t-field="inspect.vin_no"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Model:
+                                    <strong>
+                                        <span t-field="inspect.vehicle_model_id"/>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    Registration No:
+                                    <strong>
+                                        <span t-field="inspect.registration_no"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Year:
+                                    <strong>
+                                        <span t-field="inspect.year"/>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    Kilometers:
+                                    <strong>
+                                        <span t-field="inspect.miles"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Color:
+                                    <strong>
+                                        <span t-field="inspect.color"/>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    Insurance Provider:
+                                    <strong>
+                                        <span t-field="inspect.insurance_provider"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    Fuel Type:
+                                    <strong>
+                                        <span t-field="inspect.fuel_type"/>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    Transmission:
+                                    <strong>
+                                        <span t-field="inspect.transmission"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:3px;">
+                                <div class="col-6">
+                                    <t t-if="inspect.is_warranty">
+                                        Warranty Type:
+                                        <strong>
+                                            <span t-field="inspect.warranty_type"/>
+                                        </strong>
+                                    </t>
+                                </div>
+                            </div>
+                            <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;" class="m-0">
+                                Inspection Details
+                            </h6>
+                            <div class="row" style="padding:3px;">
+                                <!--                                <div class="col-6">-->
+                                <!--                                    Inspect Type:-->
+                                <!--                                    <strong>-->
+                                <!--                                        <span t-field="inspect.inspect_type"/>-->
+                                <!--                                    </strong>-->
+                                <!--                                </div>-->
+                                <div class="col-6">
+                                    Type of Inspection:
+                                    <strong>
+                                        <span t-field="inspect.inspection_type"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <!--Customer Observations-->
+                            <t t-if="inspect.customer_observation">
+                                <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;"
+                                    class="mb-0 mt-4">
+                                    Customer Observations
+                                </h6>
+                                <table class="table table-sm o_main_table">
+                                    <tr>
+                                        <td width="100%" style="border-top:0px solid white;">
+                                            <span t-field="inspect.customer_observation"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <!-- Checklist-->
+                            <t t-if="inspect.checklist_ids">
+                                <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;"
+                                    class="mb-0 mt-4">
+                                    Inspection Checklists
+                                </h6>
+                                <table class="table table-sm o_main_table">
+                                    <tr>
+                                        <td style="padding: 2px; width: 10%;border-top:0px solid white;">
+                                            <strong>Check</strong>
+                                        </td>
+                                        <td style="padding: 2px; width: 45%;border-top:0px solid white;">
+                                            <strong>Name</strong>
+                                        </td>
+                                        <td style="padding: 2px; width: 45%;border-top:0px solid white;">
+                                            <strong>Description</strong>
+                                        </td>
+                                    </tr>
+                                    <tr t-foreach="inspect.checklist_ids" t-as="check">
+                                        <t t-if="check.display_type == 'line_section'">
+                                            <td name="td_section_line"
+                                                style="background-color: #ededed; padding: 2px;"
+                                                width="100%;" colspan="3">
+                                                <span t-field="check.name"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td style="width: 10%; padding-left: 1.5rem; padding: 2px;text-align:center;"
+                                                width="20%;">
+                                                <t t-if="check.is_check">
+                                                    <img src="/tk_vehicle_management/static/src/img/true.png"
+                                                         style="width: 10px; height: 10px;"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <img src="/tk_vehicle_management/static/src/img/false.png"
+                                                         style="width: 10px; height: 10px;"/>
+                                                </t>
+                                            </td>
+                                            <td style="padding: 2px;" width="45%;">
+                                                <span t-field="check.name"/>
+                                            </td>
+                                            <td style="padding: 2px;" width="45%;">
+                                                <span t-field="check.description"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </table>
+                            </t>
+                            <!-- Inner Body Images-->
+                            <t t-if="inspect.inner_image_ids">
+                                <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;"
+                                    class="mb-0 mt-4">
+                                    Inner Body Images
+                                </h6>
+                                <table class="table table-bordered" style="width: 100%; margin-top: 0px;">
+                                    <t t-set="ap_tag"
+                                       t-value="str('&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td ') + str('style=text-align:center;') + str('&gt;')"/>
+                                    <t t-set="img_count" t-value="0"/>
+                                    <tr>
+                                        <td style="text-align:center">
+                                            <t t-foreach="inspect.inner_image_ids" t-as="img">
+                                                <t t-set="img_count" t-value="img_count + 1"/>
+                                                <div style="display: inline-block;text-align:center;">
+                                                    <t t-if="img.avatar">
+                                                        <img t-att-src="image_data_uri(img.avatar)"
+                                                             style="width: 250px; height: 250px; margin: 10px;"/>
+                                                    </t>
+                                                    <h6>
+                                                        <span t-field="img.name"/>
+                                                    </h6>
+                                                </div>
+                                                <t t-if="img_count % 3 == 0">
+                                                    <t t-raw="ap_tag"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <!-- Outer Body Images-->
+                            <t t-if="inspect.outer_image_ids">
+                                <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;"
+                                    class="mb-0 mt-4">
+                                    Outer Body Images
+                                </h6>
+                                <table class="table table-bordered" style="width: 100%; margin-top: 0px;">
+                                    <t t-set="ap_tag"
+                                       t-value="str('&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td ') + str('style=text-align:center;') + str('&gt;')"/>
+                                    <t t-set="img_count" t-value="0"/>
+                                    <tr>
+                                        <td style="text-align:center">
+                                            <t t-foreach="inspect.outer_image_ids" t-as="img">
+                                                <t t-set="img_count" t-value="img_count + 1"/>
+                                                <div style="display: inline-block;text-align:center;">
+                                                    <t t-if="img.avatar">
+                                                        <img t-att-src="image_data_uri(img.avatar)"
+                                                             style="width: 250px; height: 250px; margin: 10px;"/>
+                                                    </t>
+                                                    <h6>
+                                                        <span t-field="img.name"/>
+                                                    </h6>
+                                                </div>
+                                                <t t-if="img_count % 3 == 0">
+                                                    <t t-raw="ap_tag"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <!-- Other Images-->
+                            <t t-if="inspect.other_image_ids">
+                                <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;"
+                                    class="mb-0 mt-4">
+                                    Other Images
+                                </h6>
+                                <table class="table table-bordered" style="width: 100%; margin-top: 0px;">
+                                    <t t-set="ap_tag"
+                                       t-value="str('&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td ') + str('style=text-align:center;') + str('&gt;')"/>
+                                    <t t-set="img_count" t-value="0"/>
+                                    <tr>
+                                        <td style="text-align:center">
+                                            <t t-foreach="inspect.other_image_ids" t-as="img">
+                                                <t t-set="img_count" t-value="img_count + 1"/>
+                                                <div style="display: inline-block;text-align:center;">
+                                                    <t t-if="img.avatar">
+                                                        <img t-att-src="image_data_uri(img.avatar)"
+                                                             style="width: 250px; height: 250px; margin: 10px;"/>
+                                                    </t>
+                                                    <h6>
+                                                        <span t-field="img.name"/>
+                                                    </h6>
+                                                </div>
+                                                <t t-if="img_count % 3 == 0">
+                                                    <t t-raw="ap_tag"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <p style="page-break-before:always;"/>
+                            <!-- Concern -->
+                            <h6 style="background-color: #dddddd;; padding: 5px; border: aliceblue;"
+                                class="mb-0 mt-4">
+                                Concern
+                            </h6>
+                            <t t-if="inspect.vehicle_concern_ids">
+                                <table class="table table-sm o_main_table">
+                                    <tr>
+                                        <td style="padding: 2px;border-top:0px solid white;">
+                                            <strong>Concern</strong>
+                                        </td>
+                                        <td style="padding: 2px;border-top:0px solid white;">
+                                            <strong>Description</strong>
+                                        </td>
+                                    </tr>
+                                    <tr t-foreach="inspect.vehicle_concern_ids" t-as="c">
+                                        <t t-if="c.display_type in ['line_section','line_note']">
+                                            <td colspan="2" style="padding: 2px;background-color: #ebe9e9;">
+                                                <span t-field="c.name"/>
+                                            </td>
+                                        </t>
+                                        <t t-else="">
+                                            <td style="padding: 2px;">
+                                                <span t-field="c.concern_type_id"/>
+                                            </td>
+                                            <td style="padding: 2px;border-top:0px solid white;">
+                                                <span t-field="c.name"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+
+                                </table>
+                            </t>
+                            <h6 style="font-weight:800;padding: 5px 3px;margin-bottom:0px;">
+                                Terms &amp; Conditions
+                            </h6>
+                            <t t-set="term_conditions"
+                               t-value="request.env.ref('tk_vehicle_management.term_condition_2').terms_conditions"/>
+                            <div style="font-size: 14px; color: #5e5b5b">
+                                <t t-esc="term_conditions"/>
+                            </div>
+                            <table class="table table-borderless" style="margin-top:10rem;">
+                                <tr>
+                                    <td
+                                            style="width:30%;border-bottom:1px solid black;vertical-align:bottom;text-align:center;">
+                                        <t t-if="inspect.customer_signature">
+                                            <img t-att-src="image_data_uri(inspect.customer_signature)"
+                                                 att="Logo"
+                                                 style="width: 200px; height: 80px;"/>
+                                        </t>
+                                    </td>
+                                    <td style="width:40%;"></td>
+                                    <td
+                                            style="width:30%;border-bottom:1px solid black;vertical-align:bottom;text-align:center;">
+                                        <t t-if="inspect.authorized_signature">
+                                            <img t-att-src="image_data_uri(inspect.authorized_signature)"
+                                                 att="Logo"
+                                                 style="width: 200px; height: 80px;"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                            style="width:30%;vertical-align:bottom;text-align:center;">
+                                        Customer Signature
+                                    </td>
+                                    <td style="width:40%;"></td>
+                                    <td
+                                            style="width:30%;vertical-align:bottom;text-align:center;">
+                                        Authorised Signature
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <record id="action_vehicle_inspection_concern_qweb_report" model="ir.actions.report">
+            <field name="name">Concern Report</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tk_vehicle_management.inspection_concern_report_template</field>
+            <field name="report_file">tk_vehicle_management.inspection_concern_report_template</field>
+            <field name="binding_model_id" ref="model_vehicle_inspection"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

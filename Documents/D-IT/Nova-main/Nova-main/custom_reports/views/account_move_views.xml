@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="custom_reports_view_move_form" model="ir.ui.view">
+        <field name="name">inherit.account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook//page//field[@name='invoice_line_ids']//field[@name='name']" position="after">
+                <field name="line_name" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

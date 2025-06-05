@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+       <record id="vehicle_job_card_view_form" model="ir.ui.view">
+           <field name="name">vehicle.job.card.view.form</field>
+           <field name="model">vehicle.job.card</field>
+           <field name="arch" type="xml">
+               <form>
+                   <sheet>
+                       <group>
+                           <field name="inspection_id"/>
+                       </group>
+                       <group>
+                           <group string="Team Details">
+                               <field name="team_id" rquired="1"/>
+                               <field name="team_leaders_ids" invisible="1"/>
+                               <field name="team_technician_ids" invisible="1"/>
+                               <field name="leaders_ids" widget="many2many_avatar_user" required="1"/>
+                               <field name="technician_ids" widget="many2many_avatar_user" required="1"/>
+                           </group>
+                           <group string="Responsible">
+                               <field name="sale_person_id"/>
+                               <field name="service_adviser_id"/>
+                           </group>
+                       </group>
+                       <group string="Vehicle Details">
+                           <group>
+                               <field name="brand_id" required="1"/>
+                               <field name="vehicle_model_id" required="1"/>
+                               <field name="year" required="1"/>
+                               <field name="color" required="1"/>
+                               <field name="fuel_type" required="1"/>
+                               <field name="transmission" widget="radio" options="{'horizontal':True}" required="1"/>
+                           </group>
+                           <group>
+                               <field name="vin_no" required="1"/>
+                               <field name="registration_no" required="1"/>
+                               <field name="miles" required="1"/>
+                               <field name="is_warranty" widget="boolean_toggle" required="1"/>
+                               <field name="warranty_type" invisible="not is_warranty"/>
+                               <field name="insurance_provider"/>
+                           </group>
+                       </group>
+                   </sheet>
+               </form>
+           </field>
+       </record>
+       <record id="vehicle_job_card_view_tree" model="ir.ui.view">
+           <field name="name">vehicle.job.card.view.tree</field>
+           <field name="model">vehicle.job.card</field>
+           <field name="arch" type="xml">
+               <tree>
+                   <field name="inspection_id"/>
+               </tree>
+           </field>
+       </record>
+       <record id="vehicle_job_card_action" model="ir.actions.act_window">
+           <field name="name">Vehicle Job Card</field>
+           <field name="type">ir.actions.act_window</field>
+           <field name="res_model">vehicle.job.card</field>
+           <field name="view_mode">tree,form</field>
+       </record>
+   </data>
+</odoo>

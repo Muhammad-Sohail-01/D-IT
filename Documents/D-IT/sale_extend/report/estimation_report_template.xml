@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_car_quotation_document">
+        <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+        
+        <div class="header">
+            <div class="row">
+                <div class="col-auto col-6">
+                    <img src='/sale_extend/static/img/powertech_logo.jpeg' style="max-height: 170px; max-width: 350px;"/>
+                </div>
+                <div class="col-auto col-6">
+                       <h1 class="text-right" style="color:red;">QUOTATION</h1>
+                   </div>
+               </div>
+            <br></br>
+            <table style="width: 920px;">
+                <tr>
+                    <td><span t-field="doc.company_id.website"/></td>
+                    <td><span t-field="doc.company_id.street"/></td>
+                    <td><span t-field="doc.company_id.email"/></td>
+                    <td><span t-field="doc.company_id.phone"/></td>
+                </tr>
+            </table>
+            <div style="width: 920px;">
+                <div class="border-black" style="border-bottom: 2px solid red; margin-top:5px;"></div>
+            </div>
+         </div>
+        <div class="page">
+            <div id="quotation_id" class="row" style="float:right; margin-top:1px;">
+                <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
+                    <table class="table table-sm" style="page-break-inside: avoid; width: 650px;">
+                        <tr>
+                            <td><strong>Estimate #</strong></td>
+                            <td class="text-center"><span t-field="doc.name"/></td>
+                            <td><strong>Inspection #</strong></td>
+                            <td class="text-center"><span t-field="doc.name"/></td>
+                            <td><strong><![CDATA[&nbsp;]]>Date<![CDATA[&nbsp;]]></strong></td>
+                            <td class="text-left"><![CDATA[&nbsp;]]><span t-field="doc.date_order" t-options='{"format": "dd/MM/yyyy"}'/><![CDATA[&nbsp;]]></td>
+                        </tr>
+                    </table>
+                 </div>
+             </div>
+            <br></br>
+            
+            <table style="width: 920px;">
+                <style>
+                   td, th{border:solid 1px; text-align:center; height: 45px;}
+                </style>
+                <tbody>
+                    <tr>
+                        <th>Name / Address</th>
+                        <th>Customer Phone</th>
+                        <th>Customer E-mail</th>
+                        <th>Advisor</th>
+                        <th>Vin</th>
+                      </tr>
+                      <tr>
+                        <td><span t-field="doc.partner_id.name"/></td>
+                        <td><span t-field="doc.partner_id.phone"/></td>
+                        <td><span t-field="doc.partner_id.email"/></td>
+                        <td><span t-field="doc.employee_id.name"/></td>
+                        <td><span t-field="doc.car_history_id.vin_number"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="width: 920px;">
+                <div class="border-black" style="border-bottom: 12px solid red; margin-top:10px;"></div>
+            </div>
+            
+            <table style="width: 920px; margin-top:10px;">
+                <tr>
+                    <td><b>Year</b></td>
+                    <td><span t-field="doc.car_history_id.year"/></td>
+                    <td><b>Make</b></td>
+                    <td><span t-field="doc.car_history_id.car_brand_id.name"/></td>
+                    <td><b>Model</b></td>
+                    <td><span t-field="doc.car_history_id.car_model_id.name"/></td>
+                    <td><b>Plate Number</b></td>
+                    <td><span t-field="doc.car_history_id.plate_number"/></td>
+                    <td><b>ODO</b></td>
+                    <td><span t-field="doc.current_mileage"/></td>
+                </tr>
+            </table>
+            <div style="width: 920px;">
+                <div style="border-bottom: 12px solid red; margin-top:10px; margin-bottom:10px;"></div>
+            </div>
+            
+            <table style="width: 920px;">
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                      </tr>
+                </thead>    
+                <tbody>
+                    <t t-foreach="doc.order_line" t-as="line">
+                        <t t-set="price_total" t-value="0"/>
+                        <t t-set="subline_check" t-value="False"/>
+                          <tr>
+                            <td><span t-field="line.name"/></td>
+                            <td><span t-field="line.product_uom_qty"/></td>
+                            <td><span t-field="line.price_unit"/></td>
+                            <td style="border:1px solid;border;vertical-align:middle;" class="text-right">
+                                <t t-if="line.display_type">
+                                    <t t-foreach="doc.order_line" t-as="subline">
+                                        <t t-if="subline.display_type">
+                                            <t t-set="subline_check" t-value="False"/>
+                                        </t>
+                                        <t t-if="line.name == subline.name">
+                                            <t t-set="subline_check" t-value="True"/>
+                                        </t>
+                                        <t t-if="subline_check">
+                                            <t t-set="price_total" t-value="price_total+subline.price_subtotal"/>
+                                        </t>
+                                    </t>
+                                </t>
+                                <t t-if="not line.display_type">
+                                    <span>
+                                        <t t-esc="'%.2f'% line.price_subtotal"/>
+                                    </span>
+                                </t>
+                                <t t-if="line.name != '#'">
+                                <t t-if="line.display_type">
+                                    <t t-esc="'%.2f'% price_total"/>
+                                    </t>
+                                </t>
+                            </td>
+<!--                            <td><span t-field="line.price_subtotal"/></td>-->
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            
+            <table style="width:920px;">
+                <tr>
+                    <td colspan="2" rowspan="3" style='border:none; width:420px; text-align: left;'>
+                        <strong>Customer Signature:</strong><span t-field="doc.signed_by"/>
+                    </td>
+                    <td><strong>Sub Total</strong></td>
+                    <td><span t-field="doc.amount_untaxed"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Value Added Tax (VAT)</strong></td>
+                    <td><span t-field="doc.amount_tax"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><span t-field="doc.amount_total"/></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <style>
+               td {border:solid 1px; text-align:center;}
+               .pclass {
+                     height:450px;
+                }
+            </style>
+            
+            <table class="table table-sm" style="width: 920px;">
+                <!-- <tr>
+                    <td><b>Website: </b><span t-field="doc.company_id.website"/></td>
+                    <td><b>Email: </b><span t-field="doc.company_id.email"/></td>
+                    <td><b>Address:</b><span t-field="doc.company_id.street"/></td>
+                </tr>-->
+                <tr>
+                    <td colspan="3" style='border:none;'>
+                        <p class="pclass" style="margin-bottom:20px">
+                            Estimate charges of minimum Dhs.300/- or more (depending on the diagnostic time expenditure) will be charged if job estimated and not repaired / pulled out. Free Pick Up and Delivery is also subject to approval.
+I hereby authorize the above repair work and agree Powertech Auto Services shall repair or replace any parts on the vehicle which it determines in its reasonable professional judgement, are necessary to repair the vehicle, to be done along with the necessary material, and here by grant you and/or your employees permission to operate the car or truck herein described on street, highways or elsewhere for the purpose of testing and inspection. Upon approval of estimate 50% of the amount from total estiamte value should be paid upfront in order to proceed with the job.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </template>
+
+    <template id="report_car_quotation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sale_extend.report_car_quotation_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

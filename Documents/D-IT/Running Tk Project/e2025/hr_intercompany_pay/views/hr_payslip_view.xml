@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payslip_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Salary Distribution">
+                    <field name="salary_distribution_ids" context="{'default_payslip_id': active_id}">
+                        <tree editable="bottom">
+                            <field name="payslip_id" readonly="1"/>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="company_id"/>
+                            <field name="work_days"/>
+                            <field name="percentage"/>
+                            <field name="salary_portion"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
+

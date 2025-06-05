@@ -1,0 +1,1501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vehicle_inspection_form_view" model="ir.ui.view">
+            <field name="name">vehicle.inspection.form.view</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="arch" type="xml">
+                <form create="0">
+                    <header>
+                        <field name="update_quot_mail" invisible="1"/>
+                        <field name="is_quotation_sent_one" invisible="1"/>
+                        <field name="is_inspection_created" invisible="1"/>
+                        <field name="is_skip_inspection" invisible="1"/>
+                        <field name="service_selected" invisible="1"/>
+                        <field name="consent_reopen_request" invisible="1"/>
+                        <field name="part_selected" invisible="1"/>
+                        <field name="vehicle_health_report_id" invisible="1"/>
+                        <field name="task_check" invisible="1"/>
+                        <field name="quot_reopen_request" invisible="1"/>
+                        <field name="invoice_id" invisible="1"/>
+                        <field name="health_report_status" invisible="1"/>
+                        <field name="is_task_completed" invisible="1"/>
+                        <field name="reset_to_draft" invisible="1"/>
+                        <field name="is_any_task_completed" invisible="1"/>
+                        <field name="is_any_running_update_quotation" invisible="1"/>
+                        <field name="advance_payment_id" invisible="1"/>
+                        <field name="is_qc_done" invisible="1"/>
+                        <field name="company_direct_quote_approval" invisible="1"/>
+
+                        <field name="sale_order_id" invisible="1"/>
+                        
+                        <field name="status" widget="statusbar"
+                               options="{'folded': {'concern_reject': True, 'reject': True}}"
+                               statusbar_visible="draft,inspection_walkthrough,in_repair"/>
+                        <button name="%(advance_payment_wizard_action)d" type="action" string="Payments"
+                                class="btn btn-primary" icon="fa-money"
+                                invisible="status not in ['complete','approve','parts_available', 'in_repair','ready_delivery','qc_waiting','qc_done']"/>
+                        <button name="action_inspection_walkthrough" type="object" string="Walkaround Inspection"
+                                class="btn btn-primary" invisible="status != 'draft'"/>
+                        <button name="action_skip_inspection" type="object" string="Skip Inspection"
+                                icon="fa-chevron-right"
+                                class="btn btn-secondary"
+                                invisible="status != 'draft' or is_skip_inspection or is_inspection_created"/>
+                        <button name="action_status_concern" type="object" string="Send Consent" class="btn btn-info"
+                                invisible="status != 'inspection_walkthrough'" icon="fa-cogs"/>
+                        <button name="action_status_concern_approve" type="object" string="Approve Consent"
+                                icon="fa-check-square"
+                                class="btn btn-success"
+                                invisible="status != 'inspection_walkthrough'"/>
+                        <button name="%(inspection_reject_action)d" type="action" string="Reject Consent"
+                                icon="fa-window-close"
+                                class="btn btn-danger" invisible="status != 'concern' or consent_sent_state != 'reject'"
+                                context="{'reject':'concern'}"/>
+                        <button name="%(assign_team_action)d" type="action" string="Create Inspection"
+                                invisible="status != 'concern_approve' or health_report_status == 'complete'"
+                                icon="fa-wrench"
+                                class="btn btn-warning"/>
+                        <button name="action_status_quotation" type="object" string="Send Quotation"
+                                class="btn btn-warning"
+                                invisible="status != 'concern_approve' or health_report_status != 'complete'"
+                                icon="fa-paper-plane-o"/>
+                        <button name="action_status_approve" type="object" string="Approve" icon="fa-check-circle"
+                                class="btn btn-success" invisible="1"/>
+                        <button name="%(inspection_reject_action)d" type="action" string="Reject" icon="fa-times-circle"
+                                class="btn btn-danger" invisible="status != 'quotation' or quote_state != 'reject'"
+                                context="{'reject':'quot'}"/>
+                        <button name="action_create_required_service_part_sale_order" type="object"
+                                string="Create Sale Order" icon="fa-file-text" class="btn btn-primary"
+                                invisible="status != 'approve' or is_main_so_created != False "/>
+                        <!-- <button name="%(task_assignation_action)d" type="action" string="Assign Task"
+                                class="btn btn-primary" icon="fa-thumb-tack"
+                                invisible="status not in ['parts_available','in_repair','approve'] or task_check"/> -->
+                        <button name="%(job_card_task_reset_action)d"
+                                invisible="status not in ['in_repair','parts_available','qc_waiting'] or not is_any_task_completed"
+                                type="action" icon="fa-refresh"
+                                class="btn btn-outline-primary"
+                                string="Reset Task Status"/>
+                        <!--                        <button name="action_request_spare_part" type="object" string="Request Spare Parts"-->
+                        <!--                                class="btn btn-warning" icon="fa-cubes"-->
+                        <!--                                invisible="status != 'approve' or not inspection_required_parts_ids"/>-->
+
+                        <button name="action_skip_part_request" type="object" string="Skip Part Request"
+                                class="btn btn-info" icon="fa-cubes"
+                                invisible="inspection_required_parts_ids or not reset_to_draft"/>
+                        <button name="action_parts_available_received" icon="fa-cart-arrow-down" type="object"
+                                string="Receive Parts" class="btn btn-success" invisible="status != 'approve'"/>
+                        <button name="action_skip_spare_part" icon="fa-chevron-circle-right" type="object"
+                                string="Skip Parts"
+                                invisible="status != 'approve' or inspection_required_parts_ids"/>
+                        <!-- <button name="%(additional_service_inspection_action)d" type="action" icon="fa-cogs"
+                                string="Add Additional Services"
+                                class="btn btn-warning"
+                                invisible="status not in ['in_repair','approve','parts_available','ready_delivery']"/> -->
+                        <!-- <button name="%(additional_part_inspection_action)d" type="action" icon="fa-wrench"
+                                string="Add Additional Parts"
+                                class="btn btn-warning"
+                                invisible="status not in ['in_repair','approve','parts_available','ready_delivery'] or is_any_running_update_quotation"/> -->
+                        <button name="action_send_update_quot" type="object" string="Send Updated Quotation"
+                                invisible="not update_quot_mail or status != 'in_repair' or is_any_running_update_quotation"
+                                icon="fa-paper-plane-o"/>
+                        <button name="action_inspection_ready_delivery" type="object" string="Ready for Delivery"
+                                invisible="status == ['in_repair', 'Parts not Available','parts_available']" icon="fa-car"/>
+                        <!--                        <button name="action_create_invoice" type="object" string="Create Invoice" icon="fa-money"-->
+                        <!--                                class="btn btn-outline-primary" invisible="status != 'ready_delivery' or invoice_id"/>-->
+                        <!-- <button name="action_create_additional_sale_order" type="object"
+                                string="Update Store Request" icon="fa-money"
+                                class="btn btn-outline-primary"
+                                invisible="status not in ['concern_approve', 'quotation', 'approve', 'parts_request', 'parts_not_available', 'parts_available', 'in_repair', 'qc_waiting']"/> -->
+                        <!-- <button name="action_resend_quotation" type="object" string="Send Updated Quotation"
+                                class="btn btn-link"
+                                confirm="Are you sure you want to updateded quotation."
+                                invisible="status not in ['price_verified']"
+                                icon="fa-paper-plane-o"/> -->
+
+
+                        <!-- <button name="action_create_invoice_from_sale_orders"
+                                type="object"
+                                string="Create Invoice"
+                                icon="fa-money"
+                                class="btn btn-outline-primary"
+                                invisible="status not in ['ready_delivery', 
+                                'approve', 'in_repair', 'parts_available', 'qc_waiting', 'qc_done'] or invoice_id"/> -->
+                        
+                         <button name="action_open_invoice_wizard" 
+                             type="object" 
+                             string="Create Invoice"
+                             icon="fa-money"
+                             class="btn btn-outline-primary"
+                             invisible="status not in ['ready_delivery', 'approve', 'in_repair', 'parts_available', 'qc_waiting', 'qc_done'] and sale_order_id.state != 'sale'"
+                             
+                             />
+
+                        <button name="action_print_gate_pass" type="object" string="Print Gate Pass"
+                                icon="fa-print"
+                                class="btn btn-warning"
+                                invisible="status not in ['ready_delivery','complete'] or not invoice_id"/>
+                        <button name="action_complete_job_card" type="object" string="Complete"
+                                icon="fa-chevron-circle-right"
+                                invisible="status != 'ready_delivery' or not invoice_id"
+                                class="btn btn-success"/>
+                        <!-- <button name="action_request_qc_check" type="object" string="Go For Quality Check"
+                            class="btn btn-primary" icon="fa-cogs"
+                            invisible="not is_task_completed or status not in ['in_repair']"
+                            confirm="Are you sure you want to complete the task and send it for quality check?"/> -->
+                        <button name="%(cancel_job_card_action)d" type="action" string="Cancel" class="btn btn-danger"
+                                invisible="status in ['draft','complete','cancel','ready_delivery']" icon="fa-ban"
+                                confirm="Are you sure you want to cancel the Job card? This action will cancel all associated part orders."/>
+                        <button name="action_status_reset_draft" type="object" string="Reset to Draft"
+                                invisible="status not in ['cancel','reject','concern_reject']" icon="fa-repeat"/>
+
+                        <button name="action_status_request_parts" type="object" string="Request Parts"
+                                invisible="status not in ['parts_not_available']" icon="fa-repeat"/>
+                        <button name="action_approve_quote" type="object" string="Process Quote"
+	                            invisible="status not in ['concern_approve','quotation']"
+	                            class="oe_highlight"/>
+
+
+	                    <button name="action_skip_quote_email" string="Skip Email" type="object"
+								        invisible="status not in ['quotation', 'price_verified']"
+	                                    class="oe_highlight"
+								/>
+                       
+                    </header>
+                    <div invisible="not warranty_contract_id or vehicle_from != 'customer_vehicle' or not register_vehicle_id"
+                         class="alert alert-info text-center" role="alert">
+                        This vehicle is covered under warranty. Please refer to the warranty contract for further
+                        details.
+                    </div>
+                    <div role="alert" class="alert alert-warning mb8 text-center"
+                         invisible="quote_state != 'expire'">
+                        <strong>Quotation Expired
+                            <span invisible="quot_reopen_request != 'reopen_expire'">: Reopen Request</span>
+                        </strong>
+                        <br/>
+                        <button name="action_resend_quotation" type="object" string="Resend Quotation"
+                                class="btn btn-link"
+                                confirm="Are you sure you want to resend quotation."
+                                invisible="quot_reopen_request != 'reopen_expire'"
+                                icon="fa-paper-plane-o"/>
+                    </div>
+                    <div role="alert" class="alert alert-warning mb8 text-center"
+                         invisible="not is_any_running_update_quotation or status != 'in_repair'">
+                        <span class="fw-bold">
+                            Updated quotation running and awaiting customer approval.
+                        </span>
+                        <br/>
+                        Please take action to add the new
+                        services and parts, and send another updated quotation.
+                        <br/>
+                        <span class="fw-bold">
+                            or
+                        </span>
+                        <button name="action_approve_updated_quotation" class="btn btn-link" type="object"
+                                string="Approve Manually"
+                                confirm="By clicking the customer won't approve additional part quotation"/>
+                    </div>
+                    <div role="alert" class="alert alert-danger mb8 text-center" invisible="quote_state != 'reject'">
+                        <strong>
+                            Quotation Rejected
+                            <span invisible="quot_reopen_request != 'reopen_reject'">: Reopen Request</span>
+                        </strong>
+                        <br/>
+                        <button name="action_resend_quotation" type="object" string="Resend Quotation"
+                                class="btn btn-link"
+                                confirm="Are you sure you want to resend quotation."
+                                invisible="quot_reopen_request != 'reopen_reject'"
+                                icon="fa-paper-plane-o"/>
+                    </div>
+                    <div role="alert" class="alert alert-danger mb8 text-center"
+                         invisible="quote_state != 'cancel'">
+                        <strong>
+                            Quotation Cancelled
+                            <span invisible="quot_reopen_request != 'reopen_cancel'">: Reopen Request</span>
+                        </strong>
+                        <br/>
+                        <button name="action_resend_quotation" type="object" string="Resend Quotation"
+                                class="btn btn-link"
+                                confirm="Are you sure you want to resend quotation."
+                                invisible="quot_reopen_request != 'reopen_cancel'"
+                                icon="fa-paper-plane-o"/>
+                    </div>
+                    <div role="alert" class="alert alert-danger mb8 text-center"
+                         invisible="consent_sent_state != 'reject'">
+                        <strong>
+                            Concern Rejected
+                            <span invisible="consent_reopen_request != 'reopen_reject'">: Reopen Request</span>
+                        </strong>
+                        <br/>
+                        <button name="action_resend_consent" type="object" string="Resend Consent"
+                                class="btn btn-link"
+                                confirm="Are you sure you want to resend consent."
+                                invisible="consent_reopen_request != 'reopen_reject'"
+                                icon="fa-paper-plane-o"/>
+                    </div>
+                    <div role="alert" class="alert alert-warning mb8 text-center"
+                         invisible="consent_sent_state != 'expire'">
+                        <strong>
+                            Concern Expired
+                            <span invisible="consent_reopen_request != 'reopen_expire'">: Reopen Request</span>
+                        </strong>
+                        <br invisible="consent_reopen_request != 'reopen_expire'"/>
+                        <button name="action_resend_consent" type="object" string="Resend Consent"
+                                class="btn btn-link"
+                                confirm="Are you sure you want to resend consent."
+                                invisible="consent_reopen_request != 'reopen_expire'"
+                                icon="fa-paper-plane-o"/>
+                    </div>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_vehicle_health_report"
+                                    icon="fa-wrench"
+                                    invisible="not vehicle_health_report_id or status in ['draft','concern','inspection_walkthrough'] or is_skip_inspection or not is_inspection_created">
+                                <span>
+                                    Job Card Report
+                                </span>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_view_task"
+                                    icon="fa-tasks" invisible="task_count == 0" string="Task">
+                                <field name="task_count" string='Task' widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_view_delivery_order"
+                                    icon="fa-truck" invisible="delivery_order_count == 0" string="Parts Orders">
+                                <field name="delivery_order_count" string='Parts Orders' widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_view_return_delivery_order"
+                                    icon="fa-truck" invisible="return_delivery_order_count == 0"
+                                    string="Return Parts Orders">
+                                <field name="return_delivery_order_count" string='Return Parts Orders'
+                                       widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_view_job_card_invoice"
+                                    icon="fa-money" invisible="invoice_count == 0"
+                                    string="Invoices">
+                                <field name="invoice_count" string='Invoices'
+                                       widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_redirect_to_sale_orders"
+                                    icon="fa-file-text" invisible="sale_order_count == 0"
+                                    string="Sale Orders">
+                                <field name="sale_order_count" string='Sale Orders'
+                                       widget="statinfo"/>
+                            </button>
+                        </div>
+
+                        <!-- print buttons -->
+                        <div class="row text-end">
+                            <div class="col-12">
+                                <!-- <button name="action_print_invoice" type="object" class="btn btn-outline-success me-1 ms-1" >                             Invoice
+                                </button> -->
+                                <button string="Invoice"
+                                        type="action"
+                                        name="%(invoice_job_card_action)d"
+                                        class="btn btn-outline-success me-1 ms-1"
+                                        icon="fa-money"
+                                        context="{'default_inspection_id': active_id}"
+
+                                />
+
+
+                                <button name="action_print_repair_estimate" type="object"
+                                        class="btn btn-outline-warning me-1 ms-1" icon="fa-money">Quotation
+                                </button>
+                                <button name="action_techinician_copy" type="object" class="btn btn-outline-primary"
+                                        icon="fa-money">Technician Copy
+                                </button>
+                            </div>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Inspection"/>
+                            </h1>
+                        </div>
+                        <br/>
+                        <group invisible="0">
+                            <group>
+                                <field name="access_token" readonly="1" force_save="1"/>
+                                <field name="quote_url" readonly="1" force_save="1" invisible="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="inspection_date" readonly="status != 'draft'"/>
+                                <!-- <field name="quantity_matched"/> -->
+                            </group>
+                            <group>
+                                <field name="company_id"/>
+                                <field name="is_main_so_created" invisible="1"/>
+                            </group>
+                        </group>
+                        <group string="Check in Details" invisible="not booking_id">
+                            <group>
+                                <field name="booking_id" required="0" invisible="not booking_id" readonly="1"
+                                       force_save="1"/>
+                                <field name="is_check_in_create" invisible="1"/>
+                                <field name="booking_source" widget="radio" options="{'horizontal':True}" required="1"/>
+                                <field name="other_source" invisible="booking_source != 'other'"
+                                       required="booking_source == 'other'"/>
+                            </group>
+                            <group>
+                                <field name="booking_date"/>
+                                <field name="lead_id" readonly="1" force_save="1" invisible="not lead_id"/>
+                                <field name="lead_source_id" readonly="1" force_save="1" invisible="not lead_id"/>
+                                <field name="lead_medium_id" readonly="1" force_save="1" invisible="not lead_id"/>
+                            </group>
+                        </group>
+                        <group string="Customer Details">
+                            <group>
+                                <field name="customer_id" required="1" options="{'no_quick_create':True}"
+                                       readonly="status != 'draft'"
+                                       force_save="1"
+                                       domain="[('contact_type_sale_associate', '=', False), ('contact_type_employee', '=', False)]"/>
+
+                                    />
+                                <field name="is_partner" widget="boolean_toggle"/>
+                                <field name="partner_id" invisible="is_partner != True"
+                                    domain="[('contact_type_sale_associate', '!=', False)]"/>
+                                <field name="last_name" invisible="1"/>
+                                <field name="email" widget="email"/>
+                                <field name="phone" widget="phone"/>
+                                <field name="priority" widget="priority"/>
+                            </group>
+                            <group>
+                                <field name="address_area" required="1" readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="business" widget="boolean_toggle" required="1" readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="customer_tag_ids" widget="many2many_tags"
+                                       options="{'color_field': 'color'}"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="notes"/>
+                            </group>
+                        </group>
+                        <group string="Vehicle From Customer">
+                            <group>
+                                <field name="vehicle_from" widget="radio" options="{'horizontal':True}" invisible="1"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="register_vehicle_id" placeholder="From Register Vehicle"
+                                       invisible="vehicle_from != 'customer_vehicle'"
+                                       options="{'no_quick_create':True,'no_create':True}"
+                                       readonly="status != 'draft'"
+                                       string="Registered Vehicle"
+                                       force_save="1"/>
+                                <label for="register_vehicle_id" class="mt-1" string=""/>
+                                <div name="register_vehicle_id">
+                                    <button string="Register Vehicle" class="btn btn-primary"
+                                            icon="fa-car" type="action" name="%(vr_vehicle_register_action)d"
+                                            invisible="register_vehicle_id"/>
+                                </div>
+                            </group>
+                            <group invisible="vehicle_from not in ['fleet_vehicle','customer_vehicle']">
+                                <field name="estimate_delivery_date" required="status in ['price_verified']"/>
+                                <field name="warranty_contract_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"
+                                       domain="[('register_vehicle_id','=',register_vehicle_id),('status','=','running'),('start_date', '&lt;=', booking_date),('end_date', '&gt;=', booking_date)]"/>
+
+                            </group>
+                        </group>
+                        <group string="Vehicle Details" invisible="not register_vehicle_id">
+                            <group>
+                                <field name="brand_id" required="register_vehicle_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="vehicle_model_id" required="register_vehicle_id"
+                                       readonly="status != 'draft'" force_save="1"/>
+                                <field name="year" required="register_vehicle_id"
+                                       readonly="status != 'draft'" force_save="1"/>
+                                <field name="color" required="register_vehicle_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="fuel_type" required="register_vehicle_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="transmission" widget="radio" options="{'horizontal':True}"
+                                       required="register_vehicle_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="vin_no" required="register_vehicle_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="registration_no" required="register_vehicle_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="miles" required="register_vehicle_id"
+                                       readonly="status == 'complete'"
+                                       placeholder="Kilometers must be greater than 1."
+                                       force_save="1"/>
+                                <!-- <field name="is_warranty" widget="boolean_toggle" required="register_vehicle_id"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                                <field name="warranty_type" invisible="not is_warranty"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/> -->
+                                <field name="insurance_provider"
+                                       readonly="status != 'draft'"
+                                       force_save="1"
+                                       domain="[('contact_type_insurance', '!=', False)]"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Advance Payment Details">
+                                <label string="Payments" for="advance_payment_id"/>
+                                <div>
+                                    <field name="advance_payment_id" readonly="1" class="oe_inline"/>
+                                    <field name="advance_payment_status" widget="badge" class="oe_inline ms-2"
+                                           decoration-info="advance_payment_status == 'draft'"
+                                           decoration-warning="advance_payment_status == 'posted'"
+                                           decoration-danger="advance_payment_status == 'cancel'"/>
+
+                                    <field name="outstanding_credits_widget" widget="payment"
+                                           class="oe_outstanding_credits"/>
+
+                                    <label for="total_outstanding_amount" invisible="1"/>
+                                    <field name="total_outstanding_amount"
+                                           class="oe_form_field btn btn-secondary outstanding_credit_assign"
+                                           invisible="1"/>
+
+
+                                </div>
+                                <label for="total_due_amount"/>
+                                <div>
+                                    <field name="total_due_amount"/>
+                                </div>
+                            </group>
+                            <!-- <group string="Invoice Details" invisible="not invoice_id"> -->
+
+                            <!-- <label string="Invoice" for="invoice_id"/>
+                            <div>
+                                <field name="invoice_id" readonly="1" class="oe_inline"/>
+                                <field name="invoice_payment_state" readonly="1" force_save="1" widget="badge"
+                                       class="oe_inline ms-2"
+                                       nolabel="1"
+                                       decoration-success="invoice_payment_state == 'paid'"
+                                       decoration-danger="invoice_payment_state == 'not_paid'"
+                                       decoration-info="invoice_payment_state == 'in_payment'"
+                                       decoration-primary="invoice_payment_state == 'partial'"
+                                       decoration-warning="invoice_payment_state == 'reversed'"
+                                       invisible="invoice_payment_state == False"/>
+                            </div>
+                                 <label string="Total Invoice" for="amount_residual"/>
+                            <div>
+                                  <field name="amount_residual" class="oe_inline ms-2"
+                                       nolabel="1" invisible="invoice_payment_state == False"/>
+                            </div>
+                                   <label string="Balance Due" for="balance_due"/>
+                            <div>
+                                   <field name="balance_due" class="oe_inline ms-2"
+                                       nolabel="1" invisible="invoice_payment_state == False"/>
+                            </div> -->
+
+                            <!-- </group> -->
+                        </group>
+
+                        <separator string="Invoice Details" invisible="not invoice_id"/>
+
+                        <field name="invoice_ids" widget="one2many_list" invisible="not invoice_id" readonly="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="invoice_date"/>
+                                <field name="amount_total_signed" widget="monetary"/>
+                                <field name="state" widget="badge" decoration-success="state == 'posted'"
+                                       decoration-info="state == 'draft'"/>
+
+
+                            </tree>
+                        </field>
+                        <div class="row" invisible="not invoice_id">
+                            <div class="col-8"/>
+                            <div class="col-4 border-top border-black text-end">
+                                <span>
+                                    Total :
+                                    <field name="invoice_total" class="oe_subtotal_footer_separator"
+                                           string="Total"/>
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <group string="Responsible">
+                            <group>
+                                <field name="sale_person_id" widget="many2one_avatar_user"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+
+                            </group>
+                            <group>
+                                <field name="service_adviser_id" widget="many2one_avatar_user" required="1"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                               
+                            </group>
+                        </group>
+                        <group string="Inspection Details" name="inspection_details">
+                            <group>
+                                <field name="inspection_type" widget="radio" options="{'horizontal':True}"
+                                       readonly="status != 'draft'"
+                                       force_save="1"
+                                       required="1"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                            <group invisible="1">
+                                <field name="inspect_type" widget="radio" options="{'horizontal':True}"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="vehicle_license" string="Vehicle License">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6>
+                                            Front
+                                        </h6>
+                                        <hr class="mb-1 mt-1"/>
+                                        <field name="licence_image_front" widget="image"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6>
+                                            Back
+                                        </h6>
+                                        <hr class="mb-1 mt-1"/>
+                                        <field name="licence_image_back" widget="image"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="customer_observation" string="Customer Observation">
+                                <separator string="Concern"/>
+                                <field name="vehicle_concern_ids" widget="section_and_note_one2many">
+                                    <tree editable="bottom">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a line"/>
+                                            <create name="add_section_control"
+                                                    string="Add a title"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                        </control>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="concern_type_id" required="not display_type"/>
+                                        <field name="display_type" column_invisible="1"/>
+                                        <field name="name" widget="section_and_note_text"
+                                               required="1"/>
+                                    </tree>
+                                </field>
+                                <separator string="Customer Observation"/>
+                                <field name="customer_observation" placeholder="Customer Observation"/>
+                                <header>
+                                    <field name="consent_sent_state" widget="statusbar"
+                                           statusbar_visible="draft,sent,signed"/>
+                                    <button name="action_resend_consent" type="object" string="Resend Consent"
+                                            class="btn btn-outline-primary"
+                                            invisible="consent_sent_state not in ['expire','reject','cancel']"
+                                            icon="fa-paper-plane-o"/>
+                                </header>
+                                <group string="Concern Confirmation">
+                                    <group>
+                                        <field name="consent_access_token" string="Access Token"/>
+                                        <field name="consent_accept_date_time" string="Concern Accepted Date Time"
+                                               readonly="1" force_save="1"/>
+                                        <field name="consent_sent_date_time" string="Concern Sent Date Time"
+                                               readonly="1" force_save="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="consent_expire_date" string="Concern Expiry Date"/>
+                                        <field name="consent_is_expired" invisible="1"/>
+                                        <field name="consent_url" invisible="1"/>
+                                        <field name="consent_reject_reason" invisible="consent_sent_state != 'reject'"/>
+                                    </group>
+                                </group>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4 col-sm-6 text-center" invisible="not customer_signature">
+                                        <field name="customer_signature" widget="image"
+                                               readonly="consent_sent_state in ['signed']"/>
+                                        <hr class="mb-1 mt-1"/>
+                                        Customer Signature
+                                    </div>
+                                    <div class="col-md-4 text-center col-sm-6">
+                                        <field name="authorized_signature" widget="signature"/>
+                                        <hr class="mb-1 mt-1"/>
+                                        Authorized Signature
+                                    </div>
+                                </div>
+                            </page>
+                            <page name="inspection_images" string="Images">
+                                <group>
+                                    <group>
+                                        <field name="image_template_id"/>
+                                    </group>
+                                </group>
+                                <notebook>
+                                    <page string="Vehicle Inner Body Images">
+                                        <field name="inner_image_ids">
+                                            <form>
+                                                <sheet>
+                                                    <div class="oe_title">
+                                                        <label for="name"/>
+                                                        <h1>
+                                                            <field name="name" placeholder="e.g. Name"/>
+                                                        </h1>
+                                                    </div>
+                                                    <group string="Inspection Image">
+                                                        <field name="avatar" widget="image" style="width: 75%;"
+                                                               nolabel="1"/>
+                                                    </group>
+                                                </sheet>
+                                            </form>
+                                            <kanban string="Kanban" class="">
+                                                <field name="id"/>
+                                                <field name="avatar"/>
+                                                <field name="name"/>
+                                                <templates>
+                                                    <t t-name="kanban-box">
+                                                        <div class="card oe_kanban_global_click p-0 border-0">
+                                                            <div class="row">
+                                                                <div class="col-8">
+                                                                    <strong>
+                                                                        <field name="name"/>
+                                                                    </strong>
+                                                                </div>
+                                                            </div>
+                                                            <hr class="mb-1 mt-1"/>
+                                                            <div class="o_squared_image">
+                                                                <img class="card-img-top"
+                                                                     style="height:250px;object-fit: cover;"
+                                                                     t-att-src="kanban_image('inspection.inner.images', 'avatar', record.id.raw_value)"
+                                                                     t-att-alt="record.name.value"/>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+                                        </field>
+                                    </page>
+                                    <page string="Vehicle Outer Body Images">
+                                        <field name="outer_image_ids">
+                                            <form>
+                                                <sheet>
+                                                    <div class="oe_title">
+                                                        <label for="name"/>
+                                                        <h1>
+                                                            <field name="name" placeholder="e.g. Name"/>
+                                                        </h1>
+                                                    </div>
+                                                    <group string="Inspection Image">
+                                                        <field name="avatar" widget="image" style="width: 75%;"
+                                                               nolabel="1"/>
+                                                    </group>
+                                                </sheet>
+                                            </form>
+                                            <kanban string="Kanban" class="">
+                                                <field name="id"/>
+                                                <field name="avatar"/>
+                                                <field name="name"/>
+                                                <templates>
+                                                    <t t-name="kanban-box">
+                                                        <div class="card oe_kanban_global_click p-0 border-0">
+                                                            <div class="row">
+                                                                <div class="col-8">
+                                                                    <strong>
+                                                                        <field name="name"/>
+                                                                    </strong>
+                                                                </div>
+                                                            </div>
+                                                            <hr class="mb-1 mt-1"/>
+                                                            <div class="o_squared_image">
+                                                                <img class="card-img-top"
+                                                                     style="height:250px;object-fit: cover;"
+                                                                     t-att-src="kanban_image('inspection.outer.images', 'avatar', record.id.raw_value)"
+                                                                     t-att-alt="record.name.value"/>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+                                        </field>
+                                    </page>
+                                    <page string="Other Images">
+                                        <field name="other_image_ids">
+                                            <form>
+                                                <sheet>
+                                                    <div class="oe_title">
+                                                        <label for="name"/>
+                                                        <h1>
+                                                            <field name="name" placeholder="e.g. Name"/>
+                                                        </h1>
+                                                    </div>
+                                                    <group string="Inspection Image">
+                                                        <field name="avatar" widget="image" style="width: 75%;"
+                                                               nolabel="1"/>
+                                                    </group>
+                                                </sheet>
+                                            </form>
+                                            <kanban string="Kanban" class="">
+                                                <field name="id"/>
+                                                <field name="avatar"/>
+                                                <field name="name"/>
+                                                <templates>
+                                                    <t t-name="kanban-box">
+                                                        <div class="card oe_kanban_global_click p-0 border-0">
+                                                            <div class="row">
+                                                                <div class="col-8">
+                                                                    <strong>
+                                                                        <field name="name"/>
+                                                                    </strong>
+                                                                </div>
+                                                            </div>
+                                                            <hr class="mb-1 mt-1"/>
+                                                            <div class="o_squared_image">
+                                                                <img class="card-img-top"
+                                                                     style="height:250px;object-fit: cover;"
+                                                                     t-att-src="kanban_image('inspection.other.images', 'avatar', record.id.raw_value)"
+                                                                     t-att-alt="record.name.value"/>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+                                        </field>
+                                    </page>
+                                </notebook>
+                            </page>
+                            <page name="inspection_checklist" string="Inspection Checklist">
+                                <group>
+                                    <group>
+                                        <field name="checklist_template_id"/>
+                                    </group>
+                                </group>
+                                <field name="checklist_ids" widget="section_and_note_one2many">
+                                    <tree editable="bottom">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a line"/>
+                                            <create name="add_section_control"
+                                                    string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                        </control>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="is_check" widget="boolean_toggle"/>
+                                        <field name="name" widget="section_and_note_text" required="1"/>
+                                        <field name="description"/>
+                                        <field name="display_type" column_invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <!--                            <page name="concerns" string="3C">-->
+                            <!--                                <separator string="Concerns"/>-->
+                            <!--                                <field name="job_card_concern_ids">-->
+                            <!--                                    <tree editable="bottom">-->
+                            <!--                                        <field name="sequence" widget="handle"/>-->
+                            <!--                                        <field name="concern" string="Concern" required="1"/>-->
+                            <!--                                        <field name="cause" required="0"/>-->
+                            <!--                                        <field name="correction" required="0"/>-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                            </page>-->
+                            <page name="required_services" string="Required Services">
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button class="btn btn-outline-dark" type="object"
+                                                name="action_view_unselect_services"
+                                                invisible="unselect_service_count == 0">
+                                            <span class="badge badge-dark border border-dark me-1">
+                                                <field name="unselect_service_count" nolabel="1"/>
+                                            </span>
+                                            View Unselected Services
+                                        </button>
+                                        <!-- <button name="action_create_additional_service_line_section" type="object" icon="fa-cogs"
+                               string="Add Additional Services"
+                               class="btn btn-warning"
+                               /> -->
+                                    </div>
+                                </div>
+                                <div class="background_black">
+                                <field name="inspection_required_service_ids" force_save="1"
+                                       widget="section_and_note_one2many"
+                                       readonly="status in ['ready_delivery','cancel','complete']"
+                                                                               context="{'default_vehicle_health_report_id':vehicle_health_report_id,'default_service_selected' :True}">
+                                    <tree editable="bottom" default_order="sequence asc, id asc"
+                                          decoration-success="service_selected == True"
+                                          multi_edit="1"
+                                          decoration-warning="is_additional_service == True"
+                                          decoration-danger="service_selected == False"
+                                          decoration-info="allowed_hour_change == True"
+                                          
+                                        >
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a service"/>
+                                            <create name="add_section_control"
+                                                    string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+
+                                            <!-- <button name="action_add_additional_services" 
+                                                    string="Add Additional Service" 
+                                                    type="object" 
+                                                    icon="fa-plus"/> -->
+                                        </control>
+                                        <!-- Invisible Fields -->
+                                        <field name="active" column_invisible="1"/>
+                                        <field name="qty" column_invisible="1"/>
+                                        <field name="currency_id" column_invisible="1"/>
+                                        <field name="service_selected" column_invisible="1"/>
+                                        <field name="vehicle_health_report_id" column_invisible="1"/>
+                                        <field name="task_id" column_invisible="1" readonly="1" force_save="1"/>
+                                        <field name="is_additional_service" column_invisible="1"/>
+                                        <field name="allowed_hour_change" column_invisible="1"/>
+                                        <!--Section-->
+                                        <field name="display_type" column_invisible="1"/>
+                                        <field name="sequence" widget="handle"/>
+                                        <!--Product Details-->
+                                        <field name="product_id" required="not display_type"
+                                               context="{'default_detailed_type':'service'}" force_save="1"/>
+                                        
+                                        <field name="name" required="1" widget="section_and_note_text"/>
+                                        <field name="required_status" required="not display_type" optional="show"/>
+                                        <field name="tax_ids" widget="many2many_tags"/>
+                                        
+                                        <field name="qty" readonly="allowed_hour_change != True"/>
+                                        <field name="estimate_time" widget="float_time" force_save="1"
+                                            readonly="1"/>
+                                        <field name="uom_id"/>
+                                        <field name="warranty_applicable"/>
+                                        <field name="price" force_save="1" readonly="allowed_hour_change != True or parent.status == 'complete'"/>
+<!--                                        <field name="is_additional"/>-->
+                                        <field name="discount" optional="hide"/>
+                                        <field name="untaxed_amount" optional="hide" force_save="1"/>
+                                        <field name="tax_amount" optional="hide" force_save="1"/>
+                                        <field name="total_amount" force_save="1"/>
+                                        <field name="nos"/>
+                                        <button name="action_archive" type="object" string="Deactivate"
+                                                    class="btn-primary"/>
+                                        <button name="%(service_concern_action)d" type="action" string="3C"
+                                                class="btn btn-warning" icon="fa-bars"/>
+                                        <button name="action_view_task" icon="fa-external-link" type="object"
+                                                optional="hide"
+                                                string="View Task" invisible="not task_id" class="btn btn-primary"/>
+                                        <button name="action_approve_additional_service" type="object"
+                                                string="Approve"
+                                                class="btn btn-outline-success btn-sm"
+                                                invisible="not is_additional_service or additional_service_status != 'pending'"/>
+                                        <button name="action_reject_additional_service" type="object"
+                                                string="Reject"
+                                                confirm="By rejecting this service all part related to this service has been rejected."
+                                                class="btn btn-outline-danger btn-sm"
+                                                invisible="not is_additional_service or additional_service_status != 'pending'"/>
+                                        <field name="additional_service_status" widget="badge"
+                                               invisible="not is_additional_service" string="Service Status"
+                                               decoration-warning="additional_service_status == 'pending'"
+                                               decoration-success="additional_service_status == 'approve'"
+                                               decoration-danger="additional_service_status == 'reject'"/>
+                                        
+                                    </tree>
+                                </field>
+                                <div class="row mb-2" invisible="not is_additional_services_order">
+                                    <div class="col-12 text-end">
+                                        <field name="is_additional_services_order" invisible="1"/>
+                                        <button name="action_create_additional_sale_order" type="object"
+                                                string="Create Additional Services Sale Order" icon="fa-money"
+                                                invisible="not is_additional_services_order"
+                                                class="btn btn-outline-primary"/>
+                                    </div>
+                                </div>
+                                <group>
+                                    <group>
+                                        <field name="estimate_time_total" string="Total Service Time"
+                                               widget="float_time" invisible="1"/>
+                                        <field name="selected_services_time_total"
+                                               string="Selected Service Estimate Time"
+                                               widget="float_time"/>
+
+                                    </group>
+                                    <!--                                    <group class="oe_subtotal_footer oe_right"-->
+                                    <!--                                           style="text-align: right">-->
+                                    <!--                                        <field name="service_total" string="Service Amount" invisible="1"/>-->
+                                    <!--                                        <field name="selected_services_total" string="Service Total"/>-->
+                                    <!--                                        <field name="shop_supplies_fees" string="Shop Supplies and Environmental Fees"/>-->
+                                    <!--                                        <field name="selected_parts_total" string="Parts Amount"/>-->
+                                    <!--                                        <field name="approved_part_amount" string="Additional Parts Amount"/>-->
+                                    <!--                                    </group>-->
+                                </group>
+                                <!--                                <div class="row">-->
+                                <!--                                    <div class="col-8"/>-->
+                                <!--                                    <div class="col-4 border-top border-black text-end fw-bolder fs-2">-->
+                                <!--                                        <span>-->
+                                <!--                                            Total :-->
+                                <!--                                            <field name="inspection_total" class="oe_subtotal_footer_separator"-->
+                                <!--                                                   string="Total"/>-->
+                                <!--                                        </span>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
+                                </div>
+                            </page>
+                            <page name="required_parts" string="Required Parts">
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button class="btn btn-outline-dark" type="object"
+                                                name="action_view_unselect_parts"
+                                                invisible="unselect_part_count == 0">
+                                            <span class="badge badge-dark border border-dark me-1">
+                                                <field name="unselect_part_count" nolabel="1"/>
+                                            </span>
+                                            View Unselected Parts
+                                        </button>
+                                        <!-- <button name="action_create_additional_parts_line_section" type="object" icon="fa-wrench"
+                                        string="Add Additional Parts"
+                                        class="btn btn-warning"/> -->
+                                    </div>
+                                </div>
+                                <field name="inspection_required_parts_ids" force_save="1"
+                                       widget="section_and_note_one2many"
+                                       readonly="status in ['ready_delivery','cancel','complete']"
+                                       context="{'default_vehicle_health_report_id':vehicle_health_report_id,'default_part_selected':True,
+                                                 'from_inspection':True}">
+                                    <tree editable="bottom" decoration-warning="is_additional_part == True"
+                                          default_order="sequence asc, id asc" multi_edit="1"
+                                          decoration-success="part_selected == True">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a part"/>
+                                            <create name="add_section_control"
+                                                    string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                            <!-- <button name="action_add_additional_parts" 
+                                                    string="Add Additional Part" 
+                                                    type="object" 
+                                                    icon="fa-plus"/> -->
+                                        </control>
+                                        <!-- Invisible Fields -->
+                                        <field name="service_ids" column_invisible="1"/>
+                                        <field name="part_selected" readonly="1" force_save="1" column_invisible="1"/>
+                                        <field name="active" column_invisible="1"/>
+                                        <field name="is_additional_part" column_invisible="1"/>
+                                        <field name="required_status" column_invisible="1"/>
+                                        <field name="currency_id" column_invisible="1"/>
+                                        <field name="vehicle_health_report_id" column_invisible="1"/>
+                                        <field name="additional_part_selected" column_invisible="1"/>
+                                        <!-- Section -->
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="display_type" column_invisible="1"/>
+                                        <!-- Part Details -->
+                                        <field name="product_id" required="not display_type"/>
+                                        <field name="name"
+                                               required="1"
+                                               widget="section_and_note_text"/>
+                                        <field name="service_id"
+                                               domain="[('id','in',service_ids)]"
+                                               required="parent.status != 'draft' or parent.inspection_required_service_ids"/>
+                                        <field name="required_status"
+                                               required="not display_type"
+                                               optional="show"/>
+                                        <field name="qty"/>
+                                        <field name="uom_id"/>
+                                        <field name="warranty_applicable"/>
+                                        <field name="forecast_qty"
+                                               optional="hide"/>
+                                        <button name="action_view_forecast_report"
+                                                type="object"
+                                                title="Forecast Report"
+                                                icon="fa-area-chart"/>
+                                        <field name="tax_ids" widget="many2many_tags"/>
+                                        <field name="price" force_save="1"/>
+<!--                                        <field name="is_additional"/>-->
+                                        <field name="discount" optional="hide"/>
+                                        <field name="untaxed_amount" optional="hide" force_save="1"/>
+                                        <field name="tax_amount" optional="hide" force_save="1"/>
+                                        <field name="total_amount" force_save="1"/>
+                                        <field name="nos" optional="hide"/>
+                                        <button name="action_archive" type="object" string="Deactivate"
+                                                    class="btn-primary"
+                                                    invisible="parent.invoice_ids == True"/>
+                                        <button name="action_approve_part" type="object" string="Approve"
+                                                icon="fa-check-circle"
+                                                confirm="Are you sure you want to confirm part ?"
+                                                class="btn btn-outline-success btn-sm"
+                                                invisible="not is_additional_part or additional_part_status!= 'pending'"/>
+                                        <button name="%(inspection_reject_action)d" type="action" string="Reject"
+                                                icon="fa-times-circle"
+                                                class="btn btn-outline-danger btn-sm"
+                                                invisible="not is_additional_part or additional_part_status!= 'pending'"
+                                                context="{'reject':'part_reject'}"/>
+                                        <field name="additional_part_status" widget="badge" string="Status"
+                                               invisible="not is_additional_part"
+                                               decoration-success="additional_part_status in ('approve','part_received')"
+                                               decoration-warning="additional_part_status == 'pending'"
+                                               decoration-info="additional_part_status == 'part_request'"
+                                               decoration-danger="additional_part_status == 'reject'"/>
+                                    </tree>
+                                </field>
+                                <div class="row mb-2"
+                                     invisible="not is_additional_part_order and not is_requested_additional_parts_available">
+                                    <div class="col-12 text-end">
+                                        <field name="is_additional_part_order" invisible="1"/>
+                                        <field name="is_requested_additional_parts_available" invisible="1"/>
+                                        <button name="action_create_additional_sale_order" type="object"
+                                                string="Create Additional Part Sale Order" icon="fa-money"
+                                                invisible="not is_additional_part_order"
+                                                class="btn btn-outline-primary"/>
+                                        <button name="action_additional_parts_available_received" type="object"
+                                                string="Receive Parts" icon="fa-cart-arrow-down"
+                                                invisible="not is_requested_additional_parts_available"
+                                                class="btn btn-outline-success"/>
+                                        <!--         
+                                        
+                                        <button name="action_create_additional_delivery_order" type="object"-->
+                                        <!--                                                string="Create Additional Parts Order"-->
+                                        <!--                                                icon="fa-truck"-->
+                                        <!--                                                invisible="not is_additional_part_order"-->
+                                        <!--                                                class="btn btn-outline-primary"/>-->
+                                    </div>
+                                </div>
+                                <!--                                <group class="oe_subtotal_footer oe_right"-->
+                                <!--                                       style="text-align: right">-->
+                                <!--                                    <field name="parts_total_qo_additional" string="Actual Total"-->
+                                <!--                                           class="oe_subtotal_footer_separator" invisible="1"/>-->
+                                <!--                                    <field name="additional_parts_total" string="Additional Parts" invisible="1"/>-->
+                                <!--                                    <field name="selected_services_total" string="Selected Service Amount"-->
+                                <!--                                           class="oe_subtotal_footer_separator"/>-->
+                                <!--                                    <field name="parts_total" string="Parts Amount" invisible="1"/>-->
+                                <!--                                    <field name="selected_parts_total" string="Selected Part Total"-->
+                                <!--                                           class="oe_subtotal_footer_separator"/>-->
+                                <!--                                    <field name="approved_part_amount" string="Approved Additional Parts"-->
+                                <!--                                           class="oe_subtotal_footer_separator"/>-->
+                                <!--                                    <field name="selected_services_tax_amount"/>-->
+                                <!--                                    <field name="selected_parts_tax_amount"/>-->
+                                <!--                                </group>-->
+                                <!--                                <div class="row">-->
+                                <!--                                    <div class="col-8"/>-->
+                                <!--                                    <div class="col-4 border-top border-black text-end fw-bolder fs-2">-->
+                                <!--                                        <span>-->
+                                <!--                                            Total :-->
+                                <!--                                            <field name="inspection_total" class="oe_subtotal_footer_separator"-->
+                                <!--                                                   string="Total"/>-->
+                                <!--                                        </span>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
+                            </page>
+
+                            <page string="Quotation Details" name="quotation_details"
+                                  invisible="status not in ['quotation','approve','reject','parts_request','parts_available','in_repair','ready_delivery','complete']">
+                                <header>
+                                    <field name="quote_state" widget="statusbar" statusbar_visible="draft,sent,signed"/>
+                                    <button name="action_resend_quotation" type="object" string="Resend Quotation"
+                                            class="btn btn-outline-primary"
+                                            invisible="quote_state not in ['expire','reject','cancel']"
+                                            icon="fa-paper-plane-o"/>
+                                </header>
+                                <group string="Quotation Confirmation">
+                                    <group>
+                                        <field name="quote_accept_date_time" readonly="1" force_save="1"/>
+                                        <field name="quotation_sent_date_time" readonly="1" force_save="1"/>
+                                        <field name="quote_expire_date"/>
+                                        <field name="quote_reject_reason" invisible="quote_state != 'reject'"/>
+                                    </group>
+                                    <group>
+                                        <field name="signature" widget="image" force_save="1"
+                                               readonly="quote_state in ['signed']"/>
+                                    </group>
+                                </group>
+                                <separator string="Additional Part Confirmation"
+                                           invisible="not additional_parts_quot_ids"/>
+                                <field name="additional_parts_quot_ids" invisible="not additional_parts_quot_ids">
+                                    <tree create="0" edit="0" delete="0" decoration-success="quote_state == 'signed'">
+                                        <field name="quotation_sent_date_time"/>
+                                        <field name="quote_expire_date"/>
+                                        <field name="quote_accept_date_time"/>
+                                        <field name="additional_service_ids" widget="many2many_tags"/>
+                                        <field name="additional_part_ids" widget="many2many_tags"/>
+                                        <field name="quote_state" widget="badge"
+                                               decoration-danger="quote_state == 'cancel'"
+                                               decoration-success="quote_state == 'signed'"
+                                               decoration-primary="quote_state == 'sent'"
+                                               decoration-warning="quote_state == 'expire'"/>
+                                        <button name="action_reopen_additional_quotation" class="btn btn-primary"
+                                                invisible="quote_state not in ['expire','cancel']" type="object"
+                                                string="Reopen Request"/>
+                                    </tree>
+                                    <form create="0" edit="0" delete="0">
+                                        <widget name="web_ribbon" title="Closed Manually" bg_color="text-bg-danger"
+                                                invisible="not close_manually"/>
+                                        <header>
+                                            <field name="quote_state" widget="statusbar"
+                                                   statusbar_visible="draft,sent,signed"/>
+                                        </header>
+                                        <group>
+                                            <group>
+                                                <field name="access_token" readonly="1" force_save="1"/>
+                                                <field name="confirm_selection" invisible="1"/>
+                                                <field name="close_manually" invisible="1"/>
+                                                <field name="confirm_selection_service" invisible="1"/>
+                                                <field name="confirm_selection_service_part" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <group string="Quotation Confirmation">
+                                            <group>
+                                                <field name="quote_accept_date_time" readonly="1" force_save="1"/>
+                                                <field name="quotation_sent_date_time" readonly="1" force_save="1"/>
+                                                <field name="quote_expire_date"/>
+                                                <field name="quote_reject_reason"
+                                                       invisible="quote_state != 'reject'"/>
+                                            </group>
+                                            <group>
+                                                <field name="signature" widget="image" force_save="1"
+                                                       readonly="quote_state in ['signed']"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page string="Additional Service Details">
+                                                <tree>
+                                                    <field name="additional_service_ids">
+                                                        <tree editable="bottom"
+                                                              decoration-success="additional_service_selected == True"
+                                                              decoration-danger="service_rejected == True">
+                                                            <field name="product_id"/>
+                                                            <field name="service_selected" column_invisible="1"/>
+                                                            <field name="service_rejected" column_invisible="1"/>
+                                                            <field name="additional_service_selected"
+                                                                   column_invisible="1"/>
+                                                            <field name="name"/>
+                                                            <field name="required_status"/>
+                                                            <field name="estimate_time" force_save="1"/>
+                                                            <field name="uom_id"/>
+                                                            <field name="tax_ids" widget="many2many_tags"/>
+                                                            <field name="price"/>
+                                                            <field name="untaxed_amount"/>
+                                                            <field name="tax_amount"/>
+                                                            <field name="total_amount"/>
+                                                        </tree>
+                                                    </field>
+                                                </tree>
+                                            </page>
+                                            <page string="Additional Part Details">
+                                                <field name="additional_part_ids">
+                                                    <tree editable="bottom"
+                                                          decoration-success="additional_part_selected == True"
+                                                          decoration-danger="additional_part_rejected == True">
+                                                        <field name="product_id"/>
+                                                        <field name="additional_part_selected" column_invisible="1"/>
+                                                        <field name="additional_part_rejected" column_invisible="1"/>
+                                                        <field name="name"/>
+                                                        <field name="qty"/>
+                                                        <field name="uom_id"/>
+                                                        <field name="tax_ids" widget="many2many_tags"/>
+                                                        <field name="service_ids" column_invisible="1"/>
+                                                        <field name="service_id"
+                                                               domain="[('id','in',service_ids)]"/>
+                                                        <field name="required_status"/>
+                                                        <field name="price"/>
+                                                        <field name="tax_amount"/>
+                                                        <field name="total_amount"/>
+                                                    </tree>
+                                                </field>
+                                            </page>
+                                        </notebook>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="qc_check" string="Quality Checks"
+                                  invisible="status not in ['in_repair', 'ready_delivery', 'complete', 'cancel']">
+                                <separator string="Task Quality Checks"/>
+                                <field name="qc_check_ids" readonly="1" force_save="1">
+                                    <tree decoration-success="is_passes == True" decoration-danger="is_reject == True">
+                                        <field name="task_id"/>
+                                        <field name="datetime"/>
+                                        <field name="is_passes" column_invisible="1"/>
+                                        <field name="is_reject" column_invisible="1"/>
+                                        <button name="action_status_approve" type="object" string="Approve"
+                                                icon="fa-check-circle"
+                                                class="btn btn-outline-success" invisible="is_passes or is_reject"/>
+                                        <button name="%(inspection_reject_action)d" type="action" string="Reject"
+                                                icon="fa-times-circle"
+                                                class="btn btn-outline-danger" invisible="is_passes or is_reject"
+                                                context="{'reject':'qc_check'}"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="task_id"/>
+                                            </group>
+                                            <group>
+                                                <field name="datetime"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                                <separator string="Vehicle Quality Checks"/>
+                                <group>
+                                    <group>
+                                        <field name="qc_check_template_id"/>
+                                    </group>
+                                </group>
+                                <field name="vehicle_qc_check_ids" widget="section_and_note_one2many">
+                                    <tree editable="bottom" default_order="sequence asc, id asc">
+                                        <control>
+                                            <create name="add_product_control"
+                                                    string="Add a checkpoint"/>
+                                            <create name="add_section_control"
+                                                    string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                        </control>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="display_type" column_invisible="1"/>
+                                        <field name="name" required="1" widget="section_and_note_text"/>
+                                        <field name="required_attention" column_invisible="1"/>
+                                        <field name="okay_for_now" column_invisible="1"/>
+                                        <field name="further_attention" column_invisible="1"/>
+                                        <button name="action_okay_for_now_accept"
+                                                type="object"
+                                                title="Checked and OK at this time"
+                                                class="me-1 btn btn-outline-success inspection-qc-btn-tree"
+                                                invisible="okay_for_now"/>
+                                        <button name="action_okay_for_now_reject"
+                                                title="Checked and OK at this time"
+                                                type="object"
+                                                class="me-1 btn btn-success inspection-qc-btn-tree"
+                                                invisible="not okay_for_now"/>
+                                        <button name="action_required_attention_accept"
+                                                type="object"
+                                                class="me-1 btn btn-outline-danger inspection-qc-btn-tree"
+                                                title="Requires immediate attention"
+                                                invisible="required_attention"/>
+                                        <button name="action_required_attention_reject"
+                                                type="object" class="me-1 btn btn-danger inspection-qc-btn-tree"
+                                                string="" title="Requires immediate attention"
+                                                invisible="not required_attention"/>
+                                        <button name="action_further_attention_accept"
+                                                type="object"
+                                                class="me-1 btn btn-outline-warning inspection-qc-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="further_attention"/>
+                                        <button name="action_further_attention_reject"
+                                                type="object"
+                                                class="me-1 btn btn-warning inspection-qc-btn-tree"
+                                                title="Requires future attention"
+                                                invisible="not further_attention"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-6">
+                                        <button name="action_check_complete" type="object"
+                                                confirm="Are you sure you want complete all the unselected checkpoint"
+                                                string="Complete All" icon="fa-check-circle"
+                                                class="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </page>
+                        </notebook>
+                        <group class="oe_subtotal_footer oe_right"
+                               style="text-align: right">
+                            <field name="service_total" string="Service Amount" invisible="1"/>
+                            <field name="selected_services_total" string="Total Services Amount"/>
+                            <field name="report_additional_parts_total" string="Total Parts Amount"/>
+                            <!-- <field name="shop_supplies_fees" string="Shop Supplies and Environmental Fees"/> -->
+                        </group>
+                        <div class="row">
+                            <div class="col-8"/>
+                            <div class="col-4 border-top border-black text-end fw-bolder fs-2" name="inspection-total">
+                                <label for="inspection_total" string="Total"/>
+                                <span>
+                                    <field name="inspection_total" class="fw-bold"
+                                           string="Total"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8"/>
+                            <div class="col-4 border-top border-black text-end fw-bolder fs-2" name="amount-due">
+                                <label for="due_amount" string="Invoice Due"/>
+                                <span>
+                                    <field name="due_amount" class="fw-bold"/>
+                                </span>
+                            </div>
+                        </div>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="vehicle_inspection_tree_view" model="ir.ui.view">
+            <field name="name">vehicle.inspection.tree.view</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="arch" type="xml">
+                <tree create="1">
+                    <field name="name"/>
+                    <field name="booking_id"/>
+                    <field name="customer_id"/>
+                    <field name="email" widget="email"/>
+                    <field name="phone" widget="phone"/>
+                    <field name="brand_id"/>
+                    <field name="vehicle_model_id"/>
+                    <field name="registration_no"/>
+                    <field name="sale_person_id" widget="many2one_avatar_user"/>
+                    <field name="service_adviser_id" widget="many2one_avatar_user"/>
+                    <field name="activity_ids" widget="list_activity"/>
+                    <field name="status" widget="badge"
+                           decoration-success="status in ('approve','complete','concern_approve','parts_available')"
+                           decoration-danger="status in ('reject','cancel','concern_reject')"
+                           decoration-primary="status == 'inspection_walkthrough'"
+                           decoration-info="status in ('concern','in_repair')"
+                           decoration-warning="status in ('quotation','part_request')"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vehicle_inspection_view_kanban" model="ir.ui.view">
+            <field name="name">vehicle.inspection.view.kanban</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="arch" type="xml">
+                <kanban create="1"
+                        group_create="false"
+                        group_delete="false"
+                        quick_create="false"
+                        records_draggable="false"
+                        groups_draggable="false">
+                    <field name="name"/>
+                    <field name="selected_services_time_total"/>
+                    <field name="customer_id"/>
+                    <field name="vehicle_model_id"/>
+                    <field name="booking_date"/>
+                    <field name="estimate_delivery_date"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="card oe_kanban_global_click mb-1 mt-1 pt-3 pb-2 ps-2 pe-2"
+                                 style="width:15rem;border-radius:5px;box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;border: 1px solid #557d77;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span style="background-color: #004342;color: white;padding: 3px;font-size: 13px;border-radius: 5px;">
+                                            #
+                                            <field name="name"/>
+                                        </span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span style="background-color: #f00000;color: white;padding: 4px;font-size: 13px;border-radius: 5px;">
+                                            <field name="selected_services_time_total" widget="float_time"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-1 mt-2">
+                                        <i class="fa fa-user me-2" aria-hidden="true" title="Customer"/>
+                                    </div>
+                                    <div class="col-10 mt-2">
+                                        <field name="customer_id" class="fw-bold"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-1 mt-2">
+                                        <i class="fa fa-car me-2" aria-hidden="true" title="Car Details"/>
+                                    </div>
+                                    <div class="col-10 mt-2">
+                                        <field name="registration_no" class="fw-bold"/>
+                                        <br/>
+                                        <field name="vehicle_model_id" class="fw-bold"/>
+                                    </div>
+                                </div>
+                                <div class="row p-1 m-1"
+                                     style="background-color: #f2f3f8;border-radius:10px;border: 2px solid #557d77;">
+                                    <div class="col-12 ps-2" style="font-size: 11px;color:#969a9d;">
+                                        VEHICLE IN
+                                    </div>
+                                    <div class="col-12 ps-2 mb-1">
+                                        <strong>
+                                            <field name="booking_date"/>
+                                        </strong>
+                                    </div>
+                                    <t t-if="record.estimate_delivery_date.raw_value">
+                                        <div class="col-12 ps-2" style="font-size: 11px;color:#969a9d;">
+                                            EXPECTED DELIVERY
+                                        </div>
+                                        <div class="col-12 ps-2" style="color: #2a706a;">
+                                            <strong>
+                                                <field name="estimate_delivery_date"/>
+                                            </strong>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="vehicle_inspection_search_view" model="ir.ui.view">
+            <field name="name">vehicle.inspection.search.view</field>
+            <field name="model">vehicle.inspection</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="name"/>
+                    <field name="booking_id"/>
+                    <field name="customer_id"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="brand_id"/>
+                    <field name="vehicle_model_id"/>
+                    <field name="registration_no"/>
+                    <field name="sale_person_id"/>
+                    <field name="service_adviser_id"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Status" name="inspection_status" domain="[]"
+                                context="{'group_by':'status'}"/>
+                        <separator/>
+                        <filter string="Vehicle Model" name="vehicle_model" domain="[]"
+                                context="{'group_by':'vehicle_model_id'}"/>
+                        <filter string="Vehicle Brand" name="vehicle_brand" domain="[]"
+                                context="{'group_by':'brand_id'}"/>
+                        <separator/>
+                        <filter string="Customer" name="customer" domain="[]"
+                                context="{'group_by':'customer_id'}"/>
+                        <filter string="Customer Tags" name="customer_tag" domain="[]"
+                                context="{'group_by':'customer_tag_ids'}"/>
+                        <separator/>
+                        <filter string="Receptionist" name="sale_person" domain="[]"
+                                context="{'group_by':'sale_person_id'}"/>
+                        <filter string="Service Advisor" name="group_service_adviser" domain="[]"
+                                context="{'group_by':'service_adviser_id'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="status" string="Status" enable_counters="1"
+                               icon="fa-filter" select="multi"/>
+                        <field name="booking_source" string="Check in Source" enable_counters="1"
+                               icon="fa-filter" select="multi"/>
+                        <field name="inspection_type" string="Inspection Type" enable_counters="1" icon="fa-filter"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <record id="vehicle_inspection_action" model="ir.actions.act_window">
+            <field name="name">Job Cards</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.inspection</field>
+            <field name="view_mode">kanban,tree,form,search</field>
+            <field name="context">{ 'search_default_inspection_status': 1}</field>
+        </record>
+        <!--Server Action-->
+        <record id="ir_actions_server_customer_portal_access" model="ir.actions.server">
+            <field name="name">Grant Portal Access to Customer</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_vehicle_inspection"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.action_customer_grand_portal_access()
+            </field>
+            <field name="binding_model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="binding_view_types">form</field>
+        </record>
+
+    </data>
+</odoo>

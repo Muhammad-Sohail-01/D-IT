@@ -1,0 +1,119 @@
+<odoo>
+    <data>
+        <record id="view_account_invoice_filter_inherit_id" model="ir.ui.view">
+            <field name="name">account.move.select</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                    <field name="customer_trn" string="TRN"/>
+                    <field name="car_history_id" string="Plate Number"/>
+                    <field name="car_make"/>
+                    <field name="car_model"/>
+                    <field name="year"/>
+                </field>
+                <filter name="to_check" position="after">
+                    <field name="car_history_id" string="Plate Number"/>
+                    <field name="car_make"/>
+                    <field name="car_model"/>
+                    <field name="year"/>
+                </filter>
+                <xpath expr="//group/filter[@name='status']" position="after">
+                    <filter string="Plate Number" name="car_history_id" domain="[]"
+                            context="{'group_by': 'car_history_id'}"/>
+                    <filter string="Make" name="car_make" domain="[]" context="{'group_by': 'car_make'}"/>
+                    <filter string="Model" name="car_model" domain="[]" context="{'group_by': 'car_model'}"/>
+                    <filter string="Year" name="year" domain="[]" context="{'group_by': 'year'}"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_invoice_tree_inherit_id" model="ir.ui.view">
+            <field name="name">account.invoice.tree</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="invoice_date" position="before">
+                    <field name="customer_trn" optional="show"/>
+                </field>
+                <field name="payment_state" position="replace">
+                    <field name="payment_state" widget="badge" optional="show"
+                           decoration-danger="payment_state == 'not_paid'"
+                           decoration-warning="payment_state in ('partial', 'in_payment')"
+                           decoration-success="payment_state in ('paid', 'reversed')"
+                           invisible="payment_state in ('invoicing_legacy')"/>
+                </field>
+                <field name="invoice_user_id" position="after">
+                    <field name="car_history_id" optional="show" string="Plate Number"/>
+                    <field name="car_make" optional="show"/>
+                    <field name="car_model" optional="show"/>
+                    <field name="year" optional="show"/>
+                    <field name="user_id" string="Advisor"/>
+                    <field name="source_id"/>
+                </field>
+            </field>
+        </record>
+        <record id="view_move_form_inherit_form" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="phone"/>
+                    <field name="customer_trn"/>
+                </field>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="before">
+                    <field name="car_service_id"
+                           column_invisible="parent.move_type not in ('in_invoice', 'in_refund','in_receipt')"/>
+                    <field name="ref_number"
+                           column_invisible="parent.move_type not in ('in_invoice', 'in_refund','in_receipt')"/>
+                </xpath>
+                <!--                 <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='quantity']" position="before"> -->
+                <!--                     <field name="service_type_id"/> -->
+                <!--                 </xpath> -->
+                <xpath expr="//form/sheet/notebook/page[@name='other_info']" position="after">
+                    <page name="car_completion_form" string="Car Completion Form">
+                        <group>
+                            <group>
+                                <field name="car_history_id" domain="[('partner_id', '=', partner_id)]"/>
+                                <field name="warranty_details"/>
+                                <field name="car_delivered"/>
+                                <field name="delivery_location"
+                                       invisible="car_delivered not in ('yes')"/>
+                                <field name="driver_details"  invisible="car_delivered not in ('yes')"/>
+                                <field name="out_time"  invisible="car_delivered not in ('yes')"/>
+                            </group>
+                            <group>
+                                <label for="image_one" string="Car Completion Pictures"/>
+                                <div>
+                                    <field name="image_one" widget="image" class="oe_avatar"/>
+                                    <field name="image_two" widget="image" class="oe_avatar"/>
+                                    <field name="image_three" widget="image" class="oe_avatar"/>
+                                    <field name="image_four" widget="image" class="oe_avatar"/>
+                                    <field name="image_five" widget="image" class="oe_avatar"/>
+                                    <field name="image_six" widget="image" class="oe_avatar"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="car_make"/>
+                                <field name="car_model"/>
+                                <field name="year"/>
+                                <field name="current_mileage"/>
+                                <field name="employee_id"/>
+                                <field name="service_writer_id"/>
+                            </group>
+                            <group>
+                                <field name="car_in_time"/>
+                                <field name="car_out_time"/>
+                                <field name="total_time" widget="float_time"/>
+                                <field name="issue_heading"/>
+                                <field name="customer_note"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

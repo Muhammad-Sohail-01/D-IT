@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <record id="inspection_team_view_form_inherit" model="ir.ui.view">
+            <field name="model">inspection.team</field>
+            <field name="inherit_id" ref="tk_vehicle_management.inspection_team_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='technician_ids']//kanban[hasclass('o_kanban_mobile')]//field[@name='login']" position="replace">
+                    <field name="work_email"/>
+
+                </xpath>
+                <xpath expr="//field[@name='team_leader_ids']//kanban[hasclass('o_kanban_mobile')]//field[@name='login']" position="replace">
+                    <field name="work_email"/>
+
+                </xpath>
+                <xpath expr="//field[@name='technician_ids']//kanban[hasclass('o_kanban_mobile')]//templates//field[@name='login']" position="replace">
+                    <field name="work_email"/>
+                </xpath>
+<!--                <xpath expr="//field[@name='team_leader_ids']//kanban[hasclass('o_kanban_mobile')]//div[hasclass='oe_kanban_details']//templates//field[@name='login']" position="replace">-->
+<!--                    <field name="work_email"/>-->
+<!--                </xpath>-->
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_auto_mobile_partno_line,auto.mobile.partno.line,model_auto_mobile_partno_line,base.group_user,1,1,1,1
+access_year_selection,year.selection,model_year_selection,base.group_user,1,1,1,1
+access_item_catalog,item.catalog,model_item_catalog,base.group_user,1,1,1,1
+access_auto_mobile_product_product_partno_line,auto.mobile.product.product.partno.line,model_auto_mobile_product_product_partno_line,base.group_user,1,1,1,1
+access_partno_sparepart,partno.sparepart,model_partno_sparepart,base.group_user,1,1,1,1
+access_warranty_confirmation_wizard_user,warranty.confirmation.wizard.user,model_warranty_confirmation_wizard,base.group_user,1,1,1,1
+access_warranty_confirmation_wizard_manager,warranty.confirmation.wizard.manager,model_warranty_confirmation_wizard,base.group_system,1,1,1,1

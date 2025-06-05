@@ -1,0 +1,73 @@
+<odoo>
+    <data>
+        <record id="car_service_report_view_tree" model="ir.ui.view">
+            <field name="name">car.service.report.tree</field>
+            <field name="model">car.service.report</field>
+            <field name="arch" type="xml">
+                <tree string="Service Car" create="false">
+                    <field name="inv_date"/>
+                    <field name="partner_id"/>
+                    <field name="plate_number"/>
+                    <field name="vin_number"/>
+                    <field name="car_model_id"/>
+                    <field name="name"/>
+                    <field name="current_mileage"/>
+                    <field name="issue_heading"/>
+                    <field name="warranty_details"/>
+                    <field name="delivery_location"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="car_service_report_view_search" model="ir.ui.view">
+            <field name="name">car.service.report.list.select</field>
+            <field name="model">car.service.report</field>
+            <field name="arch" type="xml">
+                <search string="Search Service Car">
+                    <field name="name" string="Invoice Number"/>
+                    <field name="partner_id"/>
+                    <field name="plate_number"/>
+                    <field name="vin_number"/>
+                    <field name="inv_date"/>
+                    <filter string="Invoice Date" name="inv_date" domain="[]" context="{'group_by': 'inv_date'}"/>
+                    <filter string="Vin Number" name="vin_number"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Plate Number" name="plate_number" domain="[]" context="{'group_by': 'plate_number'}"/>
+                        <filter name="customer" string="Customer" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+        
+        <record id="action_car_service_report" model="ir.actions.server">
+            <field name="name">Service Car</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="model_id" ref="invoice_extend.model_car_service_report"/>
+            <field name="binding_model_id" ref="invoice_extend.model_car_service_report"/>
+            <field name="binding_view_types">list</field>
+            <field name="code">
+                action = model.car_service_report_action()
+            </field>
+            
+        </record>
+        
+        <!-- <record id="action_car_service_report" model="ir.actions.act_window">
+            <field name="name">Service Car</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">car.service.report</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="car_service_report_view_search"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = model.car_service_report_action()
+            </field>
+            <field name="context">{'search_default_group_by_partner_id': 1}</field>
+        </record>-->
+        
+        <menuitem id="menu_action_car_service_report" 
+                action="action_car_service_report"
+                parent="account.menu_finance_entries_accounting_miscellaneous"
+                groups="account.group_account_readonly" sequence="3"/>
+    </data>
+</odoo>

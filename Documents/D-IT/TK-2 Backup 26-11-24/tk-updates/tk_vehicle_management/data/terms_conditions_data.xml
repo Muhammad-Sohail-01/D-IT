@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Terms & Conditions -->
+        <record id="term_condition_1" model="vehicle.terms.conditions">
+            <field name="name">Invoice Terms &amp; Conditions</field>
+            <field name="terms_conditions" type="html">
+                <p>
+                    This invoice is issued by EVS for services rendered. By accepting this invoice, the customer agrees
+                    to the following terms and conditions:
+                    <br/>
+                    <br/>
+                    Payment is due within 24 hours of the invoice date, except for Corporate Accounts, where it has been
+                    agreed upon in writing.
+                    <br/>
+                    The customer is responsible for ensuring that the invoice is accurate and complete and for notifying
+                    EVS of any discrepancies within 24 hours of receipt.
+                    <br/>
+                    EVS reserves the right to suspend or terminate services if payment is not received within the
+                    specified time frame.
+                    <br/>
+                    The customer agrees to indemnify and hold EVS harmless from any claims, damages, or expenses arising
+                    from the customer's use of the services provided.
+                    <br/>
+                    Any disputes arising from this invoice or the services provided will be subject to mediation and, if
+                    necessary, legal action.
+                    <br/>
+                    EVS reserves the right to modify these terms and conditions at any time, and the customer will be
+                    bound by the terms in effect at the time of invoice issuance.
+                    <br/>
+                    All materials and intellectual property created or provided by EVS in connection with the services
+                    remain the property of EVS unless otherwise agreed upon in writing.
+                    <br/>
+                    <br/>
+                    BANK NAME: ADCB
+                    <br/>
+                    COMPANY NAME: E V S ELECTRIC VEHICLES SERVICES
+                    <br/>
+                    ACCOUNT: 12098149820001
+                    <br/>
+                    IBAN : AE870030012098149820001
+                    <br/>
+                    SWIFT CODE: XXX
+                </p>
+            </field>
+        </record>
+        <record id="term_condition_2" model="vehicle.terms.conditions">
+            <field name="name">Consent Terms &amp; Conditions</field>
+            <field name="terms_conditions" type="html">
+                <p>
+                    <ol>
+                        <li>The owner of the vehicle or his/her representative agrees that all valuable and personal
+                            items have been removed from the vehicle, and any personal valuables that remain in the
+                            vehicle shall only be the responsibility of the vehicle owner or his/her representative. EVS
+                            shall not be responsible for the loss or damage of any personal valuables left in the
+                            vehicle.
+                        </li>
+                        <li>In case of an accident while the customer's vehicle is under EVS custody or on a road test,
+                            EVS's responsibility is limited only to repairing any damage resulting from any accident
+                            back to the condition in which the vehicle was received. The vehicle's owner or his/her
+                            representative accepts and waives the right to demand a replacement car or claim any
+                            compensation for losses resulting from any accidents.
+                        </li>
+                        <li>Estimates for the cost of repairs are only valid if, in writing, the Customer authorizes EVS
+                            without delay and EVS agrees to undertake the work.
+                        </li>
+                        <li>The estimates will cover only the items and labour explicitly stated in the estimate and do
+                            not cover the cost of any additional items that may be requested or required from either
+                            Party. The Customer consents that EVS may dismantle any part of the vehicle that may be
+                            required to effect the agreed repair or service work and hereby agrees to pay for the cost
+                            of the required dismantling and reassembly.
+                        </li>
+                        <li>Estimated completion time is an approximate guide only and is stated entirely without
+                            obligation.
+                        </li>
+                        <li>EVS agrees to warrant the repairs to the vehicle in line with the Manufacturer's Warranty
+                            terms and conditions. Parts purchased and fitted by EVS outside of any Vehicle Warranty
+                            scope will be warranted for a period of 3 months from the date of installation. Mechanical
+                            and Suspension parts are excluded. EVS will not warrant parts that have been fitted or
+                            tampered with outside of an EVS branch.
+                        </li>
+                        <li>The company reserves the right to subcontract any or all of the agreed work. All parts
+                            replaced by EVS will be retained and disposed of by EVS, unless the Customer requests in
+                            writing at the time of vehicle handover to EVS to receive the replaced parts. In this case,
+                            the replaced parts must be collected at the time of vehicle collection. All parts replaced
+                            under the scope of a Manufacturer's or official EVS Warranty must be retained by EVS for
+                            warranty purposes.
+                        </li>
+                        <li>The Customer hereby authorizes EVS to store the vehicle at EVS's or its Sub-contractors
+                            premises, at the Customer's risk, to test-drive, to drive the vehicle to and from EVS
+                            premises, and between EVS and EVS's sub-contractors premises.
+                        </li>
+                        <li>Delivery and Collection of the vehicle should take place at EVS premises. Alternative
+                            arrangements must be agreed by an EVS Representative and may be undertaken at the exclusive
+                            risk of the Customer. All payments for work undertaken must be made at EVS premises.
+                        </li>
+                        <li>The vehicle should be collected within <strong>two (2) days from the date of
+                            completion
+                        </strong> of the
+                            agreed work or a non-agreement on the repair estimate. Any delay beyond this point will
+                            incur a daily charge of AED100 charged every day, for vehicle storage as well as any
+                            additional expenses. Storage in this manner will be undertaken at the exclusive risk of the
+                            Customer.
+                        </li>
+                    </ol>
+                </p>
+            </field>
+        </record>
+        <record id="term_condition_3" model="vehicle.terms.conditions">
+            <field name="name">Estimate Terms &amp; Conditions</field>
+            <field name="terms_conditions" type="html">
+                <p>
+                    This quotation is valid for a period of 7 days from the date of issue. EVS reserves the right to
+                    amend or withdraw the quotation after this period.
+                    <br/>
+                    <br/>
+                    The following terms and conditions apply to this quotation:
+                    <br/>
+                    <br/>
+                    Prices are subject to change due to fluctuations in material costs, labor, or other factors beyond
+                    our control.
+                    <br/>
+                    The quoted price does not include any taxes, duties, or other fees that may apply.
+                    <br/>
+                    Payment terms are to be agreed upon before the commencement of work, and late payments may be
+                    subject to additional fees.
+                    <br/>
+                    The scope of work is as outlined in the quotation, and any additional work requested by the customer
+                    may incur additional charges. EVS is not responsible for any delays caused by circumstances beyond
+                    our control, including but not limited to natural disasters, accidents, or shipping delays.
+                    <br/>
+                    <br/>
+                    This quotation is based on the information provided by the customer, and EVS is not responsible for
+                    any inaccuracies or omissions in that information.
+                    By accepting this quotation, the customer agrees to these terms and conditions.
+                    <br/>
+                    <br/>
+                    BANK NAME: ADCB
+                    <br/>
+                    COMPANY NAME: E V S ELECTRIC VEHICLES SERVICES
+                    <br/>
+                    ACCOUNT: 12098149820001
+                    <br/>
+                    IBAN : AE870030012098149820001
+                    <br/>
+                    SWIFT CODE: XXX
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

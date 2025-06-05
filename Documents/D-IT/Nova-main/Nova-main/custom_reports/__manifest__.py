@@ -1,0 +1,23 @@
+{
+    'name': 'Custom Reports',
+    'version': '16.0.0',
+    'sequence': 0,
+    'summary': "This module contains all the report customization related to their business nature",
+    'author': 'Centrics Business Solutions PVT Ltd',
+    'company': 'Centrics Business Solutions PVT Ltd',
+    'website': 'http://www.centrics.cloud/',
+    'depends': ['base', 'sale', 'sale_project', 'purchase', 'stock'],
+    'data': [
+        'views/account_move_views.xml',
+        'report/carlab_report.xml',
+        'report/custom_inspection_report.xml',
+        'report/custom_estimation_report.xml',
+        'report/custom_service_contract.xml',
+        'report/custom_tax_invoice.xml',
+        'report/custom_job_card.xml',
+    ],
+    'demo': [],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+	    <record id="advance_payment_wizard_view_form" model="ir.ui.view">
+            <field name="name">advance.payment.wizard.view.form</field>
+            <field name="model">advance.payment.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="selected_payment_type" invisible="1"/>
+                    <div class="row mb-4">
+                        <!-- Cash Journal Payment Methods -->
+                        <div class="col-4 col-lg-2 px-2">
+                            <button name="set_payment_method"
+                                type="object"
+                                t-attf-class="btn w-100 h-100 p-3 #{selected_payment_type == 'cash' ? 'btn-primary' : 'btn-secondary'}"
+                                context="{'payment_type': 'cash'}">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="fa fa-money fa-3x mb-2"/>
+                                <span class="font-weight-bold">Cash</span>
+                            </div>
+                        </button>
+
+                        </div>
+
+                        <!-- Bank Journal Payment Methods -->
+                        <div class="col-4 col-lg-2 px-2">
+                            <button name="set_payment_method"
+                                    type="object"
+                                    t-attf-class="btn w-100 h-100 p-3 #{selected_payment_type == 'transfer' ? 'btn-primary' : 'btn-secondary'}"
+                                    context="{'payment_type': 'transfer'}">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fa fa-exchange fa-3x mb-2"/>
+                                    <span class="font-weight-bold">Transfer</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="col-4 col-lg-2 px-2">
+                            <button name="set_payment_method"
+                                    type="object"
+                                    t-attf-class="btn w-100 h-100 p-3 #{selected_payment_type == 'card' ? 'btn-primary' : 'btn-secondary'}"
+                                    context="{'payment_type': 'card'}">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fa fa-credit-card fa-3x mb-2"/>
+                                    <span class="font-weight-bold">Card</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="col-4 col-lg-2 px-2">
+                            <button name="set_payment_method"
+                                    type="object"
+                                    t-attf-class="btn w-100 h-100 p-3 #{selected_payment_type == 'tabby' ? 'btn-primary' : 'btn-secondary'}"
+                                    context="{'payment_type': 'tabby'}">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fa fa-handshake-o fa-3x mb-2"/>
+                                    <span class="font-weight-bold">Tabby</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="col-4 col-lg-2 px-2">
+                            <button name="set_payment_method"
+                                    type="object"
+                                    t-attf-class="btn w-100 h-100 p-3 #{selected_payment_type == 'payment_link' ? 'btn-primary' : 'btn-secondary'}"
+                                    context="{'payment_type': 'payment_link'}">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fa fa-link fa-3x mb-2"/>
+                                    <span class="font-weight-bold">Payment Link</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="col-4 col-lg-2 px-2">
+                            <button name="set_payment_method"
+                                    type="object"
+                                    t-attf-class="btn w-100 h-100 p-3 #{selected_payment_type == 'pdc' ? 'btn-primary' : 'btn-secondary'}"
+                                    context="{'payment_type': 'pdc'}">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fa fa-clock-o fa-3x mb-2"/>
+                                    <span class="font-weight-bold">PDC</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="journal_id" options="{'no_create': True}"/>
+                            <field name="payment_method_line_id" options="{'no_create': True}"/>
+                            <field name="selected_payment_type" invisible="1"/>
+<!--                            <field name="date"/>-->
+                            <field name="is_accounting_advance_payment_user" invisible="1"/>
+                            <field name="available_journal_ids" invisible="1"/>
+                            <field name="available_payment_method_line_ids" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_create_advance_payment"
+                                type="object"
+                                string="Create Payment"
+                                class="btn btn-primary"
+                                invisible="not selected_payment_type"/>
+                        <button special="cancel" class="btn btn-secondary" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+
+	<record id="advance_payment_wizard_action" model="ir.actions.act_window">
+            <field name="name">Advance Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">advance.payment.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+</odoo>

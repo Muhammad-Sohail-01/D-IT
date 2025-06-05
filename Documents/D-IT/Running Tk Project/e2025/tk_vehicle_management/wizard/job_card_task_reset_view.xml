@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="job_card_task_reset_view_form" model="ir.ui.view">
+            <field name="name">job.card.task.reset.view.form</field>
+            <field name="model">vehicle.task.reset</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="inspection_id" invisible="1"/>
+                            <field name="is_reset_all_task" string="Reset All Task Status"/>
+                            <field name="task_ids" widget="many2many_tags" invisible="is_reset_all_task"
+                                   required="not is_reset_all_task"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Reset Task Status" type="object" class="btn btn-success"
+                                name="action_reset_service_task_status"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="job_card_task_reset_action" model="ir.actions.act_window">
+            <field name="name">Task Status Reset</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.task.reset</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

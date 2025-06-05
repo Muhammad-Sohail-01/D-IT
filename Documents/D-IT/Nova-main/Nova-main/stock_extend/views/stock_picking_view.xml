@@ -1,0 +1,122 @@
+<odoo>
+
+        <record id="vpicktree_inherit_id" model="ir.ui.view">
+            <field name="name">stock.picking.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="car_history_id" optional="show"/>
+                    <field name="car_make" optional="show"/>
+                    <field name="car_model" optional="show"/>
+                    <field name="year" optional="show"/>
+                    <field name="plat_number"/>
+                    <field name="user_id" string="Advisor"/>
+                    <field name="source_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_picking_internal_search_inherit_id" model="ir.ui.view">
+            <field name="name">stock.picking.internal.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="car_history_id"/>
+                    <field name="car_make"/>
+                    <field name="car_model"/>
+                    <field name="year"/>
+                </field>
+                <xpath expr="//group/filter[@name='picking_type']" position="after">
+                     <filter string="Plate Number" name="car_history_id" domain="[]" context="{'group_by': 'car_history_id'}"/>
+                       <filter string="Make" name="car_make" domain="[]" context="{'group_by': 'car_make'}"/>
+                       <filter string="Model" name="car_model" domain="[]" context="{'group_by': 'car_model'}"/>
+                       <filter string="Year" name="year" domain="[]" context="{'group_by': 'year'}"/>
+                 </xpath>
+            </field>
+        </record>
+        
+        <record id="view_picking_form_inh" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <label for="partner_id" position="replace">
+                    <label for="partner_id" string="Job Card Address" style="font-weight:bold;"
+                                           attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                </label>
+                <field name="partner_id" position="after">
+                    <field name="phone"/>
+                </field>
+                
+                <xpath expr="//notebook/page[@name='note']" position="after">
+                    <page name="job_card" string="Job Card Details">
+                        <group>
+                            <group>
+                                <field name="car_history_id" domain="[('partner_id', '=', partner_id)]"/>
+                                <field name="car_make"/>
+                                <field name="car_model"/>
+                                <field name="year"/>
+                                <field name="plat_number"/>
+                                <field name="current_mileage"/>
+                                <field name="employee_id"/>
+                            </group>
+                            <group>
+                                <field name="service_writer_id"/>
+                                <field name="salesperson_id"/>
+                                <field name="in_time"/>
+                                <field name="out_time"/>
+                                <field name="total_time" widget="float_time"/>
+                                <field name="source_id"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                
+                <!-- <xpath expr="//notebook/page[@name='operations']/field[@name='move_ids_without_package']" position="attributes">
+                    <attribute name="widget">section_and_note_one2many</attribute>
+                </xpath>
+                
+                <xpath expr="//notebook/page[@name='operations']/field[@name='move_ids_without_package']/tree/field[@name='company_id']" position="before">
+                    <control>
+                        <create name="add_product_control" string="Add a product"/>
+                        <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                        <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                    </control>
+                </xpath>-->
+                
+                <xpath expr="//notebook/page[@name='operations']/field[@name='move_ids_without_package']/tree/field[@name='description_picking']" position="replace">
+                    <field name="description_picking"/>
+                </xpath>
+                <!--<xpath expr="//notebook/page[@name='operations']/field[@name='move_ids_without_package']/tree/field[@name='description_picking']" position="after">
+                    <field name="technician_id"/>
+                    <field name="service_type_id"/>
+                </xpath>-->
+                
+            </field>
+        </record>
+        
+        <menuitem id="stock.all_picking" name="Job Cards" 
+                parent="stock.menu_stock_warehouse_mgmt" 
+                sequence="5" action="stock.action_picking_tree_all" 
+                groups="stock.group_stock_manager,stock.group_stock_user"/>
+                
+       <record id="stock.stock_picking_type_action" model="ir.actions.act_window">
+            <field name="name">Job Card Overview</field>
+            <field name="res_model">stock.picking.type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new operation type
+              </p><p>
+                The operation type system allows you to assign each stock
+                operation a specific type which will alter its views accordingly.
+                On the operation type you could e.g. specify if packing is needed by default,
+                if it should show the customer.
+              </p>
+            </field>
+        </record>s
+            
+</odoo>

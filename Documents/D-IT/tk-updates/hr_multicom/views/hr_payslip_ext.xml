@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_payslip_form_inherit" model="ir.ui.view">
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+            <field name="arch" type="xml">
+               <xpath expr="//page[@name='worked_days_input']//field[@name='input_line_ids']" position="after">
+                    <separator string="Affiliate Company Distribution"/>
+                        <field name="affiliation_company_ids" widget="one2many">
+                         <tree editable="bottom">
+                             <field name="name"/>
+                            <field name="no_of_days"/>
+                            <field name="wage_percentage"/>
+                            <field name="wage_amount"/>
+                        </tree>
+                        </field>
+               </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

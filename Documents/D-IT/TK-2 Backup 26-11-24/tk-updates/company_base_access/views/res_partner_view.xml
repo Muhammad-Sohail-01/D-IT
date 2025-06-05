@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+    <record id="view_product_template_form_inherit_ext" model="ir.ui.view">
+      <field name="name">res.partner.form.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="product.product_template_only_form_view"/>
+      <field name="arch" type="xml">
+         <xpath expr="//page[@name='general_information']//field[@name='company_id']" position="after">
+          <field name="allowed_company_ids" widget="many2many_tags"/>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>

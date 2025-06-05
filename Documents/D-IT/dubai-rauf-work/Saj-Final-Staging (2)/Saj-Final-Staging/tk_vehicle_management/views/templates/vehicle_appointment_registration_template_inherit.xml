@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="vehicle_service_appointment_registration_template" inherit_id="appointment.appointment_form">
+            <xpath expr="//form[hasclass('appointment_submit_form')]/div[3]" position="after">
+                <div class="row mb-4">
+                    <label class="col-sm-3 col-form-label fw-normal" for="phone">Vehicle Brand*</label>
+                    <div class="col-sm-9">
+                        <select name="brand_id" class="form-select" placeholder="Select Vehicle Brand"
+                                id="vehicle_brand_id">
+                            <t t-foreach="vehicle_brands" t-as="brand">
+                                <option t-att-value="brand.id">
+                                    <t t-esc="brand.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <label class="col-sm-3 col-form-label fw-normal" for="phone">Vehicle Model*</label>
+                    <div class="col-sm-9">
+                        <select name="model_id" class="form-select" placeholder="Select Vehicle Model"
+                                id="vehicle_model_id">
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <label class="col-sm-3 col-form-label fw-normal" for="vin_no">VIN No.*</label>
+                    <div class="col-sm-9">
+                        <input type="char" class="form-control" name="vin_no" id="vin_no" required="1"
+                               placeholder="VIN No." maxlength="17"/>
+                        <div id="vin_no_validation">
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+car_service_report_access_right_manager,car_service_report_access_right,model_car_service_report,garage_car.car_garage_group_manager,1,1,1,1
+car_service_report_access_right_user,car_service_report_access_right,model_car_service_report,garage_car.car_garage_group_user,1,0,0,0

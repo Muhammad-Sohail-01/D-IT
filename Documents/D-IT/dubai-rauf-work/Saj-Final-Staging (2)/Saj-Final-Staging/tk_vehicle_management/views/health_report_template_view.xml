@@ -1,0 +1,130 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <data>-->
+<!--        <record id="health_report_template_view_form" model="ir.ui.view">-->
+<!--            <field name="name">health.report.template.view.form</field>-->
+<!--            <field name="model">health.report.template</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form>-->
+<!--                    <sheet>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="name" required="1"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <separator string="Inspections" name="vehicle_inspection_categories"/>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="inner_body_inspection"/>-->
+<!--                            <label for="inner_body_inspection"/>-->
+<!--                        </span>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="outer_body_inspection"/>-->
+<!--                            <label for="outer_body_inspection"/>-->
+<!--                        </span>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="mechanical_condition"/>-->
+<!--                            <label for="mechanical_condition"/>-->
+<!--                        </span>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="vehicle_fluid"/>-->
+<!--                            <label for="vehicle_fluid"/>-->
+<!--                        </span>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="tyre_inspection"/>-->
+<!--                            <label for="tyre_inspection"/>-->
+<!--                        </span>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="under_vehicle"/>-->
+<!--                            <label for="under_vehicle"/>-->
+<!--                        </span>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="brake_condition"/>-->
+<!--                            <label for="brake_condition"/>-->
+<!--                        </span>-->
+<!--                        <span class="d-inline-block">-->
+<!--                            <field name="vehicle_component"/>-->
+<!--                            <label for="vehicle_component"/>-->
+<!--                        </span>-->
+<!--                        <notebook>-->
+<!--                            <page name="inner_condition" string="Interior"-->
+<!--                                  invisible="not inner_body_inspection">-->
+<!--                                <field name="vehicle_inner_body_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="vehicle_body_outer_condition" string="Exterior"-->
+<!--                                  invisible="not outer_body_inspection">-->
+<!--                                <field name="vehicle_outer_body_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="mechanical_condition" string="Under Hood"-->
+<!--                                  invisible="not mechanical_condition">-->
+<!--                                <field name="vehicle_mechanical_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="vehicle_fluids" string="Fluids" invisible="not vehicle_fluid">-->
+<!--                                <field name="vehicle_fluid_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="tyre_inspection" string="Tyres" invisible="not tyre_inspection">-->
+<!--                                <field name="vehicle_tyre_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="under_vehicle" string="Under Vehicle" invisible="not under_vehicle">-->
+<!--                                <field name="vehicle_under_vehicle_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="brake_condition" string="Brake Condition" invisible="not brake_condition">-->
+<!--                                <field name="vehicle_brake_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="multi_point_inspection" string="Multi-Point Inspection"-->
+<!--                                  invisible="not vehicle_component">-->
+<!--                                <field name="vehicle_component_parts_ids">-->
+<!--                                    <tree>-->
+<!--                                        <field name="name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                        </notebook>-->
+<!--                    </sheet>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        <record id="health_report_template_view_tree" model="ir.ui.view">-->
+<!--            <field name="name">health.report.template.view.tree</field>-->
+<!--            <field name="model">health.report.template</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree>-->
+<!--                    <field name="name"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        <record id="health_report_template_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Health Report Template</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">health.report.template</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--        </record>-->
+<!--    </data>-->
+<!--</odoo>-->

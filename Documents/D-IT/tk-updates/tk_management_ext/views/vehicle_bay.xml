@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<data>
+    <odoo>
+        <record id="vehicle_bay_form_view" model="ir.ui.view">
+            <field name="name">vehicle.bay.form.view</field>
+            <field name="model">vehicle.bay</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Bay's Name" required="1"/>
+                            </h1>
+                            <label for="company_id"/>
+                            <h4>
+                                <field name="company_id"/>
+                            </h4>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="bay_type"/>
+                            </group>
+                            <group>
+                                <field name="bay_area_size"/>
+                                <field name="car_count"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vehicle_bay_view_tree" model="ir.ui.view">
+            <field name="name">vehicle.bay_view.tree</field>
+            <field name="model">vehicle.bay</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="bay_type"/>
+                    <field name="car_count"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="vehicle_bay_action" model="ir.actions.act_window">
+            <field name="name">Bay</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.bay</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="vehicle_bay_menu"
+            name="Bay"
+            parent="project.menu_project_config"
+            action="vehicle_bay_action"
+            sequence="11"/>
+    </odoo>
+</data>

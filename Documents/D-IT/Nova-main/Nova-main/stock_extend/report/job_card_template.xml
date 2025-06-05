@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_job_card_document">
+        <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+        
+        <div class="header">
+            <div class="col-auto col-6">
+                <img src='/stock_extend/static/img/header.png' style="max-height: 170px; max-width: 920px;"/>
+            </div>
+         </div>
+        <div class="page">
+            <div id="job_card" class="row" style="margin-top:0px;">
+                <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
+                    <table style="width:920px;">
+                        <tr style="border:solid 1px;height: 40px;">
+                            <td style="text-align:center;border:solid 1px;"><strong><![CDATA[&nbsp;]]>Date<![CDATA[&nbsp;]]></strong></td>
+                            <td style='border:none;text-align:center;' rowspan="2"><h1 class="text-center" style="color:red;"><b>JOB CARD</b></h1></td>
+                            <td style="text-align:center;border:solid 1px;"><![CDATA[&nbsp;]]><strong>JOB CARD #</strong></td>
+                            <td style="text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.name"/></td>
+                        </tr>
+                        <tr style="border:solid 1px;height: 40px;">
+                            <td style="text-align:center;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.scheduled_date" t-options='{"format": "dd/MM/yyyy"}'/><![CDATA[&nbsp;]]></td>
+                            <td style="text-align:center;border:solid 1px;"><strong><![CDATA[&nbsp;]]>Name<![CDATA[&nbsp;]]></strong></td>
+                            <td style="text-align:left;border:solid 1px;"><![CDATA[&nbsp;]]><span t-field="doc.partner_id.street"/><![CDATA[&nbsp;]]></td>
+                        </tr>
+                    </table>
+                 </div>
+             </div>
+            <br></br>
+            
+            <table style="width: 920px;">
+                <!-- <style>
+                   td, th{border:solid 1px; text-align:center; height: 45px;}
+                </style>-->
+                <tbody>
+                    <tr style="border:solid 1px;height: 40px;">
+                        <th style="text-align:center;border:solid 1px;">ADVISOR</th>
+                        <th style="text-align:center;border:solid 1px;">ODO</th>
+                        <th style="text-align:center;border:solid 1px;">TIME IN</th>
+                        <th style="text-align:center;border:solid 1px;">TIME OUT</th>
+                        <th style="text-align:center;border:solid 1px;">INSPECTED BY</th>
+                        <th style="text-align:center;border:solid 1px;">DIAGNOSED BY</th>
+                      </tr>
+                      <tr style="border:solid 1px;height: 40px;">
+                        <td style="text-align:center;border:solid 1px;"><span t-field="doc.salesperson_id.name"/></td>
+                        <td style="text-align:center;border:solid 1px;"><span t-field="doc.current_mileage"/></td>
+                        <td style="text-align:center;border:solid 1px;"><span t-field="doc.in_time"/></td>
+                        <td style="text-align:center;border:solid 1px;"><span t-field="doc.out_time"/></td>
+                        <td style="text-align:center;border:solid 1px;"><span t-field="doc.employee_id.name"/></td>
+                        <td style="text-align:center;border:solid 1px;"><span t-field="doc.service_writer_id.name"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="width: 920px;">
+                <div class="border-black" style="border-bottom: 12px solid red; margin-top:10px;"></div>
+            </div>
+            
+            <table style="width: 920px; margin-top:10px;">
+                <tr style="border:solid 1px;height: 40px;">
+                    <th style="text-align:center;border:solid 1px;">Estimate #</th>
+                    <th style="text-align:center;border:solid 1px;">Year</th>
+                    <th style="text-align:center;border:solid 1px;">Make</th>
+                    <th style="text-align:center;border:solid 1px;">Model</th>
+                    <th style="text-align:center;border:solid 1px;">Plate Number</th>
+                    <th style="text-align:center;border:solid 1px;">VIN</th>
+                  </tr>
+                  <tr style="border:solid 1px;height: 40px;">
+                    <td style="width:100px; text-align:center;border:solid 1px;"><span t-field="doc.origin"/></td>
+                    <td style="width:100px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.year"/></td>
+                    <td style="width:100px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.car_brand_id.name"/></td>
+                    <td style="width:120px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.car_model_id.name"/></td>
+                    <td style="width:180px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.plate_number"/></td>
+                    <td style="width:140px; text-align:center;border:solid 1px;"><span t-field="doc.car_history_id.vin_number"/></td>
+                </tr>
+            </table>
+            <div style="width: 920px;">
+                <div style="border-bottom: 12px solid red; margin-top:10px; margin-bottom:10px;"/>
+            </div>
+            
+            <table style="width: 920px;">
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th style="width: 550px;">Job Description</th>
+                        <th style="width: 110px;">Demand Qty</th>
+                        <th style="width: 80px;">Done Qty</th>
+                        <th style="width: 160px;">Technician</th>
+                        <th style="width: 100px;">Time</th>
+                      </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="doc.move_ids_without_package" t-as="line">
+                          <tr>
+                            <td style="text-align:left;"><span t-field="line.description_picking"/></td>
+                            <td style="text-align:center;"><span t-field="line.product_uom_qty"/></td>
+                            <td style="text-align:center;">><span t-field="line.quantity_done"/></td>
+                            <td style="text-align:center;">
+<!--                                <span t-field="line.technician_id.name"/>-->
+                            </td>
+                            <td style="text-align:center;">00</td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            
+            <br></br>
+            <br></br>
+            <br></br>
+            <table style="width: 920px;">
+                <tr>
+                    <td style='border:none;'>TECHNICIAN</td>
+                    <td style='border:none;'>TECHNICIAN</td>
+                    <td style='border:none;'>TECHNICIAN</td>
+                    <td style='border:none;'>SUPERVISOR</td>
+                  </tr>
+            </table>
+            <div style="width: 920px;">
+                <div style="border-bottom: 2px solid black;"></div>
+            </div>
+            
+            <br></br>
+            <br></br>
+            <br></br>
+            <table style="width: 920px;">
+                <tr>
+                    <td style='border:none;'>QUALITY CONTROL</td>
+                    <td style='border:none;'>SERVICE ADVISOR</td>
+                    <td style='border:none;'>PARTS SUPERVISOR</td>
+                  </tr>
+            </table>
+            <div style="width: 920px;">
+                <div style="border-bottom: 2px solid black;"></div>
+            </div>
+        </div>
+           <div class="footer">
+               <br></br>
+            <div class="text-center">
+                <img src='/stock_extend/static/img/footer.png' style="max-height: 130px; max-width: 920px;"/>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_job_card">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="stock_extend.report_job_card_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

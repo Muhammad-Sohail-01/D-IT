@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_car_invoice_document">
+        <t t-set="doc" t-value="o.with_context(lang=o.partner_id.lang)"/>
+        
+        <div class="header">
+            <div class="col-auto col-6">
+                <img src='/stock_extend/static/img/header.jpg' style="max-height: 170px; max-width: 920px;"/>
+            </div>
+            <div class="row">
+                <div class="text-center">
+                    <img src='/invoice_extend/static/img/powertech_logo.jpeg' style="max-height: 130px; max-width: 400px;"/>
+                </div>
+                <div class="col-auto col-6">
+                    <h1 class="text-right" style="color:red;">
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">𝐓𝐀𝐗 𝐈𝐍𝐕𝐎𝐈𝐂𝐄</span>
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'draft'">𝐃𝐑𝐀𝐅𝐓  𝐈𝐍𝐕𝐎𝐈𝐂𝐄</span>
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'cancel'">𝐂𝐀𝐍𝐂𝐄𝐋𝐋𝐄𝐃  𝐈𝐍𝐕𝐎𝐈𝐂𝐄</span>
+                        <span t-if="o.move_type == 'out_refund'">𝐂𝐑𝐄𝐃𝐈𝐓  𝐍𝐎𝐓𝐄</span>
+                        <span t-if="o.move_type == 'in_refund'">𝐕𝐄𝐍𝐃𝐎𝐑  𝐂𝐑𝐄𝐃𝐈𝐓  𝐍𝐎𝐓𝐄</span>
+                        <span t-if="o.move_type == 'in_invoice'">𝐕𝐄𝐍𝐃𝐎𝐑  𝐁𝐈𝐋𝐋</span>
+                        <span t-if="o.name != '/'" t-field="o.name"/>
+                    </h1>
+                </div>
+                       <!-- <h1 class="text-right" style="color:red;">𝐓𝐀𝐗 𝐈𝐍𝐕𝐎𝐈𝐂𝐄</h1>-->
+               </div>
+               <br></br>
+            <table style="width: 920px;">
+                <tr>
+                    <td><span t-field="o.company_id.website"/></td>
+                    <td><span t-field="o.company_id.street"/></td>
+                    <td><span t-field="o.company_id.email"/></td>
+                    <td><span t-field="o.company_id.phone"/></td>
+                </tr>
+            </table>
+         </div>
+         
+        <div class="page">
+            <div style="width: 920px;">
+                <div class="border-black" style="border-bottom: 12px solid red; margin-top:10px;"></div>
+            </div>
+            
+            <table style="width: 920px; margin-top:10px;">
+                <tr>
+                    <td colspan="2"><b>Customer Name</b></td>
+                    <td colspan="2"><span t-field="o.partner_id.name"/></td>
+                    <td colspan="3" rowspan="4"></td>
+                    <td><b>Date</b></td>
+                    <td colspan="2"><span t-field="o.invoice_date"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><b>TRN# </b></td>
+                    <td colspan="2">-------</td>
+                    <td><b>Invoice# </b></td>
+                    <td colspan="2"><span t-field="o.name"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><b>Customer Phone</b></td>
+                    <td colspan="2"><span t-field="o.partner_id.phone"/></td>
+                    <td><b>TRN</b></td>
+                    <td colspan="2">----------------</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><b>VIN</b></td>
+                    <td colspan="2"><span t-field="o.car_history_id.vin_number"/></td>
+                    <td><b>Advisor</b></td>
+                    <td colspan="2">----------</td>
+                </tr>
+                <tr>
+                    <td><b>Year</b></td>
+                    <td><span t-field="o.car_history_id.year"/></td>
+                    <td><b>Make</b></td>
+                    <td><span t-field="o.car_history_id.car_brand_id.name"/></td>
+                    <td><b>Model</b></td>
+                    <td style="width: 110px;"><span t-field="o.car_history_id.car_model_id.name"/></td>
+                    <td><b>Plate Number</b></td>
+                    <td><span t-field="o.car_history_id.plate_number"/></td>
+                    <td><b>ODO</b></td>
+                    <td><span t-field="o.current_mileage"/></td>
+                </tr>
+            </table>
+            
+            <div style="width: 920px;">
+                <div style="border-bottom: 12px solid red; margin-top:10px; margin-bottom:10px;"></div>
+            </div>
+            
+            <table style="width: 920px;">
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th style="width: 570px;">Description</th>
+                        <th style="width: 100px;" class="text-center">QTY</th>
+                        <th style="width: 120px;" class="text-center">RATE</th>
+                        <th style="width: 120px;" class="text-center">RT. PRICE</th>
+                        <th style="width: 120px;" class="text-center">VAT</th>
+                        <th style="width: 130px;" class="text-center">AMOUNT+VAT</th>
+                      </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                          <tr>
+                            <td><span t-field="line.name"/></td>
+                            <td class="text-center"><span t-field="line.quantity"/></td>
+                            <td class="text-center"><span t-field="line.price_unit"/></td>
+                            <td class="text-center"><span t-field="line.price_subtotal"/></td>
+                            <td class="text-center"><span t-field="line.price_total - line.price_subtotal"/></td>
+                            <td class="text-center"><span t-field="line.price_total"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <br></br>
+            <table style="width:50%;float:left" border="0">
+                <tr>
+                    <td style='border:none;' class="text-left"><strong>Invoiced Amount in word:</strong></td>
+                    <td style='border:none;' class="text-left">
+                        <span t-esc="o.set_amount_in_words(o.company_id.currency_id, o.amount_total)"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='border:none;' class="text-left"><br></br><strong>Customer Signature:</strong></td>
+                    <td style='border:none;' class="text-left"><br></br></td>
+                </tr>
+            </table>
+            <br></br>
+            
+            <table style="width:40%;float:right">
+                <tr>
+                    <td><strong>Sub Total</strong></td>
+                    <td><span t-field="o.amount_untaxed"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Value Added Tax (VAT)</strong></td>
+                    <td><span t-field="o.amount_tax"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Invoiced Total</strong></td>
+                    <td><span t-field="o.amount_total"/></td>
+                </tr>
+                <!-- <tr>
+                    <td><strong>Payment Received</strong></td>
+                    <td><span t-field="o.invoice_payments_widget"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Total Balance</strong></td>
+                    <td><span t-field="o.amount_residual"/></td>
+                </tr>-->
+            </table>
+            <br></br>
+            <table style="width:400px; float:right">
+                <tr>
+                    <td><strong>Payment Received</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Total Balance</strong></td>
+                    <td><span t-field="o.amount_residual"/></td>
+                </tr>
+            </table>
+            <br></br>
+            <table style="width: 920px;">
+                <tr>
+                    <td style='border:none; text-align: left;'>
+                        <p>
+                        I hereby authorize the above repair work or (Work that I'm notified about through phone or SMS) and agree Powertech Auto Services shall repair or replace
+                        any parts on the vehicle which it determines in its reasonable professional judgment, are necessary to repair the vehicle, along with the necessary material,
+                        and here by grant you and/or your employees permission to operate the vehicle on streets, highways or elsewhere for the purpose of testing and inspection.<br/>
+                        An express mechanic’s lien is hereby acknowledge on above vehicle to secure the amount of repair thereto. A phone approval is sufficient to carry-on with any
+                        repairs or additional work.<br/>
+                        The product no carries warranty unless otherwise stated.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <br></br>
+            <div class="text-center">
+                <img src='/invoice_extend/static/img/footer.jpg' style="max-height: 130px; max-width: 920px;"/>
+            </div>
+        </div>
+        
+    </template>
+
+    <template id="report_car_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="invoice_extend.report_car_invoice_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+

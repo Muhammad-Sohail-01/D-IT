@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_insurance" model="ir.ui.view">
+	    <field name="name">res.partner.form.inherit.insurance</field>
+	    <field name="model">res.partner</field>
+	    <field name="inherit_id" ref="company_evs.view_partner_form_inherit_contact_type"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//field[@name='contact_type_sale_associate']" position="after">
+               
+                
+	        </xpath>
+	    </field>
+	</record>
+</odoo>

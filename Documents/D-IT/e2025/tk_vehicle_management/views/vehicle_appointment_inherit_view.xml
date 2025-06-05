@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vehicle_appointment_type_form_view_inherit" model="ir.ui.view">
+            <field name="name">vehicle.appointment.type.form.view.inherit</field>
+            <field name="model">appointment.type</field>
+            <field name="inherit_id" ref="appointment.appointment_type_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lead_create']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="vehicle_calendar_appointment_form_view_inherit" model="ir.ui.view">
+            <field name="name">vehicle.calendar.appointment.form.view.inherit</field>
+            <field name="model">calendar.event</field>
+            <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="before">
+                    <group>
+                        <group string="Vehicle Service">
+                            <field name="service_adviser_id"/>
+                            <field name="technician_id"/>
+                        </group>
+                        <group string="Customer Details">
+                            <field name="appointment_booker_id" string="Customer"/>
+                            <field name="address_area"/>
+                            <field name="reschedule_url" invisible="1"/>
+                            <field name="appointment_booker_id" invisible="1"/>
+                            <field name="checkin_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Vehicle Details">
+                        <group>
+                            <field name="vehicle_brand_id"/>
+                            <field name="vin_no"/>
+                            <field name="color"/>
+                        </group>
+                        <group>
+                            <field name="vehicle_model_id"/>
+                            <field name="registration_no"/>
+                            <field name="year"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="action_create_vehicle_service_lead" type="object" string="Create CRM Opportunity"
+                                invisible="vehicle_lead_id or checkin_id" class="btn btn-primary" icon="fa-bars"/>
+                        <button name="action_create_vehicle_checkin" type="object" string="Create Check-In"
+                                class="btn btn-info" icon="fa-check-square" invisible="vehicle_lead_id or checkin_id"/>
+                    </header>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button icon="fa-bars" type="object" name="action_view_vehicle_lead"
+                            invisible="not vehicle_lead_id">
+                        <field name="vehicle_lead_id" invisible="1"/>
+                        Lead
+                    </button>
+                    <button icon="fa-check-square" type="object" name="action_view_vehicle_checkin"
+                            invisible="not checkin_id">
+                        <field name="vehicle_lead_id" invisible="1"/>
+                        Check in
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

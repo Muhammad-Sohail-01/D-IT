@@ -1,0 +1,13 @@
+<odoo>
+  <!-- <data>
+    <record id="view_tk_inspection_form_discount_service_inherit" model="ir.ui.view">
+            <field name="model">vehicle.inspection</field>
+            <field name="inherit_id"  ref="tk_vehicle_management.vehicle_inspection_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='inspection_required_service_ids']//field[@name='tax_amount']" position="after">
+                    <field name="discount" string="Disc.%" optional="hide"/>
+                </xpath>
+            </field>
+    </record>
+    </data> -->
+</odoo>

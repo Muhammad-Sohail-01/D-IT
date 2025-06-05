@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id='car_gear_box_view_form' model='ir.ui.view'>
+        <field name="name">car.gear.box.form</field>
+        <field name="model">car.gear.box</field>
+        <field name="arch" type="xml">
+            <form string="Gear Box">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='car_gear_box_view_tree' model='ir.ui.view'>
+        <field name="name">car.gear.box.tree</field>
+        <field name="model">car.gear.box</field>
+        <field name="arch" type="xml">
+            <tree string="Gear Box">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id='car_gear_box_view_action' model='ir.actions.act_window'>
+        <field name="name">Gear Box</field>
+        <field name="res_model">car.gear.box</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new car gear box
+          </p><p>
+            You can define several services (e.g. repair, watching).
+          </p>
+        </field>
+    </record>
+
+    <menuitem action="car_gear_box_view_action" parent="car_configuration" name="Gear Box" id="car_gear_box_menu" sequence="6"/>
+
+</odoo>

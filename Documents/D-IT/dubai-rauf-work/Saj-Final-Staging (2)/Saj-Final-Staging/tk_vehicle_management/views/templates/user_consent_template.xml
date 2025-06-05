@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="tk_vehicle_management.user_consent_details" name="Consent">
+            <t t-call="website.layout">
+                <t t-call="tk_vehicle_management.vehicle_main_avtar_template">
+                    <t t-set="vehicle_main_title" t-value="'Customer Approval'"/>
+                </t>
+                <div class="container py-4">
+                    <t t-if="error">
+                        <div t-attf-class="alert alert-{{error['type']}} mb-0" role="alert">
+                            <h4 class="alert-heading">
+                                <span t-esc="error['title']"/>
+                            </h4>
+                            <p>
+                                <span t-esc="error['message']"/>
+                            </p>
+                            <t t-if="inspection_id and inspection_id.consent_reopen_request not in ['reopen_expire','reopen_reject']">
+                                <a class="btn btn-success"
+                                   t-attf-href="/vehicle-service/user-consent/reopen-request/#{inspection_id.consent_access_token}">
+                                    Request for reopen
+                                </a>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-if="not error and inspection_id.consent_sent_state in ['sent','draft','signed']">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 mb-4"
+                                 t-if="inspection_id.consent_sent_state in ['sent','draft']">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    The last date to validate your approval is
+                                    <strong>
+                                        <span t-field="inspection_id.consent_expire_date"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 mb-4" t-if="inspection_id.consent_sent_state in ['signed']">
+                                <div class="alert alert-success text-center mb-0" role="alert">
+                                    <strong>
+                                        Approved
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4">
+                                <div class="card border-primary info-overview">
+                                    <p class="p-2 mb-0 border-bottom text-primary border-primary">Job Card Details</p>
+                                    <div class="card-body text-primary">
+                                        <h5 class="card-title">Ref.
+                                            <span t-field="inspection_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Check in Date :
+                                            </strong>
+                                            <span t-field="inspection_id.booking_date"/>
+                                            <br/>
+                                        </p>
+                                        <a class="btn btn-outline-primary"
+                                           t-attf-href="/vehicle-service/consent-report/#{inspection_id.consent_access_token}/Consent report"
+                                           id="print_consent_report" title="Print Consent Report" target="new">
+                                            <i class="fa fa-print"/>
+                                            Customer Approval
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4">
+                                <div class="card border-primary info-overview">
+                                    <p class="p-2 mb-0 border-bottom text-primary border-primary">Your Details</p>
+                                    <div class="card-body text-primary">
+                                        <h5 class="card-title">
+                                            <span t-field="inspection_id.customer_id.name"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Phone :
+                                            </strong>
+                                            <span t-field="inspection_id.phone"/>
+                                            <br/>
+                                            <strong>
+                                                Email :
+                                            </strong>
+                                            <span t-field="inspection_id.email"/>
+                                            <br/>
+                                            <strong>
+                                                Address :
+                                            </strong>
+                                            <span t-field="inspection_id.address_area"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12 mb-4">
+                                <div class="card border-primary info-overview">
+                                    <p class="p-2 mb-0 border-bottom text-primary border-primary">Vehicle Details</p>
+                                    <div class="card-body text-primary">
+                                        <h5 class="card-title">
+                                            <span t-field="inspection_id.vehicle_model_id"/>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>
+                                                Registration No :
+                                            </strong>
+                                            <span t-field="inspection_id.registration_no"/>
+                                            <br/>
+                                            <strong>
+                                                Color :
+                                            </strong>
+                                            <span t-field="inspection_id.color"/>
+                                            <br/>
+                                            <strong>
+                                                Fuel Type :
+                                            </strong>
+                                            <span t-field="inspection_id.fuel_type"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 col-sm-12">
+                                <t t-if="inspection_id._consent_has_to_be_signed()">
+                                    <div class="col-sm-auto">
+                                        <a role="button" class="btn btn-primary m-2" data-bs-toggle="modal"
+                                           data-bs-target="#consentmodalaccept" href="#">
+                                            <i class="fa fa-check"/>
+                                            <t t-if="inspection_id._consent_has_to_be_signed()">Sign &amp; Accept</t>
+                                            <t t-else="">Accept &amp; Sign</t>
+                                        </a>
+                                        <a role="button" class="btn btn-outline-danger m-2" data-bs-toggle="modal"
+                                           data-bs-target="#consentReject">
+                                            <i class="fa fa-times"/>
+                                            Reject
+                                        </a>
+                                    </div>
+                                </t>
+                                <!-- Sign and Accept -->
+                                <div role="dialog" class="modal fade" id="consentmodalaccept">
+                                    <div class="modal-dialog" t-if="inspection_id._consent_has_to_be_signed()">
+                                        <form id="accept" method="POST" t-att-data-job-card-id="inspection_id.id"
+                                              t-att-data-token="inspection_id.consent_access_token"
+                                              class="js_accept_json modal-content js_website_submit_form">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <header class="modal-header">
+                                                <h4 class="modal-title">Validate Approval</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </header>
+                                            <main class="modal-body" id="sign-dialog">
+                                                <p>
+                                                    <span>By signing this consent, I agree to the following terms:
+                                                    </span>
+                                                    <ul>
+                                                        <li>
+                                                            <span>Accepted on the behalf of :</span>
+                                                            <strong>
+                                                                <span t-field="inspection_id.customer_id.name"/>
+                                                            </strong>
+                                                        </li>
+                                                    </ul>
+                                                </p>
+                                                <t t-call="portal.signature_form">
+                                                    <t t-set="call_url"
+                                                       t-value="'/vehicle-service/user-consent/'+inspection_id.consent_access_token+'/accept'"/>
+                                                    <t t-set="default_name"
+                                                       t-value="inspection_id.customer_id.name"/>
+                                                </t>
+                                            </main>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Reject Consent-->
+                                <div class="modal fade" id="consentReject" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1"
+                                     aria-labelledby="consentRejectLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                                    Approval Reject Reason
+                                                </h1>
+                                                <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"/>
+                                            </div>
+                                            <form class="row g-3"
+                                                  action="/vehicle-service/user-consent/consent-reject/reason"
+                                                  method="POST"
+                                                  enctype="multipart/form-data">
+                                                <div class="modal-body text-start">
+                                                    <input type="hidden" name="csrf_token"
+                                                           t-att-value="request.csrf_token()"/>
+                                                    <input type="hidden" name="access_token"
+                                                           t-att-value="inspection_id.consent_access_token"/>
+                                                    <textarea class="form-control"
+                                                              placeholder="Leave a reason here"
+                                                              name="reject_reason"
+                                                              id="reject_reason"
+                                                              required="required"/>
+                                                </div>
+                                                <div class="modal-footer text-start">
+                                                    <button class="btn btn-danger" type="submit">
+                                                        Submit
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4" t-if="inspection_id.consent_sent_state=='signed'">
+                            <div class="col-md-4 col-sm-12"/>
+                            <div class="col-md-4 col-sm-12">
+                                <div t-if="inspection_id.authorized_signature" class="card mb-3 border-0">
+                                    <t t-if="inspection_id.authorized_signature">
+                                        <img t-att-src="image_data_uri(inspection_id.authorized_signature)"
+                                             class="card-img-top" alt="Authorized Signature"/>
+                                    </t>
+                                    <t t-else="">
+                                        <img src="..." class="card-img-top" alt="..."/>
+                                    </t>
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            <small class="text-body-secondary">
+                                                <strong>
+                                                    Authorized Signature
+                                                </strong>
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="card mb-3 border-0">
+                                    <t t-if="inspection_id.customer_signature">
+                                        <img t-att-src="image_data_uri(inspection_id.customer_signature)"
+                                             class="card-img-top" alt="Customer Signature"/>
+                                    </t>
+                                    <t t-else="">
+                                        <img src="..." class="card-img-top" alt="..."/>
+                                    </t>
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            <small class="text-body-secondary">
+                                                <strong>
+                                                    Confirmed by:
+                                                </strong>
+                                                <span t-field="inspection_id.customer_id.name"/>
+                                                <br/>
+                                                <strong>
+                                                    Confirmed on:
+                                                </strong>
+                                                <span t-field="inspection_id.consent_accept_date_time"/>
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

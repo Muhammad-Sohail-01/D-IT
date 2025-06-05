@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="customer_quotation_action_part_mail_template" model="mail.template">
+            <field name="name">Customer Quotation Action Mail Template</field>
+            <field name="model_id" ref="tk_vehicle_management.model_vehicle_inspection"/>
+            <field name="body_html" type="html">
+                <p>
+                    Dear
+                    <strong>
+                        <span t-field="object.service_adviser_id.name"/> &amp;
+                        <span t-field="object.sale_person_id.name"/>
+                    </strong>
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <p>
+                    I hope this message finds you well.
+                    <br/>
+                    <br/>
+                    I wanted to bring to your attention that the customer
+                    <strong>
+                        <span t-field="object.customer_id.name"/>
+                    </strong>
+                    , has reviewed and
+                    <strong>
+                        <span t-out="object.env.context.get('type')"/>
+                    </strong>
+                    the
+                    <span t-out="object.env.context.get('for')"/>
+                    for Job Card
+                    <strong>
+                        <span t-field="object.name"/>
+                    </strong>
+                    .
+                    <t t-if="object.env.context.get('reject_reason')">
+                        <br/>
+                        <strong>
+                            Reject Reason :
+                        </strong>
+                        <span t-out="object.env.context.get('reject_reason')"/>
+                    </t>
+                    <br/>
+                    <br/>
+                    Please proceed with the necessary arrangements to fulfill requirement of this job card.
+                </p>
+                <p>
+                    <strong>Best regards</strong>
+                    <br/>
+                    <strong>
+                        <t t-out="object.company_id.name"/>
+                    </strong>
+                </p>
+                <hr class="mb-1 mt-1"/>
+                <span>
+                    <t t-out="object.company_id.name"/>
+                    <br/>
+                    <t t-out="object.company_id.phone"/>
+                    <br/>
+                    <t t-out="object.company_id.email"/>
+                    <br/>
+                    <t t-out="object.company_id.website"/>
+                </span>
+            </field>
+        </record>
+    </data>
+</odoo>

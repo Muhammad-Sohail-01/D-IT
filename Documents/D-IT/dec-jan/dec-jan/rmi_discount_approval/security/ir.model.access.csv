@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_users_discount_limit,res.users.discount.limit,model_res_users,base.group_user,1,0,0,0
+access_sales_admin_discount_limit,res.users.discount.limit,model_res_users,sales_team.group_sale_manager,1,1,1,1
+access_purchase_admin_discount_limit,res.users.discount.limit,model_res_users,purchase.group_purchase_manager,1,1,1,1
+access_inventory_admin_discount_limit,res.users.discount.limit,model_res_users,stock.group_stock_manager,1,1,1,1
+access_sales_purchase_user_discount_limit,res.users.discount.limit,model_res_users,sales_team.group_sale_salesman_all_leads,1,0,0,0
+

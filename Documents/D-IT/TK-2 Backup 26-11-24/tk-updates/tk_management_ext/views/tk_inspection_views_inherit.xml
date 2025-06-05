@@ -1,0 +1,104 @@
+<odoo>
+  <data>
+    <record id="view_tk_ext_form_inherit" model="ir.ui.view">
+            <field name="model">vehicle.inspection</field>
+            <field name="inherit_id"  ref="tk_vehicle_management.vehicle_inspection_form_view" />
+            <field name="arch" type="xml">
+
+
+
+            <xpath expr="//button[@name='action_status_quotation']" position="attributes">
+                <attribute name="invisible">status not in ['price_verified']</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_create_required_service_part_sale_order']" position="attributes">
+                <attribute name="string">Store request</attribute>
+                <attribute name="invisible">status not in ['concern_approve','quotation'] or health_report_status != 'complete'  </attribute>
+            </xpath>
+
+
+                
+
+            <xpath expr="//field[@name='service_adviser_id']" position="replace">
+                <field name="service_adviser_id" widget="many2one_avatar_user" required="1"
+                                       readonly="status != 'draft'"
+                                       force_save="1"/>
+              </xpath>
+                
+                <!-- invisible logic -->
+                <xpath expr="//form//sheet//div[hasclass('oe_title')]" position="inside">
+                    <lable for="is_payment_verified" invisible="1"/>
+                    <field name="is_payment_verified" widget="boolean_toggle" invisible="1"/>
+                </xpath>
+
+                <!-- required service -->
+                <xpath expr="//field[@name='company_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+                <!-- <xpath expr="//field[@name='tax_ids']" position="attributes">
+                    <attribute name="column_invisible">True</attribute>
+                </xpath> -->
+                <xpath expr="//field[@name='price']" position="attributes">
+                    <attribute name="column_invisible">parent.is_payment_verified != True</attribute>
+                    <attribute name="readonly">parent.is_payment_verified == True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='total_amount']" position="attributes">
+                    <attribute name="column_invisible">parent.is_payment_verified != True</attribute>
+                    <attribute name="readonly">parent.is_payment_verified == True</attribute>
+                </xpath>
+
+                
+
+                <!-- required parts -->
+                <!-- <xpath expr="//field[@name='inspection_required_parts_ids']//field[@name='tax_ids']" position="attributes">
+                    <attribute name="column_invisible">True</attribute>
+                </xpath> -->
+                 <xpath expr="//field[@name='inspection_required_parts_ids']//field[@name='price']" position="attributes">
+                    <attribute name="column_invisible">parent.is_payment_verified != True</attribute>
+                     <attribute name="readonly">parent.is_payment_verified == True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='inspection_required_parts_ids']//field[@name='total_amount']" position="attributes">
+                    <attribute name="column_invisible">parent.is_payment_verified != True</attribute>
+                    <attribute name="readonly">parent.is_payment_verified == True</attribute>
+                </xpath>
+
+
+                <!-- footer -->
+                <xpath expr="//group[hasclass('oe_subtotal_footer')]" position="attributes">
+                    <attribute name="invisible">is_payment_verified != True</attribute>
+                </xpath>
+                <xpath expr="//div[@name='inspection-total']" position="attributes">
+                    <attribute name="invisible">is_payment_verified != True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='inspection_total']" position="attributes">
+                    <attribute name="invisible">is_payment_verified != True</attribute>
+                </xpath>
+                <xpath expr="//div[@name='amount-due']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='due_amount']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+
+            
+
+
+
+
+
+        
+    </record>
+    <!-- <record id="view_tk_vehicle_booking_ext_form_inherit" model="ir.ui.view">
+        <field name="model">vehicle.booking</field>
+        <field name="inherit_id" ref="tk_vehicle_management.vehicle_booking_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_person_id']" position="replace">
+                <field name="sale_person_id"/>
+            </xpath>
+            <xpath expr="//field[@name='service_adviser_id']" position="replace">
+                <field name="service_adviser_id"/>
+            </xpath>
+        </field>
+    </record> -->
+  </data>
+</odoo>

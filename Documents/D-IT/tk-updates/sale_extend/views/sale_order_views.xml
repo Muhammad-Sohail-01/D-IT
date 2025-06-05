@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_tree_inh" model="ir.ui.view">
+         <field name="name">sale.order.tree</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale.view_order_tree"/>
+         <field name="arch" type="xml">
+             <field name="name" position="before">
+                 <field name="ins_name" string="Ins. Number"/>
+             </field>
+             <field name="partner_id" position="after">
+                 <field name="car_history_id" string="Plate number"/>
+                 <field name="car_make"/>
+                 <field name="car_model"/>
+                 <field name="year"/>
+                <field name="source_id"/>
+             </field>
+         </field>
+    </record>
+    
+    <record id="view_quotation_tree_inh" model="ir.ui.view">
+         <field name="name">sale.order.tree</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale.view_quotation_tree"/>
+         <field name="arch" type="xml">
+             <field name="name" position="before">
+                 <field name="ins_name" string="Ins. Number"/>
+             </field>
+             <field name="partner_id" position="after">
+                 <field name="car_history_id" string="Plate number"/>
+                 <field name="car_make"/>
+                 <field name="car_model"/>
+                 <field name="year"/>
+                <field name="source_id"/>
+             </field>
+         </field>
+    </record>
+
+    <record id="view_order_form_inherit" model="ir.ui.view">
+         <field name="name">sale.order.form</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale.view_order_form"/>
+         <field name="arch" type="xml">
+             <xpath expr="//button[@name='action_quotation_send']" position="before">
+                 <!-- <button name="action_confirm_sale_order" string="Create Estimation" type="object" invisible="state not in ('draft','sent')" class="oe_highlight"/> -->
+                 <!-- <button name="action_quotation_send" string="Send by Email" type="object" invisible="state not in ('sale_create')" class="btn-primary"/> -->
+             </xpath>
+            <button name="action_cancel" position="replace">
+                <button name="action_cancel" type="object" string="Cancel" invisible="state not in ('draft', 'sent','sale', 'sale_create') or not ('id', '=', False)"/>
+            </button>
+            <button name="action_confirm" position="replace">
+                <button name="action_confirm" string="Confirm Estimation" class="btn-primary" type="object"  invisible="state in ('sale')"/>
+            </button>
+            <!-- <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm'][2]" position="replace">
+                <button name="action_confirm" string="Confirm Estimation" type="object"
+                    invisible="state not in ('sale_create')"/>
+            </xpath> -->
+            <!--<xpath expr="//form/sheet/notebook/page/group/group[@name='sale_total']/field[@name='amount_untaxed']" position="before">
+                <field name="total_work_hours"/>
+            </xpath>
+            
+            <xpath expr="//form/sheet/notebook/page/group/group[@name='sale_total']/field[@name='amount_untaxed']" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['draft', 'sent'])]}</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/group/group[@name='sale_total']/field[@name='amount_tax']" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['draft', 'sent'])]}</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/group/group[@name='sale_total']/field[@name='amount_total']" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['draft', 'sent'])]}</attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/group/group[@name='sale_total']/div/label[@for='amount_total']" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'in', ['draft', 'sent'])]}</attribute>
+            </xpath>-->
+             
+       
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="address_area"/>
+                <field name="phone"/>
+                <field name="car_history_id" options="{'no_create_edit': False}" domain="[('partner_id', '=', partner_id)]" context="{'default_partner_id': partner_id}"/>
+                <field name="current_mileage"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="ins_name" invisible="state not in ('draft', 'sent')" string="Ins. Number"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="invisible">state in ('draft', 'sent', 'cancel')</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="ins_name" invisible="state in ('draft', 'sent', 'cancel')" string="Ins. Number"/>
+            </xpath>
+            
+             <xpath expr="//form/sheet/notebook/page[@name='customer_signature']" position="after">
+                 <page string="Car Details" name="customer_car_detials">
+                     <group>
+                        <group>
+                            <field name="car_history_id" domain="[('partner_id', '=', partner_id)]" readonly="1"/>
+                            <field name="car_make"/>
+                            <field name="car_model"/>
+                            <field name="year"/>
+                            <field name="employee_id"/>
+                            <field name="service_writer_id"/>
+                        </group>
+                        <group>
+                            <field name="in_time"/>
+                            <field name="out_time"/>
+                            <field name="total_time" widget="float_time"/>
+                             <field name="customer_note"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Car Pictures" name="customer_car_pictures">
+                    <group>
+                        <group>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </group>
+                        <group>
+                            <label for="image_one" string="Car Pictures"/>
+                            <div>
+                                <field name="image_one" widget='image' class="oe_avatar"/>
+                                <field name="image_two" widget='image' class="oe_avatar"/>
+                                <field name="image_three" widget='image' class="oe_avatar"/>
+                                <field name="image_four" widget='image' class="oe_avatar"/>
+                                <field name="image_five" widget='image' class="oe_avatar"/>
+                                <field name="image_six" widget='image' class="oe_avatar"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+             </xpath>
+             
+             <xpath expr="//form/sheet/notebook/page[@name='order_lines']/field/tree/field[@name='discount']" position="attributes">
+                 <attribute name="column_invisible">parent.state in ('draft', 'sent')</attribute>
+             </xpath>
+             <!-- <xpath expr="//form/sheet/notebook/page[@name='order_lines']/field/tree/field[@name='price_unit']" position="attributes">
+                 <attribute name="column_invisible">parent.state in ('draft', 'sent')</attribute>
+             </xpath> -->
+             <xpath expr="//form/sheet/notebook/page[@name='order_lines']/field/tree/field[@name='tax_id']" position="attributes">
+               <attribute name="column_invisible">parent.state in ('draft', 'sent')</attribute>
+             </xpath>
+             <!-- <xpath expr="//form/sheet/notebook/page[@name='order_lines']/field/tree/field[@name='price_subtotal']" position="attributes">
+               <attribute name="column_invisible">parent.state in ('draft', 'sent')</attribute>
+             </xpath> -->
+             <!-- <xpath expr="//form/sheet/notebook/page[@name='order_lines']/field/tree/field[@name='price_total']" position="attributes">
+                <attribute name="column_invisible">parent.state in ('draft', 'sent')</attribute>
+             </xpath> -->
+             <!--<xpath expr="//form/sheet/notebook/page[@name='order_lines']/field/tree/field[@name='price_unit']" position="before">
+                 <field name="working_hours"/>
+                 <field name="technician_id"/>
+                 <field name="service_type_id"/>
+             </xpath>-->
+             
+             <xpath expr="//form/sheet/group/group[@name='order_details']/div[1]" position="replace">
+                 <div invisible="1"></div>
+             </xpath>
+             <xpath expr="//form/sheet/group/group[@name='order_details']/div[2]" position="replace">
+                 <div invisible="1"></div>
+             </xpath>
+             <xpath expr="//form/sheet/group/group[@name='order_details']/field[@name='date_order'][1]" position="replace">
+                 <field name="date_order" invisible="1"/>
+             </xpath>
+             <xpath expr="//form/sheet/group/group[@name='order_details']/field[@name='date_order'][2]" position="replace">
+                 <field name="date_order" readonly="0" 
+                         required="state in ('sale', 'done')" invisible="state in ('draft', 'sent')"
+                         string="Estimation Date"/>
+             </xpath>
+             <xpath expr="//form/sheet/group/group[@name='order_details']/field[@name='date_order'][2]" position="before">
+                 <field name="inspection_date"/>
+                 <field name="issue_heading"/>
+             </xpath>
+         </field>
+    </record>
+    
+    <record id="sale_order_view_search_inherit_quotation_car_inh" model="ir.ui.view">
+         <field name="name">sale.order.search.inherit.quotation</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+         <field name="arch" type="xml">
+             <xpath expr="//filter[@name='my_quotation']" position="replace">
+                 <filter string="My Inspections" name="my_quotation" domain="[('user_id', '=', uid)]"/>
+             </xpath>
+             <xpath expr="//filter[@name='draft']" position="replace">
+                 <filter string="Inspections" name="draft" domain="[('state','in',('draft', 'sent'))]"/>
+             </xpath>
+             <xpath expr="//filter[@name='sales']" position="replace">
+                 <filter string="Estimations" name="sales" domain="[('state','in',('sale','done'))]"/>
+             </xpath>
+         </field>
+     </record>
+     
+     <record id="view_sales_order_filter_estimation_inh" model="ir.ui.view">
+         <field name="name">sale.order.list.select</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+         <field name="arch" type="xml">
+             <xpath expr="//group/filter[@name='customer']" position="after">
+                 <filter string="Plate Number" name="car_history_id" domain="[]" context="{'group_by': 'car_history_id'}"/>
+                   <filter string="Make" name="car_make" domain="[]" context="{'group_by': 'car_make'}"/>
+                   <filter string="Model" name="car_model" domain="[]" context="{'group_by': 'car_model'}"/>
+                   <filter string="Year" name="year" domain="[]" context="{'group_by': 'year'}"/>
+             </xpath>
+             <xpath expr="//filter[@name='order_month']" position="attributes">
+                 <attribute name="string">Estimations Date</attribute>
+              </xpath>
+          </field>
+    </record>
+    
+    <menuitem id="sale.menu_sale_order"
+            name="Estimation"
+            action="sale.action_orders"
+            parent="sale.sale_order_menu"
+            sequence="2" groups="sales_team.group_sale_salesman"/>
+            
+    <menuitem id="sale.menu_sale_quotations"
+             action="sale.action_quotations_with_onboarding"
+             parent="sale.sale_order_menu"
+             name="Inspection"
+             sequence="1" groups="sales_team.group_sale_salesman"/>
+             
+    <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+        <field name="name">Inspection</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+        <field name="search_view_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="context">{'search_default_my_quotation': 1}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Inspection, the first step of a new car estimation!
+          </p><p>
+            Once the Inspection is confirmed by the customer, it becomes a Estimation.<br/> You will be able to create an invoice and collect the payment.
+          </p>
+        </field>
+    </record>
+        
+    <record id="view_order_form_inherit_sale_stock_inherit" model="ir.ui.view">
+         <field name="name">sale.order.form.sale.stock</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+         <field name="arch" type="xml">
+             <xpath expr="//button/field[@name='delivery_count']" position="replace">
+                 <field name="delivery_count" widget="statinfo" string="Job Card"/>
+             </xpath>
+         </field>
+    </record>
+
+</odoo>

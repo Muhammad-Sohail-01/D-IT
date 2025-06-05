@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="inspection_team_view_form_inherit" model="ir.ui.view">
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <!-- button addition -->
+                <xpath expr="//field[@name='parent_id']" position="after">
+                <button string="Price Fixed" type="object" class="btn btn-outline-success"
+                                name="price_fixed" icon="fa-bookmark"/>
+                    
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

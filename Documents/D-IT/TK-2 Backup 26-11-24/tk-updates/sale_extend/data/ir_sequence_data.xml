@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Sequences for Inspection -->
+        <record id="seq_sale_inspection" model="ir.sequence">
+            <field name="name">Inspection</field>
+            <field name="code">sale.inspection</field>
+            <field name="prefix">INS/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Sequence for sale estimation -->
+        <record id="seq_sale_estimation" model="ir.sequence">
+            <field name="name">Estimation</field>
+            <field name="code">sale.estimation</field>
+            <field name="prefix">EST/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

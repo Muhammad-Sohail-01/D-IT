@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='car_cylinder_view_form' model='ir.ui.view'>
+        <field name="name">car.cylinder.form</field>
+        <field name="model">car.cylinder</field>
+        <field name="arch" type="xml">
+            <form string="Car Cylinder">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='car_cylinder_view_tree' model='ir.ui.view'>
+        <field name="name">car.cylinder.tree</field>
+        <field name="model">car.cylinder</field>
+        <field name="arch" type="xml">
+            <tree string="Car Spec">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id='car_cylinder_view_action' model='ir.actions.act_window'>
+        <field name="name">Car Cylinder</field>
+        <field name="res_model">car.cylinder</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new car cylinder.
+          </p><p>
+            You can define several Car Cylinder (e.g. 2, 4).
+          </p>
+        </field>
+    </record>
+    
+    <menuitem action="car_cylinder_view_action" parent="car_configuration" name="Car Cylinder" id="car_cylinder_menu" sequence="5"/>
+    
+</odoo>

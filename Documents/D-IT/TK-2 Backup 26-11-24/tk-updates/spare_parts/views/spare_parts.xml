@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<odoo>
+    <!-- Duplicated Tree View for Lots/Serial Numbers -->
+    <record id="view_stock_lot_tree_duplicate" model="ir.ui.view">
+        <field name="name">stock.lot.tree.duplicate</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <tree>
+                
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="part_number_id"/>
+                <field name="part_internal_number"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
+                <field name="year_display" force_save="1"/> 
+                <field name="part_vendor_name" force_save="1"/> 
+                <field name="part_type" force_save="1"/> 
+                <field name="note" force_save="1"/> 
+                <field name="cost_price" force_save="1"/> 
+                <field name="sale_price" force_save="1"/>
+                <field name="part_main_category" optional="Hide"/>
+                <field name="sub_category" optional="Hide"/>
+                <field name="part_element" optional="Hide"/>
+                <field name= "catalog_name" optional="Hide"/>
+                <field name="part_image" widget="image" options="{'size': [40, 40]}" string="Image"/> 
+                <field name="product_qty" force_save="1"/>
+                <field name="company_id"/>
+                
+            </tree>
+        </field>
+    </record>
+
+    <!-- Duplicated Form View for Lots/Serial Numbers -->
+    <record id="view_stock_lot_form_duplicate_new_new" model="ir.ui.view">
+        <field name="name">stock.lot.form.duplicate</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+
+            <form>
+                <div class="o_col_right" style="text-align:right; margin-top: 10px;">
+                    <field name="part_image" widget="image" options="{'size': [40, 40]}" string="Image"/> 
+                </div>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="part_number_id"/>
+                            <field name="part_internal_number"/>
+                            <field name="brand_id"/>
+                            <field name="model_id"/>
+                            <field name="year_display" force_save="1"/> 
+                            <field name="part_vendor_name" force_save="1"/> 
+                            <field name="part_type" force_save="1"/> 
+                            <field name="note" force_save="1"/> 
+                            <field name="cost_price" force_save="1"/> 
+                            <field name="sale_price" force_save="1"/>
+                        </group>
+                        <group>
+                            <field name="part_main_category" optional="Hide"/>
+                            <field name="sub_category" optional="Hide"/>
+                            <field name="part_element" optional="Hide"/>
+                            <field name= "catalog_name" optional="Hide"/>
+                            
+                            <field name="product_qty" force_save="1"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_stock_production_lot_duplicate" model="ir.actions.act_window">
+        <field name="name">Spare Parts</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_stock_lot_tree_duplicate"/>
+        <field name="context">{'show_duplicate_fields': True}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new lot or serial number.
+            </p>
+        </field>
+    </record>
+
+    <!-- New Menu Item -->
+    <menuitem id="menu_stock_production_lot_duplicate"
+              name="Spare Parts"
+              parent="stock.menu_stock_inventory_control"
+              action="action_stock_production_lot_duplicate"
+              sequence="102"/>
+</odoo>
+

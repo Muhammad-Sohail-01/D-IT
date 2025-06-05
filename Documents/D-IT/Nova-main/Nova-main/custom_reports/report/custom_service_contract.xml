@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="custom_service_contract_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="header" style="font-family: sans-serif; border: none;">
+                        <style>
+                            .report_heading {
+                            border-top: 60px solid #960505;
+                            border-left: 0px solid transparent;
+                            border-right: 25px solid transparent;
+                            height: 0;
+                            width: 350px;
+                            }
+                            .report_trn {
+                            border-top: 40px solid #000000;
+                            border-left: 0px solid transparent;
+                            border-right: 18px solid transparent;
+                            height: 0;
+                            width: 325px;
+                            }
+                            .report_heading_text {
+                            position: absolute;
+                            margin-top: -55px;
+                            margin-left: 35px;
+                            font-size: 35px;
+                            color: white;
+                            font-weight: 900;
+                            }
+                            .report_trn_text {
+                            position: absolute;
+                            margin-top: -40px;
+                            margin-left: 35px;
+                            font-size: 25px;
+                            color: white;
+                            font-weight: 900;
+                            }
+                        </style>
+                        <div style="width: 400px; float:left; height:120px;" align="left">
+                            <div class="report_heading">
+                                <p class="report_heading_text">Service Contract</p>
+                            </div>
+                            <div class="report_trn">
+                                <p class="report_trn_text">TRN: <span t-field="doc.company_id.vat"/></p>
+                            </div>
+                        </div>
+                        <div style="width: 450px; float:left; height:175px;" align="right">
+                            <img t-if="doc.company_id.logo"
+                                 t-att-src="image_data_uri(doc.company_id.logo)"
+                                 id="company_logo" alt="Logo" height="175" width="330"/>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <style>
+                            .hr{
+                            margin-top: 2%;
+                            }
+                            .foot{
+                            margin-top: 0.5%;
+                            }
+                            .customer_heading {
+                            border-top: 40px solid;
+                            border-right: 18px solid transparent;
+                            height: 0;
+                            width: 325px;
+                            }
+                            .customer_heading_text {
+                            position: absolute;
+                            margin-top: -32px;
+                            margin-left: 35px;
+                            font-size: 25px;
+                            color: white;
+                            font-weight: 900;
+                            }
+                            .vehicle_heading {
+                            border-top: 40px solid;
+                            border-left: 18px solid transparent;
+                            height: 0;
+                            width: 325px;
+                            }
+                            .vehicle_heading_text {
+                            position: absolute;
+                            margin-top: -32px;
+                            margin-left: 35px;
+                            font-size: 25px;
+                            color: white;
+                            font-weight: 900;
+                            }
+                        </style>
+                        <div style="width: 40%; float:left; height:150px;">
+                            <table width="100%" style="margin-top: 10px;">
+                                <tr width="100%">
+                                    <td width="30%" style="font-size: 20px;">Date:</td>
+                                    <td width="70%" style="font-size: 20px;"><span t-esc="doc.date_order.strftime('%d/%m/%Y')"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="40%" style="font-size: 20px;">Estimation No:</td>
+                                    <td width="60%" style="font-size: 20px;"><span t-field="doc.name"/></td>
+                                </tr>
+                            </table>
+                            <div class="customer_heading">
+                                <p class="customer_heading_text">Customer Details</p>
+                            </div>
+                            <table width="100%" style="margin-top: 10px; padding-right: 10px;">
+                                <tr width="100%">
+                                    <td width="20%" >Name</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.partner_id.name"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">TRN</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.partner_id.vat"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">Mobile</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.partner_id.mobile"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">Advisor</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="left"><span t-field="doc.other_salesperson_id"/></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div style="width: 20%; float:left; height:150px;" align="center">
+                            <img t-if="doc.car_make.image_128" t-att-src="image_data_uri(doc.car_make.image_128)" style="max-height: 150px; max-width: 450px;" alt="Logo"/>
+                        </div>
+                        <div style="width: 40%; float:right; height:150px;" align="left">
+
+                            <table width="100%" style="margin-top: 10px;">
+                                <tr width="100%">
+                                    <td width="30%" style="font-size: 20px;"><br/></td>
+                                    <td width="70%" style="font-size: 20px;"><br/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="30%" style="font-size: 20px;">Model :</td>
+                                    <td width="70%" style="font-size: 20px;"><span t-field="doc.car_model.name"/></td>
+                                </tr>
+                            </table>
+                            <div class="vehicle_heading">
+                                <p class="vehicle_heading_text">Vehicle Details</p>
+                            </div>
+                            <table width="100%" style="margin-top: 10px; padding-right: 25px; margin-left: 20px;">
+                                <tr width="100%">
+                                    <td width="20%">Plate</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.car_history_id.plate_number"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">Year</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.year"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">ODO</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.current_mileage"/></td>
+                                </tr>
+                                <tr width="100%">
+                                    <td width="20%">VIN</td>
+                                    <td width="5%" >:</td>
+                                    <td width="75%" align="right"><span t-field="doc.car_history_id.vin_number"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                        <table width="100%">
+                            <tbody>
+                                <hr style="height:2px;color:red;background-color:red"/>
+                                <tr>
+                                    <th style="background-color:grey;" width="30%">ITEM</th>
+                                    <th style="background-color:grey;" width="10%">QTY</th>
+                                    <th style="background-color:grey;" width="10%">UOM</th>
+                                    <th style="background-color:grey;" width="12%">UNIT PRICE</th>
+                                    <th style="background-color:grey;" width="12%">VAT</th>
+                                    <th style="background-color:grey;" width="16%">TOTAL</th>
+                                </tr>
+                                <t t-set="current_subtotal" t-value="0"/>
+                                <t t-foreach="doc.order_line" t-as="line">
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                    <tr width="100%">
+                                        <t t-if="not line.display_type">
+                                            <td width="30%">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td align="right" width="10%">
+                                                <span t-field="line.product_uom_qty"/>
+                                            </td>
+                                            <td align="right" width="10%">
+                                                <span t-field="line.product_uom"/>
+                                            </td>
+                                            <td align="right" width="12%">
+                                                <span t-esc="'{:,.2f}'.format(line.price_unit)"/> <span t-field="doc.currency_id.symbol"/>
+                                            </td>
+                                            <td align="right" width="12%">
+                                                <t t-if="line.tax_id">
+                                                    <span t-field="line.tax_id.name"/>
+                                                </t>
+                                            </td>
+                                            <td name="td_subtotal" class="text-right o_price_total" align="right" width="16%">
+                                                <span t-esc="'{:,.2f}'.format(line.price_subtotal)"/> <span t-field="doc.currency_id.symbol"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_section'">
+                                            <td name="td_section_line" style="background-color:#C0C0C0; line-height: 1.5;" colspan="6" width="100%">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <t t-set="current_section" t-value="line"/>
+                                            <t t-set="current_subtotal" t-value="0"/>
+                                        </t>
+                                        <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section')">
+                                            <tr class="is-subtotal" style="text-align:right;">
+                                                <td name="td_section_subtotal" colspan="6" width="100%">
+                                                    <strong class="mr16">Section Total: </strong>
+                                                    <strong><span t-esc="'{:,.2f}'.format(current_subtotal)"/> <span t-field="doc.currency_id.symbol"/></strong>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_note'">
+                                            <td name="td_note_line" colspan="6" style="background-color:#C0C0C0; line-height: 1.5;" width="100%">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <table width="50%" class="foot" align="right">
+                            <tbody>
+                                <hr class='hr' style="height:2px;color:red;background-color:red"/>
+                                <tr>
+                                    <td style="background-color:#C0C0C0;">SUB TOTAL</td>
+                                    <td style="background-color:#C0C0C0;" align="right"><span t-esc="'{:,.2f}'.format(doc.amount_untaxed)"/> <span t-field="doc.currency_id.symbol"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color:#C0C0C0;">VALUE ADDED TAX [VAT]</td>
+                                    <td style="background-color:#C0C0C0;" align="right"><span t-esc="'{:,.2f}'.format(doc.amount_tax)"/> <span t-field="doc.currency_id.symbol"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color:grey;"><b>TOTAL</b></td>
+                                    <td style="background-color:grey;" align="right"><span t-esc="'{:,.2f}'.format(doc.amount_total)"/><b> <span t-field="doc.currency_id.symbol"/></b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/><br/><br/><br/><br/>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="font-size: 20px;">Terms and Conditions: </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 11px;">1. Estimate charges of minimum Dhs.300/- or more will be charged if job estimated and not repaired.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 11px;">2. Free Pick Up and Delivery is also subject to approval.</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 11px;">3. If the car is not collected within 7 days after inspection or repair, a parking fee of AED 50/- per day will be charged</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer">
+                        <div>
+                            <img src="/carlab_report/static/img/Footer.jpg" style="margin-bottom:100px; max-height: 130px; max-width: 920px;"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_custom_service_contract_report" model="ir.actions.report">
+            <field name="name">Service Contract</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_reports.custom_service_contract_report</field>
+            <field name="report_file">custom_reports.custom_service_contract_report</field>
+            <field name="print_report_name">(object.name)</field>
+            <field name="paperformat_id" ref="custom_reports.custom_paperformat_quotation"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

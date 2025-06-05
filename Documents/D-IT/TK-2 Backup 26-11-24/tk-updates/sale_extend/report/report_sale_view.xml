@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+            <div class="header">
+                <div class="text-center">
+                    <img src='/sale_extend/static/img/powertech_logo.jpeg' style="max-height: 130px; max-width: 520px;"/>
+                </div>
+                   <!-- <h2 class="text-center"><i><b>𝐏𝐨𝐰𝐞𝐫𝐭𝐞𝐜𝐡  𝐀𝐮𝐭𝐨  𝐒𝐞𝐫𝐯𝐢𝐜𝐞𝐬</b></i></h2>-->
+             </div>
+            <div class="page">
+                <div id="job_card" class="row" style="float:right; margin-top:0px;">
+                    <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
+                        <table class="table table-sm" style="page-break-inside: avoid; width: 920px;">
+                            <tr>
+                                <td style='border:none;' rowspan="2"><h1 class="text-center" style="color:red;"><b>𝐈𝐍𝐒𝐏𝐄𝐂𝐓𝐈𝐎𝐍</b></h1></td>
+                                <td><strong>JOB CARD #</strong></td>
+                                <td class="text-center">123456</td>
+                            </tr>
+                            <tr>
+                                <td><strong><![CDATA[&nbsp;]]>Name/Address<![CDATA[&nbsp;]]></strong></td>
+                                <td class="text-left"><![CDATA[&nbsp;]]><span t-field="doc.partner_id.name"/><![CDATA[&nbsp;]]></td>
+                            </tr>
+                        </table>
+                     </div>
+                 </div>
+                <br></br>
+            
+                <table style="width: 920px;">
+                    <style>
+                       td, th{border:solid 1px; text-align:center; height: 45px;}
+                    </style>
+                    <tbody>
+                        <tr>
+                            <th>Advisor</th>
+                            <th>Service Writer</th>
+                            <th>Time Started</th>
+                            <th>Finished At</th>
+                            <th>Total Time</th>
+                            <th>Date</th>
+                            <th>JC Date</th>
+                          </tr>
+                          <tr>
+                            <td><span t-field="doc.employee_id.name"/></td>
+                            <td><span t-field="doc.service_writer_id.name"/></td>
+                            <td><span t-field="doc.in_time"/></td>
+                            <td><span t-field="doc.out_time"/></td>
+                            <td><span t-field="doc.total_time"/></td>
+                            <td><span t-field="doc.date_order" t-options='{"format": "dd/MM/yyyy"}'/></td>
+                            <td><span t-field="doc.date_order" t-options='{"format": "dd/MM/yyyy"}'/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            
+                <div style="width: 920px;">
+                    <div class="border-black" style="border-bottom: 12px solid red; margin-top:10px;"></div>
+                </div>
+            
+                <table style="width: 920px; margin-top:10px;">
+                    <tr>
+                        <th>Reference</th>
+                        <th>Year</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Plate Number</th>
+                        <th>ODO</th>
+                      </tr>
+                      <tr>
+                        <td><span t-field="doc.client_order_ref"/></td>
+                        <td><span t-field="doc.car_history_id.year"/></td>
+                        <td><span t-field="doc.car_history_id.car_brand_id.name"/></td>
+                        <td><span t-field="doc.car_history_id.car_model_id.name"/></td>
+                        <td><span t-field="doc.car_history_id.plate_number"/></td>
+                        <td><span t-field="doc.current_mileage"/></td>
+                    </tr>
+                </table>
+                
+                <div style="width: 920px;">
+                    <div style="border-bottom: 12px solid red; margin-top:10px; margin-bottom:10px;"></div>
+                </div>
+            
+                <table style="width: 920px;">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th>Job Description</th>
+                            <th>Qty</th>
+                            <th>Time</th>
+                          </tr>
+                    </thead>    
+                    <tbody>
+                        <t t-foreach="doc.order_line" t-as="line">
+                              <tr>
+                                <td><span t-field="line.name"/></td>
+                                <td><span t-field="line.product_uom_qty"/></td>
+                                <td><span t-field="line.working_hours"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <table style="width:920px;">
+                    <tr>
+                        <td colspan="2" rowspan="2" style='border:none; width:460px; text-align: left;'>
+                        </td>
+                        <td><strong>Total Working Hours: </strong></td>
+                        <td><strong><span t-field="doc.total_work_hours"/></strong></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="footer" style="height: 40%">
+                <table style="width: 920px;">
+                    <tr>
+                        <td>TECHNICIAN</td>
+                        <td>TECHNICIAN</td>
+                        <td>TECHNICIAN</td>
+                        <td>SUPERVISOR</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <br></br>
+                <br></br>
+                <table style="width: 920px;">
+                    <style>
+                        table {
+                          border-collapse: collapse;
+                        }
+                        
+                        td {
+                          border-bottom: 1pt solid black;
+                        }
+                    </style>
+                    <tr>
+                        <td>QUALITY CONTROL</td>
+                        <td>SERVICE ADVISOR</td>
+                        <td>PARTS SUPERVISOR</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </xpath>
+    </template>
+    
+     <template id="report_saleorder" inherit_id="sale.report_saleorder">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sale_extend.report_saleorder_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+    
+    <!--<template id="report_saleorder" inherit_id="sale.report_saleorder">
+            <xpath expr='//t[@t-call="sale.report_saleorder_document"]' position="after">
+                <t t-if="o._get_name_saleorder_report() == 'sale_extend.report_saleorder_document'"
+                    t-call="sale_extend.report_saleorder_document" t-lang="lang"/>
+            </xpath>
+        </template>-->
+    
+</odoo>
+

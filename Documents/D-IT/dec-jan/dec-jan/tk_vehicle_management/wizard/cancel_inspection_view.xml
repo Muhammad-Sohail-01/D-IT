@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="cancel_job_card_inspection_view_form" model="ir.ui.view">
+            <field name="name">cancel.job.card.inspection.view.form</field>
+            <field name="model">vehicle.cancel.inspection</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="inspection_id" invisible="1"/>
+                        <label for="is_cancel_part"/>
+                        <div>
+                            <field name="is_cancel_part"/>
+                            <div class="font-italic text-muted" invisible="not is_cancel_part">
+                                If the part delivery order is not completed, the order will be canceled and deleted.
+                            </div>
+                        </div>
+                        <label for="is_return_part"/>
+                        <div>
+                            <field name="is_return_part"/>
+                            <div class="font-italic text-muted" invisible="not is_return_part">
+                                If the part delivery order is completed, a return delivery part order will be created.
+                            </div>
+                        </div>
+                    </group>
+                    <footer>
+                        <button string="Cancel Job Card" type="object" class="btn btn-danger"
+                                name="action_cancel_job_card" icon="fa-times-circle"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="cancel_job_card_action" model="ir.actions.act_window">
+            <field name="name">Job Card Cancel Confirmation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vehicle.cancel.inspection</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
